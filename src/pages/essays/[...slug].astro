@@ -1,0 +1,57 @@
+---
+// src/pages/essays/[...slug].astro
+//
+// Dynamic route for the essays collection. Renders any entry the
+// content layer discovers under src/content/essays/.
+//
+// Per §5/Phase 3 final acceptance criterion: "Adding a second .mdx
+// file under src/content/essays/ would automatically create a new
+// route with zero additional code." This file is the reason that's
+// true.
+//
+// The [...slug] rest-param accepts paths with slashes, so an essay at
+// src/content/essays/2027/foo.mdx routes to /essays/2027/foo/ without
+// further configuration — useful when the archive grows.
+
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import EssayLayout from '@/layouts/EssayLayout.astro';
+import Footnote from '@/components/Footnote.astro';
+
+export async function getStaticPaths() {
+  // Filter drafts out of the production build. In dev (npm run dev)
+  // this same filter applies — drafts remain reachable only by direct
+  // getEntry() calls (e.g. a future /preview/<slug> route).
+  const essays = await getCollection('essays', ({ data }) => !data.draft);
+  return essays.map((essay) => ({
+    params: { slug: essay.id },
+    props: { essay },
+  }));
+}
+
+interface Props {
+  essay: CollectionEntry<'essays'>;
+}
+
+const { essay } = Astro.props;
+
+// `render()` (imported from astro:content, the modern content-layer
+// equivalent of the legacy `entry.render()`) returns the compiled
+// component for the body plus the heading tree extracted by the
+// markdown pipeline. We hand `headings` to the layout so the ToC can
+// be built from it; we don't touch it here.
+const { Content, headings } = await render(essay);
+---
+
+<EssayLayout
+  title={essay.data.title}
+  subtitle={essay.data.subtitle}
+  date={essay.data.date}
+  headings={headings}
+>
+  {/* Pass the Footnote component through MDX's `components` prop so
+      essays can use <Footnote id="..." /> without an import statement
+      in their frontmatter. Adding more components later (Figure,
+      Aside, etc.) is a one-line change here. */}
+  <Content components={{ Footnote }} />
+</EssayLayout>

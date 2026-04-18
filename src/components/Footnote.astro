@@ -1,0 +1,50 @@
+---
+// src/components/Footnote.astro
+//
+// Dual-mode footnote component. One component, two render shapes
+// determined by whether MDX gave it children:
+//
+//   <Footnote id="1" />              → inline superscript marker
+//   <Footnote id="1">Body</Footnote> → list-item at the bottom of the essay
+//
+// The two shapes are linked by id naming convention:
+//   - Inline marker:  <sup id="fn-ref-1"><a href="#fn-1">1</a></sup>
+//   - Item:           <div id="fn-1"> ... <a href="#fn-ref-1">↩</a> </div>
+//
+// So clicking the inline ref jumps to the body, and the back-link in
+// the body jumps back to the source. Standard academic footnote
+// pattern, no JS required.
+//
+// The styles for both shapes live in EssayLayout.astro's <style is:global>
+// block (under `.essay__body .footnote-*`) because they need to coordinate
+// with the surrounding essay typography. This component contributes only
+// the markup and the id wiring.
+
+interface Props {
+  id: string | number;
+}
+
+const { id } = Astro.props;
+
+// Slot detection: present iff the author wrote <Footnote id="…">…</Footnote>.
+// Self-closing usage gives no slot, so we fall through to the inline marker.
+const isItem = Astro.slots.has('default');
+---
+
+{isItem ? (
+  <div class="footnote-item" id={`fn-${id}`}>
+    <span class="footnote-num">{id}.</span>
+    <span class="footnote-body">
+      <slot />
+      <a
+        href={`#fn-ref-${id}`}
+        class="footnote-backref"
+        aria-label={`Back to footnote ${id} in the text`}
+      >↩</a>
+    </span>
+  </div>
+) : (
+  <sup class="footnote-ref" id={`fn-ref-${id}`}>
+    <a href={`#fn-${id}`} aria-label={`Jump to footnote ${id}`}>{id}</a>
+  </sup>
+)}

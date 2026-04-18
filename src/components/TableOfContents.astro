@@ -1,0 +1,162 @@
+---
+// src/components/TableOfContents.astro
+//
+// Auto-built sticky ToC for essay pages. Per §3.2 / §5/Phase 3:
+//   - Built from H2s only (deeper headings are too granular for the
+//     reading-anchor purpose; Dario's ToC is also H2-only).
+//   - Visible only at ≥1024px (handled by the parent layout, not here).
+//   - Highlights the current section via IntersectionObserver as the
+//     reader scrolls.
+//
+// The component receives the headings array straight from Astro's
+// render() result. Each entry has { depth, slug, text }.
+
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// Filter to H2s only. The author can still use H3s freely in the body —
+// they just don't appear in the sidebar ToC. Keeps the ToC scannable.
+const tocItems = headings.filter((h) => h.depth === 2);
+---
+
+{tocItems.length > 0 && (
+  <nav class="toc" aria-label="On this page">
+    <p class="toc__label">Contents</p>
+    <ol class="toc__list">
+      {tocItems.map((h) => (
+        <li class="toc__item">
+          <a class="toc__link" href={`#${h.slug}`} data-toc-link={h.slug}>
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+<style>
+  .toc {
+    font-size: var(--fs-small);
+    line-height: 1.45;
+  }
+  .toc__label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0 0 0.75rem 0;
+    font-weight: 600;
+  }
+  .toc__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .toc__item {
+    margin: 0;
+    /* Each item gets a left border that becomes the active indicator.
+       Transparent at rest; flips to accent color when the link inside
+       has aria-current="true" (set by the IO callback below). */
+    border-left: 2px solid var(--border);
+    transition: border-color 200ms ease;
+  }
+  .toc__link {
+    display: block;
+    padding: 0.4rem 0 0.4rem 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+  .toc__link:hover {
+    color: var(--text);
+  }
+  /* Active state — set by IntersectionObserver in the inline script
+     below. Both the link and its bordering item flip color in concert. */
+  .toc__link[aria-current='true'] {
+    color: var(--accent);
+  }
+  .toc__item:has(.toc__link[aria-current='true']) {
+    border-left-color: var(--accent);
+  }
+</style>
+
+<script>
+  // Highlight the section the reader is currently inside.
+  //
+  // Approach: a "scanline" of activity defined by IntersectionObserver's
+  // rootMargin — the active zone is the area between 80px below the top
+  // of the viewport and 70% from the top. Any H2 whose top edge is
+  // inside that zone counts as "in view"; the topmost (in document
+  // order) of those is the active one.
+  //
+  // Why a scanline rather than "fully visible"? Long sections often
+  // span the entire viewport, so "fully visible" rarely fires. The
+  // scanline makes the highlight feel anchored to the reader's
+  // attention — the heading they most recently scrolled past.
+  //
+  // Edge cases:
+  //   - No H2 in the active zone (above the first or below the last):
+  //     highlight is cleared. Acceptable; could be improved by
+  //     "sticky-last" later but the simpler behavior is honest.
+  //   - The script tolerates pages where there is no ToC (e.g. essays
+  //     with no H2s) — the early return handles that.
+
+  const headings = Array.from(
+    document.querySelectorAll<HTMLElement>('.essay__body h2[id]'),
+  );
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('.toc__link[data-toc-link]'),
+  );
+
+  if (headings.length > 0 && links.length > 0) {
+    // Map slug → link element for O(1) lookup in the IO callback.
+    const linkBySlug = new Map<string, HTMLAnchorElement>();
+    for (const link of links) {
+      const slug = link.getAttribute('data-toc-link');
+      if (slug) linkBySlug.set(slug, link);
+    }
+
+    // Set of slugs currently in the active zone.
+    const activeSlugs = new Set<string>();
+
+    function applyActive() {
+      // Pick the topmost (document-order) active heading.
+      let chosenSlug: string | null = null;
+      for (const h of headings) {
+        if (activeSlugs.has(h.id)) {
+          chosenSlug = h.id;
+          break;
+        }
+      }
+      // Clear all then set one.
+      for (const link of links) link.removeAttribute('aria-current');
+      if (chosenSlug) {
+        linkBySlug.get(chosenSlug)?.setAttribute('aria-current', 'true');
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = entry.target.id;
+          if (entry.isIntersecting) activeSlugs.add(id);
+          else activeSlugs.delete(id);
+        }
+        applyActive();
+      },
+      {
+        // Active zone = top 80px to 30% of viewport. Headings inside
+        // this band count as "in view" for highlighting purposes.
+        rootMargin: '-80px 0px -70% 0px',
+        threshold: 0,
+      },
+    );
+
+    for (const h of headings) observer.observe(h);
+  }
+</script>
