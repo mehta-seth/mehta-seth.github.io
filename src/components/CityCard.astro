@@ -1,0 +1,200 @@
+---
+// src/components/CityCard.astro
+//
+// One photo card on /cities/. Paul-style (§3.2): full-width cover,
+// then city name (H2), caption, optional meta line. The whole card
+// is a link — in v1 the href is a hash anchor on the same page so
+// the card still carries the correct affordances (hover, focus,
+// keyboard activation); v2 swaps hrefs to real /cities/<slug>/ routes.
+//
+// Props match §5/Phase 4 exactly — { name, slug, caption, image, meta } —
+// plus a `loading` prop to let the index page mark the first card
+// eager and the rest lazy (§5/Phase 4 acceptance criterion).
+//
+// Why <Picture> and not <Image>:
+//   <Image> emits one <img> with srcset in a single format. <Picture>
+//   emits <picture> with one <source srcset> PER format and a final
+//   <img> fallback, so browsers that support AVIF pull AVIF, those
+//   that only support WebP pull WebP, and legacy browsers get the
+//   original JPEG. Phase 4's acceptance criterion explicitly asks for
+//   "AVIF/WebP variants being generated and served" — <Picture> is
+//   the component that delivers that. Sharp is already installed
+//   (it ships with Astro 5 and is in node_modules from Phase 1).
+
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  name: string;
+  slug: string;
+  caption: string;
+  image: ImageMetadata;
+  meta?: string;
+  /**
+   * Native <img loading> semantics. The page decides which card is
+   * above-the-fold (eager) and which are below (lazy). Default 'lazy'
+   * is the safe choice for cards rendered anywhere else. Per §5/Phase 4:
+   * "LCP image is eagerly loaded, others are lazy."
+   */
+  loading?: 'eager' | 'lazy';
+}
+
+const { name, slug, caption, image, meta, loading = 'lazy' } = Astro.props;
+
+// v1 href: anchor on this page (§5/Phase 4: "Each card's link href for
+// v1 can be `#` or an anchor"). Also makes the links from the home page
+// (/cities/#kolhapur etc.) land on the right card. v2: /cities/<slug>/.
+const href = `#${slug}`;
+
+// Widths for srcset generation. Picked from §3.7 / §4.3 spec guidance:
+// 640 for mobile, 1024 for mid, 1600 for desktop, 2400 for high-DPI
+// desktop. The source asset is 2400px on the long edge, so we never
+// upscale.
+const widths = [640, 1024, 1600, 2400];
+
+// sizes attribute — helps the browser pick the right srcset candidate
+// BEFORE layout. The cards stack to a single column; on mobile they're
+// ~100vw (minus page padding), on desktop they top out at the card
+// container's max width (~50rem = 800px). The clamp between those two
+// ranges is what `sizes` is describing to the browser.
+const sizes = '(min-width: 50rem) 50rem, 100vw';
+
+// Alt text (accessibility, §6): descriptive, not decorative. The
+// current images are placeholders — once real photos land this will
+// want real descriptive alts per photo. For now the alt describes the
+// semantic role ("Cover image for …") which is correct for a cover.
+const alt = `Cover image for ${name}`;
+---
+
+<a
+  class="city-card"
+  href={href}
+  id={slug}
+  aria-labelledby={`city-${slug}-name`}
+>
+  <figure class="city-card__figure">
+    {/* <Picture> produces:
+         <picture>
+           <source type="image/avif" srcset="…w=640 640w, …w=1024 1024w, …" sizes="…">
+           <source type="image/webp" srcset="…" sizes="…">
+           <img src="…jpg" srcset="…" sizes="…" width=… height=… loading=…>
+         </picture>
+        The <img> inherits width/height from the source ImageMetadata
+        which gives the browser the aspect ratio pre-layout — no CLS. */}
+    <Picture
+      src={image}
+      formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+      widths={widths}
+      sizes={sizes}
+      alt={alt}
+      loading={loading}
+      decoding={loading === 'eager' ? 'sync' : 'async'}
+      class="city-card__img"
+    />
+  </figure>
+  <div class="city-card__meta">
+    {/* H2 — the city name is the primary heading on the card. The id
+        on the anchor above is `#<slug>` (which is what the home page
+        links to) so the anchor target is the card, not this H2. */}
+    <h2 id={`city-${slug}-name`} class="city-card__name">{name}</h2>
+    <p class="city-card__caption">{caption}</p>
+    {meta && <p class="city-card__metaline">{meta}</p>}
+  </div>
+</a>
+
+<style>
+  /* The card is a single <a>, so everything inside inherits from it.
+     We reset the default underlined-link styling that global.css
+     applies to all <a> tags — the card's affordance is the whole
+     block, not a text underline. */
+  .city-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    /* Offset for the #slug scroll-target so it doesn't sit flush at
+       the viewport top when jumped to from the home page's
+       /cities/#kolhapur link — leaves air above the card. */
+    scroll-margin-top: 4rem;
+  }
+  .city-card + .city-card {
+    /* Big gap between cards. Paul's /photos leaves roughly a full card's
+       worth of air between each entry so they read as a list of distinct
+       places, not a contact sheet. 4rem at mobile, 6rem at desktop. */
+    margin-top: 4rem;
+  }
+  @media (min-width: 768px) {
+    .city-card + .city-card {
+      margin-top: 6rem;
+    }
+  }
+
+  /* Figure wrapper: reset default <figure> margins; the image itself
+     sizes to 100% of the card width. Aspect ratio is enforced by the
+     <img>'s intrinsic width/height (2400×1600 = 3:2) so there's no
+     CLS on load. */
+  .city-card__figure {
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    /* Very subtle rounding — matches the essay <img> rule (2px). The
+       cover's visual weight comes from the photo, not from chrome. */
+    border-radius: 2px;
+    background-color: var(--bg-elevated);
+  }
+  .city-card__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* Guarantee the aspect ratio if ever an image's intrinsic dims
+       aren't read correctly by the browser before decode. 3 / 2 is
+       what the v1 placeholders use and §3.2 specifies. */
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    transition: opacity 200ms ease;
+  }
+
+  /* Below-the-photo metadata block. Left-aligned under the cover,
+     with enough top padding that the H2 has room to breathe — Paul's
+     cards give the name generous air. */
+  .city-card__meta {
+    padding-top: 1.25rem;
+  }
+
+  /* City name — large serif H2. Uses the global H2 token so it scales
+     with the rest of the system. No underline (we removed the default
+     link styling at the .city-card level).
+     On hover/focus of the card, the name picks up the accent color as
+     the primary hover affordance — same pattern used on the home page
+     linklist. */
+  .city-card__name {
+    font-size: var(--fs-h2);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.35em 0;
+    line-height: 1.15;
+    color: var(--text);
+    transition: color 150ms ease;
+  }
+  .city-card:hover .city-card__name,
+  .city-card:focus-visible .city-card__name {
+    color: var(--accent);
+  }
+
+  /* Caption — secondary voice. Smaller than body to keep the H2
+     dominant, italic-ish weight implied by color rather than style
+     (italics fight the serif's x-height a bit too much at small sizes). */
+  .city-card__caption {
+    font-size: 1.0625rem; /* 17px at default root, sits between small and body */
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+  .city-card__metaline {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    margin: 0.35em 0 0 0;
+    /* Deliberately muted further — this is the quietest line on the card. */
+    opacity: 0.85;
+  }
+</style>

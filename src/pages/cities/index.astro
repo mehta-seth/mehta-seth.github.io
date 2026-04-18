@@ -1,0 +1,96 @@
+---
+// src/pages/cities/index.astro
+//
+// Phase 4 — the cities index page (§5/Phase 4 of the v1 plan).
+//
+// Layout intent (§3.2):
+//   - Same wordmark top-left, theme toggle top-right chrome as essay pages.
+//   - No H1 — Paul's /photos goes straight into cards, and we follow him.
+//   - Vertical stack of three CityCards (not a grid). Paul's page scrolls
+//     long on purpose; that's the right feel for a quiet archive.
+//
+// Deferred to v2 (§9):
+//   - Individual /cities/<slug>/ pages. The CityCard hrefs point at hash
+//     anchors today (`#kolhapur` etc.) so the home-page links
+//     /cities/#kolhapur land correctly on each card. Flipping to real
+//     detail routes is a one-line change in CityCard.astro when v2
+//     arrives.
+//   - The India-map animation per-city.
+//   - Any grouping, filtering, or year navigation.
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Wordmark from '@/components/Wordmark.astro';
+import ThemeToggle from '@/components/ThemeToggle.astro';
+import CityCard from '@/components/CityCard.astro';
+import { cities } from '@/data/cities';
+
+// Page-level SEO. Phase 5 will layer on OG images + richer meta; for
+// Phase 4 the title + description are enough.
+const title = 'Cities — Adit Mehta';
+const description =
+  'Photographs from Kolhapur, Bangalore, and Pune — an archive of places Adit has called home.';
+---
+
+<BaseLayout title={title} description={description}>
+  <ThemeToggle />
+
+  {/* Page header — mirrors the essay layout's chrome so the wordmark
+      and toggle feel consistent across every sub-page. No "Archive"
+      link here (that lived on essay pages only); the wordmark alone
+      is the route back home. Padding-right reserves space for the
+      fixed theme toggle at top:1.25rem right:1.25rem from global.css. */}
+  <header class="cities-header">
+    <Wordmark href="/" size="small" />
+  </header>
+
+  <main class="cities-stage">
+    {/* Stack of cards. The first card is the LCP candidate on this
+        page, so it gets loading="eager" + decoding="sync"; the others
+        are lazy. Per §5/Phase 4 acceptance: "LCP image is eagerly
+        loaded, others are lazy." */}
+    {cities.map((city, i) => (
+      <CityCard
+        name={city.name}
+        slug={city.slug}
+        caption={city.caption}
+        image={city.image}
+        meta={city.meta}
+        loading={i === 0 ? 'eager' : 'lazy'}
+      />
+    ))}
+  </main>
+</BaseLayout>
+
+<style>
+  /* Page header — same visual language as EssayLayout.astro's
+     .essay-header, but without the right-side "Archive" link.
+     Max-width matches the stage below so the header and content align
+     to the same edge. */
+  .cities-header {
+    display: flex;
+    align-items: baseline;
+    padding: 2rem 1.5rem 0;
+    padding-right: 4.5rem; /* clear the fixed theme toggle */
+    max-width: 56rem;
+    margin-inline: auto;
+  }
+
+  /* The cards container. Wider than the essay column (42.5rem) because
+     photographs want room; narrower than Paul's page (which is ~48rem
+     at its widest) to keep the site cohesive. 50rem reads comfortably
+     on desktop and full-bleed-ish on mobile. Top padding is generous —
+     §3.7 says "Cities page starts from the top, small padding", which
+     I'm reading as "no vertical centering, modest top padding" rather
+     than "cram it to the edge". */
+  .cities-stage {
+    max-width: 50rem;
+    margin-inline: auto;
+    padding: 3rem 1.5rem 8rem;
+  }
+
+  @media (min-width: 1024px) {
+    .cities-stage {
+      padding: 4rem 2rem 10rem;
+    }
+  }
+</style>
