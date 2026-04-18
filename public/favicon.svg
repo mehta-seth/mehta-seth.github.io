@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!--
+    Favicon for aditmehta.com.
+
+    Design rationale: the single Devanagari letter "अ" (the first letter
+    of "अदित", and of the Sanskrit/Hindi alphabet). Matches the site's
+    bilingual wordmark better than a Latin "A" would — Latin "A" carries
+    no semantic weight on a site whose identity explicitly mixes scripts.
+
+    Rendered as plain text (not path-traced) so it inherits whichever
+    Devanagari font the browser/OS has available, keeping the SVG tiny
+    and always legible. This is acceptable because the whole point of
+    SVG favicon support is text + basic shapes; for a single glyph at
+    small sizes, text-with-font-fallback is more robust than a
+    rasterizable path.
+
+    Color: the warm-amber accent in both themes (#d4a574 dark, #8a5a2b
+    light). We serve the DARK accent here because (a) the dark theme is
+    the site's default, (b) most modern browsers show favicons on their
+    native (not page) chrome, so the background is unknown — warm amber
+    reads legibly against both light and dark tab bars.
+
+    Size: the SVG viewBox is 64×64, not 16×16, so anti-aliased scaling
+    is smooth down to 16px. Browser will render at whatever size the
+    consumer requests (16, 32, 64, etc.).
+  -->
+  <rect width="64" height="64" fill="none" />
+  <text
+    x="32"
+    y="50"
+    text-anchor="middle"
+    font-family="'Kalam', 'Noto Sans Devanagari', system-ui, sans-serif"
+    font-size="56"
+    font-weight="400"
+    fill="#d4a574"
+  >अ</text>
+</svg>

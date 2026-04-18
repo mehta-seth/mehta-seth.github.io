@@ -42,6 +42,21 @@ export interface City {
   /** Cover image — imported ImageMetadata so <Picture> can srcset it. */
   image: ImageMetadata;
   /**
+   * Alt text for the cover image.
+   *
+   * Per §5/Phase 5 §5.1: alt text describes what the REAL PHOTOGRAPH will
+   * eventually show, NOT the procedural gradient placeholder currently
+   * sitting in the JPEG. The consequence is that when a real photo ships
+   * in v2, the alt text doesn't need to change — these strings were
+   * written for the eventual real cover on each city.
+   *
+   * Guidance for v2 swap: if the final photo diverges dramatically from
+   * what's described here (e.g. we pick a night shot after describing a
+   * dusk shot), update this field at the same time as the image import
+   * above. For minor divergence (different street, same mood) leave as-is.
+   */
+  alt: string;
+  /**
    * Photographer attribution URL. Filled in when the procedurally-generated
    * placeholder is replaced with a real Unsplash photo. Unused in v1 rendering
    * (no UI for it yet), but stored here so credit can be surfaced later in
@@ -57,6 +72,7 @@ export const cities: City[] = [
     caption: 'Home, in the first sense of the word.',
     meta: '—',
     image: kolhapurCover,
+    alt: 'A quiet street in Kolhapur at dusk, terracotta walls and long shadows, the last light catching a temple spire.',
     // unsplashUrl: 'https://unsplash.com/photos/<id>', // TODO when real photo lands
   },
   {
@@ -65,6 +81,7 @@ export const cities: City[] = [
     caption: 'Weekends and weeknights, 2021–2023.',
     meta: '—',
     image: bangaloreCover,
+    alt: 'A tree-lined Bangalore avenue in soft afternoon light, motorbikes parked along the kerb, an old bungalow wall visible behind the canopy.',
     // unsplashUrl: 'https://unsplash.com/photos/<id>', // TODO when real photo lands
   },
   {
@@ -73,6 +90,7 @@ export const cities: City[] = [
     caption: 'A monsoon, and then another.',
     meta: '—',
     image: puneCover,
+    alt: 'A Pune courtyard during the monsoon, wet cobblestones reflecting a grey sky, a plant in a clay pot in the foreground.',
     // unsplashUrl: 'https://unsplash.com/photos/<id>', // TODO when real photo lands
   },
 ];

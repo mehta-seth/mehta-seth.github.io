@@ -1,0 +1,14 @@
+# robots.txt for aditmehta.com
+#
+# Allow all well-behaved crawlers to index everything. The site is
+# static, public, and intentionally discoverable. The sitemap is
+# advertised here so crawlers that honor it can discover new essays
+# and pages without spidering every link.
+#
+# If we ever add an /admin/ or /preview/ route (e.g. a draft-essay
+# preview in v2), disallow it explicitly here. For now: nothing to hide.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://mehta-seth.github.io/sitemap-index.xml

@@ -23,8 +23,14 @@
   type="button"
   class="theme-toggle"
   id="theme-toggle"
-  aria-label="Switch theme"
-  aria-live="polite"
+  {/* Default theme on first paint is dark (§3.5 + BaseLayout init script).
+      So the initial label describes the ACTION that click will take:
+      in dark mode, clicking switches to light. The inline script below
+      re-runs updateAriaLabel() after mount, which corrects this if the
+      user has previously chosen light and we loaded with `.dark`
+      absent on <html>. Either way the label is correct by the time a
+      screen reader could announce it. */}
+  aria-label="Switch to light mode"
 >
   {/* Sun icon — shown in dark mode (meaning: click to switch to light).
       Small circle + eight short rays. Stroke weight 1.5 matches body

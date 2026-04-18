@@ -31,6 +31,16 @@ interface Props {
   image: ImageMetadata;
   meta?: string;
   /**
+   * Descriptive alt text for the cover photograph. Phase 5 §5.1 upgrade:
+   * the cities data now carries real per-photo alts describing the
+   * eventual real photograph (not the placeholder). When provided, this
+   * prop takes precedence over the legacy "Cover image for {name}"
+   * fallback — which is kept ONLY for backwards compatibility with any
+   * old caller that hasn't been updated yet. In v1 production every
+   * caller passes `alt` via the cities data.
+   */
+  alt?: string;
+  /**
    * Native <img loading> semantics. The page decides which card is
    * above-the-fold (eager) and which are below (lazy). Default 'lazy'
    * is the safe choice for cards rendered anywhere else. Per §5/Phase 4:
@@ -39,7 +49,7 @@ interface Props {
   loading?: 'eager' | 'lazy';
 }
 
-const { name, slug, caption, image, meta, loading = 'lazy' } = Astro.props;
+const { name, slug, caption, image, meta, alt: altProp, loading = 'lazy' } = Astro.props;
 
 // v1 href: anchor on this page (§5/Phase 4: "Each card's link href for
 // v1 can be `#` or an anchor"). Also makes the links from the home page
@@ -59,11 +69,13 @@ const widths = [640, 1024, 1600, 2400];
 // ranges is what `sizes` is describing to the browser.
 const sizes = '(min-width: 50rem) 50rem, 100vw';
 
-// Alt text (accessibility, §6): descriptive, not decorative. The
-// current images are placeholders — once real photos land this will
-// want real descriptive alts per photo. For now the alt describes the
-// semantic role ("Cover image for …") which is correct for a cover.
-const alt = `Cover image for ${name}`;
+// Alt text resolution (§5.1 a11y):
+// - If the caller passed meaningful alt via the prop, use it as-is.
+// - If not, fall back to the semantic-role placeholder. The fallback is
+//   a last resort; an undescribed cover is better than a missing alt
+//   attribute (which makes screen readers read the filename) but still
+//   worse than a real description.
+const alt = altProp ?? `Cover image for ${name}`;
 ---
 
 <a

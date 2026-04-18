@@ -41,9 +41,15 @@ const EXPECTED = [
   { path: 'public/fonts/newsreader-400-ext.woff2',         min: 7000,  max: 22000,  label: 'Latin-Ext 400' },
   { path: 'public/fonts/newsreader-400-italic-ext.woff2',  min: 7000,  max: 22000,  label: 'Latin-Ext 400 italic' },
   { path: 'public/fonts/newsreader-600-ext.woff2',         min: 7000,  max: 22000,  label: 'Latin-Ext 600' },
-  // Kalam — Devanagari (inherently large due to conjuncts/matras)
-  { path: 'public/fonts/kalam-devanagari-400.woff2', min: 80000,  max: 150000, label: 'Devanagari 400' },
-  { path: 'public/fonts/kalam-devanagari-700.woff2', min: 80000,  max: 150000, label: 'Devanagari 700' },
+  // Kalam — Devanagari, aggressively subsetted to the 9 codepoints of
+  // the wordmark "अदित मेहता" (+ space). Full Devanagari @fontsource ships
+  // at ~108 KB/weight; after pyftsubset down to just these glyphs, both
+  // weights land at ~4 KB. If either balloons back into the tens of KB,
+  // someone ran refresh-fonts.mjs WITHOUT its pyftsubset post-step —
+  // see the subset hint below. Tight ranges (2–10 KB) catch that class
+  // of regression.
+  { path: 'public/fonts/kalam-devanagari-400.woff2', min: 2000, max: 10000, label: 'Devanagari 400 (wordmark subset)' },
+  { path: 'public/fonts/kalam-devanagari-700.woff2', min: 2000, max: 10000, label: 'Devanagari 700 (wordmark subset)' },
   // JetBrains Mono — Latin monospace
   { path: 'public/fonts/jetbrains-mono-400.woff2',   min: 15000,  max: 35000,  label: 'Monospace 400' },
 ];

@@ -31,7 +31,9 @@
    when they were fixed, Safari loaded the new files but Arc kept serving
    the 14 KB Cyrillic copy from cache. Renaming the URLs avoids that
    class of bug entirely — the old URL simply isn't requested anymore.
-   Current font version: v=2.
+   Current font version: v=3.  (Bumped 2→3 in Phase 5 when Kalam shrank
+   from ~108 KB to ~4 KB. All fonts bumped together because
+   check-fonts.mjs enforces a single consistent version across the set.)
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Newsreader · Latin subset ──
@@ -48,7 +50,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/newsreader-400.woff2?v=2') format('woff2');
+  src: url('/fonts/newsreader-400.woff2?v=3') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
@@ -56,7 +58,7 @@
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/newsreader-400-italic.woff2?v=2') format('woff2');
+  src: url('/fonts/newsreader-400-italic.woff2?v=3') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
@@ -64,7 +66,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('/fonts/newsreader-600.woff2?v=2') format('woff2');
+  src: url('/fonts/newsreader-600.woff2?v=3') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -80,7 +82,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/newsreader-400-ext.woff2?v=2') format('woff2');
+  src: url('/fonts/newsreader-400-ext.woff2?v=3') format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
@@ -88,7 +90,7 @@
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/newsreader-400-italic-ext.woff2?v=2') format('woff2');
+  src: url('/fonts/newsreader-400-italic-ext.woff2?v=3') format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
@@ -96,22 +98,60 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('/fonts/newsreader-600-ext.woff2?v=2') format('woff2');
+  src: url('/fonts/newsreader-600-ext.woff2?v=3') format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-/* ── Kalam · Devanagari ──
-   unicode-range limits Kalam to the Devanagari block — the Latin glyphs
-   of Kalam are handwritten and we never want them rendering any Latin
-   content (§3.4). This lets us write `font-family: 'Newsreader', 'Kalam'`
-   on mixed-script elements and have the browser pick Kalam only for
-   Devanagari codepoints. */
+/* ── Kalam · Devanagari (wordmark subset) ──
+   Kalam is used ONLY for the Devanagari half of the wordmark
+   "अदित मेहता" — 5 consonants, 3 vowel signs, 1 space. The upstream
+   @fontsource Devanagari WOFF2 is ~108 KB/weight (inherently large due
+   to conjuncts and matras covering the full Unicode block U+0900–U+097F).
+   For two weights that's ~216 KB on every page load for nine glyphs.
+
+   Phase 5 aggressively subsets both weights to the exact codepoints used
+   in the wordmark. Result: ~4 KB/weight — a 27× reduction, well under
+   the 40 KB per-font budget and the 15 KB Phase 5 Kalam target.
+
+   ┌── reproducibility: regenerate from the full @fontsource files ──┐
+   │ pyftsubset kalam-devanagari-400.woff2 \                          │
+   │   --unicodes="U+0020,U+0905,U+0924,U+0926,U+092E,U+0939,U+093E,U+093F,U+0947" \│
+   │   --layout-features='*' \                                        │
+   │   --flavor=woff2 \                                               │
+   │   --output-file=kalam-devanagari-400.woff2                       │
+   │                                                                  │
+   │ Same command for the 700 file. Requires:                         │
+   │   pip install fonttools brotli                                   │
+   │                                                                  │
+   │ scripts/refresh-fonts.mjs automates this: after copying the full │
+   │ files from @fontsource it runs pyftsubset in place, so the       │
+   │ standard "refresh → check → commit" flow preserves the subset.   │
+   └──────────────────────────────────────────────────────────────────┘
+
+   Codepoints kept:
+     U+0020 space      U+0905 अ (a)       U+0924 त (ta)
+     U+0926 द (da)     U+092E म (ma)      U+0939 ह (ha)
+     U+093E ा (aa)     U+093F ि (i)       U+0947 े  (e)
+
+   unicode-range below still declares the full Devanagari block, not the
+   subset — this is deliberate. The range tells the browser which
+   codepoints to ask for; it does NOT claim the file contains them. If
+   the site ever uses a Devanagari codepoint OUTSIDE our subset, the
+   browser will still REQUEST this file (because the range matches), but
+   the glyph will fall through to the system Devanagari font after Kalam
+   silently misses it. Authoring that case would be an oversight and
+   should be caught in review; restricting the unicode-range to our 9
+   codepoints would hide the oversight by never triggering the request.
+
+   Cache-buster bumped 2→3 at Phase 5 when the files shrank from ~108 KB
+   to ~4 KB — a live-site deploy without the bump would leave cached
+   browsers serving the stale 108 KB copies. */
 @font-face {
   font-family: 'Kalam';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/kalam-devanagari-400.woff2?v=2') format('woff2');
+  src: url('/fonts/kalam-devanagari-400.woff2?v=3') format('woff2');
   unicode-range: U+0900-097F, U+A8E0-A8FF, U+1CD0-1CFF, U+200C-200D, U+25CC;
 }
 @font-face {
@@ -119,7 +159,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/fonts/kalam-devanagari-700.woff2?v=2') format('woff2');
+  src: url('/fonts/kalam-devanagari-700.woff2?v=3') format('woff2');
   unicode-range: U+0900-097F, U+A8E0-A8FF, U+1CD0-1CFF, U+200C-200D, U+25CC;
 }
 
@@ -131,7 +171,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/jetbrains-mono-400.woff2?v=2') format('woff2');
+  src: url('/fonts/jetbrains-mono-400.woff2?v=3') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -283,15 +323,61 @@ body::before {
   mix-blend-mode: overlay;
 }
 
-/* ─── 5. Accessibility: focus + reduced-motion ────────────────────── */
+/* ─── 5. Accessibility: focus + reduced-motion + skip link ────────── */
 
-/* Keyboard focus ring. Uses accent color, 2px offset, never blue. */
+/* Keyboard focus ring. Uses accent color, 2px offset, never blue.
+   :focus-visible (NOT :focus) is deliberate — it means mouse clicks on
+   buttons and links don't leave a lingering outline after the pointer
+   moves away, while keyboard Tab users still get a clear indicator.
+   Per §5.1: "Use :focus-visible, NOT :focus — so mouse clicks don't
+   leave a lingering ring." */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
+/* Belt-and-braces: explicitly strip any :focus styling for the
+   non-keyboard case. Chromium honors :focus-visible already, but some
+   older browsers still apply UA :focus styles; this guarantees silence. */
 :focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Skip to main content link (§5.1) ──
+   First focusable element in <body> (placed there by BaseLayout).
+   Hidden offscreen by default via transform — NOT display:none, which
+   would strip it from the accessibility tree entirely, and NOT
+   visibility:hidden, which would make :focus impossible to land on.
+   Transform moves it visually without touching the a11y tree.
+
+   When the user tabs into it, the :focus-visible rule slides it in
+   from the top-left with an accent pill. Enter jumps to #main-content
+   (the wrapper around the page's <slot />), which is the page's
+   logical starting point (past the fixed theme toggle and page
+   chrome). */
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 300; /* above grain (100) AND theme toggle (200) */
+  padding: 0.6rem 1rem;
+  background-color: var(--accent);
+  color: var(--bg);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 3px;
+  /* Offscreen: the transform trick. Kept in the a11y tree (unlike
+     display:none) and still focusable (unlike visibility:hidden). */
+  transform: translateY(-150%);
+  transition: transform 150ms ease;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  /* Suppress the default focus outline on this specific element —
+     the pill's accent background already communicates focus and an
+     additional ring on a pill of this size looks doubled. */
   outline: none;
 }
 

@@ -50,10 +50,21 @@ const isoDate = date.toISOString();
 // Browser-tab title. The wordmark's full bilingual string is too long
 // here; "{Essay Title} — Adit Mehta" matches Phase 5's SEO spec (§6).
 const headTitle = `${title} — Adit Mehta`;
-const headDescription = subtitle ?? title;
+
+// SEO description for the essay page. Prefers subtitle (the author's
+// own one-line summary) when present; falls back to title. Always
+// suffixed with an author tag so the description is substantive even
+// when the subtitle is very short (Phase 5 §5.3 target: 140–160 chars).
+// If this ever lands above the ~160 char limit for a given essay's
+// long subtitle, feed readers and search engines truncate it
+// gracefully — we're not chasing perfection here, just ensuring the
+// snippet is useful.
+const headDescription = subtitle
+  ? `${subtitle}. An essay by Adit Mehta.`
+  : `${title}. An essay by Adit Mehta.`;
 ---
 
-<BaseLayout title={headTitle} description={headDescription}>
+<BaseLayout title={headTitle} description={headDescription} ogType="article">
   <ThemeToggle />
 
   {/* Page header — wordmark left, archive link right. The fixed theme

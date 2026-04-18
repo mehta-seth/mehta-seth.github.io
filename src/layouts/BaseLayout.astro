@@ -2,31 +2,53 @@
 // BaseLayout.astro
 //
 // Wraps every page in the site. Responsibilities:
-//   1. Document head: meta tags, font preloading, pre-paint theme init
-//      script, global stylesheet.
-//   2. Document body: a default slot for page content. The grain overlay
-//      is a ::before pseudo-element on the body (defined in global.css)
-//      and is always present.
+//   1. Document head: meta tags (SEO + social), per-page title/description
+//      overrides, font preloading, pre-paint theme init script, favicon/
+//      touch-icon/theme-color wiring, RSS alternate link, stylesheet.
+//   2. Document body: a skip-to-content link (a11y), then a default slot
+//      for page content. The grain overlay is a ::before pseudo-element
+//      on the body (global.css) and is always present.
 //
 // Phase 1 acceptance criterion 1: "No FOUT on refresh" — handled by
 // preloading the two most-important font files AND font-display:swap.
 // Phase 1 acceptance criterion 3: "Persisted on refresh, no flash" —
 // handled by the synchronous inline theme-init script placed at the
 // start of the document head.
+//
+// Phase 5 additions:
+//   - Per-page OG/Twitter overrides via `ogImage` + `ogType` props
+//     (defaults to /og-default.png, summary_large_image).
+//   - Favicon SVG monogram + apple-touch-icon PNG + theme-color meta
+//     (media-queried so light mode gets the warm cream bg, dark mode
+//     gets near-black).
+//   - <link rel="alternate" type="application/rss+xml"> pointing at
+//     /rss.xml so feed readers can discover it from any page.
+//   - Skip link as the first element in <body> — visually hidden until
+//     focused by Tab, then slides in at the top-left. All page content
+//     is wrapped in <div id="main-content"> as the jump target.
 
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
+  /** Absolute or root-relative URL of the per-page OG image. Defaults to the site-wide og-default. */
+  ogImage?: string;
+  /** og:type — 'website' for list/home pages, 'article' for essays. */
+  ogType?: 'website' | 'article';
 }
 
 const {
   title = 'Adit Mehta · अदित मेहता',
   description = 'Personal website of Adit Mehta. Essays and photographs.',
+  ogImage = '/og-default.png',
+  ogType = 'website',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+// Resolve the OG image URL against Astro.site so Twitter/Slack/iMessage
+// crawlers get an absolute URL (they refuse relative paths).
+const ogImageAbsolute = new URL(ogImage, Astro.site).toString();
 ---
 
 <!doctype html>
@@ -62,50 +84,103 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
+    {/* ───────── theme-color ─────────
+        Tints mobile browser chrome (Safari iOS status bar, Chrome
+        Android URL bar) to match the current theme. Two tags with
+        media queries: the default matches dark (our default theme on
+        first paint per §3.5), and a prefers-color-scheme: light variant
+        hands the light-mode cream bg to browsers that honor it. Real
+        theme switching via JS doesn't update this — the meta is
+        paint-time only — but first-paint correctness is the 80% case. */}
+    <meta name="theme-color" content="#181818" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#faf8f3"
+    />
+
     {/* Preload the two critical fonts — body Latin 400 and the Devanagari
         400 used in the wordmark. The rest load on-demand via font-display:swap.
         `crossorigin` is required on font preloads per spec.
 
         ?v=<N> must match the version used in src/styles/global.css @font-face
         src URLs. When fonts are refreshed, bump BOTH places. The scripts/
-        check-fonts.mjs script verifies they match as a pre-build safety net. */}
+        check-fonts.mjs script verifies they match as a pre-build safety net.
+        All fonts bumped 2→3 in Phase 5 when Kalam shrank from ~108 KB to
+        ~4 KB — the font-check enforces a single consistent version across
+        the set, so all URLs moved together. */}
     <link
       rel="preload"
-      href="/fonts/newsreader-400.woff2?v=2"
+      href="/fonts/newsreader-400.woff2?v=3"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
     />
     <link
       rel="preload"
-      href="/fonts/kalam-devanagari-400.woff2?v=2"
+      href="/fonts/kalam-devanagari-400.woff2?v=3"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
     />
 
-    {/* Favicon — Phase 5 will ship a real one; for Phase 1 use a transparent
-        1×1 SVG so the browser doesn't 404-request favicon.ico on every page. */}
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
-    />
+    {/* ───────── Icons ─────────
+        favicon.svg — monogram, scales crisply at every size.
+        apple-touch-icon.png — 180×180, iOS home-screen. */}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <title>{title}</title>
     <link rel="canonical" href={canonical} />
 
-    {/* Open Graph / Twitter cards are stubbed for Phase 1; fleshed out in Phase 5. */}
+    {/* ───────── Open Graph ─────────
+        Fleshed out in Phase 5. og:image is an absolute URL (resolved
+        against Astro.site) because Slack/iMessage/Twitter crawlers
+        reject relative paths. og:type defaults to 'website' and is
+        overridden to 'article' on essay pages via the prop. */}
+    <meta property="og:site_name" content="Adit Mehta" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImageAbsolute} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    {/* ───────── Twitter card ─────────
+        summary_large_image picks up the 1200×630 og:image as a banner,
+        which is the standard treatment for essays and photo-heavy sites.
+        Paul's /photos uses this; Dario's essays use this. */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbsolute} />
 
     {/* Tell search engines the site language is primarily English with
         Hindi fragments (the wordmark). Good for Indian search context (§6). */}
     <meta http-equiv="content-language" content="en" />
+
+    {/* RSS autodiscovery — feed readers and browsers scan this link
+        from any page. The feed itself is generated at build time by
+        src/pages/rss.xml.ts. */}
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Adit Mehta — Essays"
+      href="/rss.xml"
+    />
   </head>
   <body>
-    <slot />
+    {/* ───────── Skip link (a11y, §5.1) ─────────
+        First focusable element on every page. Visually hidden by default
+        (the .skip-link rule in global.css pulls it offscreen with a
+        transform, not display:none — display:none strips it from the
+        accessibility tree too, which is the common mistake). When the
+        user tabs into it, :focus-visible moves it back into view at the
+        top-left with an accent background, and Enter jumps to
+        #main-content — the wrapper around <slot /> below. */}
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="main-content"><slot /></div>
   </body>
 </html>

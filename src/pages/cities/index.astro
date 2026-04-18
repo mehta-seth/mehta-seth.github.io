@@ -28,7 +28,7 @@ import { cities } from '@/data/cities';
 // Phase 4 the title + description are enough.
 const title = 'Cities — Adit Mehta';
 const description =
-  'Photographs from Kolhapur, Bangalore, and Pune — an archive of places Adit has called home.';
+  'Photographs from Kolhapur, Bangalore, and Pune — an archive of the places Adit Mehta has called home, visual notes on monsoons, weekends, and evenings.';
 ---
 
 <BaseLayout title={title} description={description}>
@@ -44,6 +44,20 @@ const description =
   </header>
 
   <main class="cities-stage">
+    {/* ───────── In-progress notice (§5/Phase 5.7) ─────────
+        A single quiet editorial line above the first card, explaining
+        that the covers are still placeholders. Deliberately NOT a box,
+        banner, alert, icon, or dismissible element — it's a note on the
+        page, not a system message. When the real photos ship in v2,
+        this one <p> gets deleted in a single edit.
+
+        No role="note", no aria-live — it's static content, plain prose
+        read top-to-bottom with the rest of the page. */}
+    <p class="cities-notice">
+      Photos coming soon — real cities, real rolls of film. These covers
+      are placeholders.
+    </p>
+
     {/* Stack of cards. The first card is the LCP candidate on this
         page, so it gets loading="eager" + decoding="sync"; the others
         are lazy. Per §5/Phase 4 acceptance: "LCP image is eagerly
@@ -55,6 +69,7 @@ const description =
         caption={city.caption}
         image={city.image}
         meta={city.meta}
+        alt={city.alt}
         loading={i === 0 ? 'eager' : 'lazy'}
       />
     ))}
@@ -92,5 +107,19 @@ const description =
     .cities-stage {
       padding: 4rem 2rem 10rem;
     }
+  }
+
+  /* ── In-progress notice (§5/Phase 5.7) ──
+     Quiet editorial note. Small type, muted color, italic for voice,
+     left-aligned to match the card column. Generous bottom margin so
+     it sits in its own air before the first card. Not boxed, not
+     framed — it's a line of prose, not a system message. */
+  .cities-notice {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    font-style: italic;
+    margin: 0 0 2rem 0;
+    line-height: 1.5;
+    max-width: 32rem;
   }
 </style>
