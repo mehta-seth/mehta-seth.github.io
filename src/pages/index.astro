@@ -1,0 +1,58 @@
+---
+// Phase 1 home page.
+//
+// Per §5/Phase 1 task 9: "Create a placeholder / (home) with just the
+// wordmark and toggle, and confirm everything renders cleanly in both
+// themes." The real home page content (bio, essays list, cities list,
+// email) is Phase 2 and lives in this same file then.
+//
+// What's visible on this page:
+//   - Wordmark (home link, big).
+//   - Theme toggle (fixed, top-right).
+//   - A muted line of "scaffold complete" text so it's clear this is
+//     the infrastructure checkpoint, not the finished home page.
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Wordmark from '../components/Wordmark.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+---
+
+<BaseLayout title="Adit Mehta · अदित मेहता">
+  <ThemeToggle />
+
+  <main class="home-stage">
+    <div class="home-card">
+      <Wordmark href="/" />
+      <p class="scaffold-note">
+        Scaffold ready. Phase 2 fills this page with real content — bio,
+        essays list, cities list, email.
+      </p>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  /* Per §3.7, the home card sits centered vertically AND horizontally on
+     desktop. On mobile, padded from the top, not centered. */
+  .home-stage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .scaffold-note {
+    margin-top: 2rem;
+    color: var(--text-muted);
+    font-size: var(--fs-small);
+    font-style: italic;
+  }
+
+  @media (max-width: 640px) {
+    .home-stage {
+      align-items: flex-start;
+      padding-top: 5rem;
+    }
+  }
+</style>

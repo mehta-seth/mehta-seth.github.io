@@ -1,0 +1,46 @@
+---
+// Wordmark.astro
+// The bilingual name-as-home-link that appears on every page.
+// Renders: "Adit Mehta · अदित मेहता" — Latin in Newsreader, Devanagari
+// in Kalam, separated by a middle-dot.
+//
+// Props:
+//   href:  where the wordmark links to. Default '/'. Essay pages may pass
+//          '/' explicitly; the component doesn't assume anything.
+//   size:  'default' | 'small'. Small variant for sub-page headers (essay,
+//          cities) per §3.2. Phase 1 only uses 'default' on the home page.
+
+interface Props {
+  href?: string;
+  size?: 'default' | 'small';
+}
+
+const { href = '/', size = 'default' } = Astro.props;
+
+// Use a dynamic class to scale down without duplicating wordmark styles.
+const sizeClass = size === 'small' ? 'wordmark--small' : '';
+---
+
+<a
+  class:list={['wordmark', sizeClass]}
+  href={href}
+  aria-label="Adit Mehta — home"
+>
+  <span class="latin">Adit Mehta</span>
+  <span class="dot" aria-hidden="true">·</span>
+  {/* lang="hi" so screen readers and spellcheck treat this as Hindi
+      and the browser picks the right shaper for the glyphs. */}
+  <span class="devanagari" lang="hi">अदित मेहता</span>
+</a>
+
+<style>
+  .wordmark {
+    /* H1-ish on home, per the red-rectangle sketch — not actually an <h1>
+       because the home page may want a real <h1> elsewhere. Visual weight
+       only. */
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.875rem);
+  }
+  .wordmark--small {
+    font-size: 1.125rem;
+  }
+</style>

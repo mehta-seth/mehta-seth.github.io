@@ -1,0 +1,107 @@
+---
+// BaseLayout.astro
+//
+// Wraps every page in the site. Responsibilities:
+//   1. Document head: meta tags, font preloading, pre-paint theme init
+//      script, global stylesheet.
+//   2. Document body: a default slot for page content. The grain overlay
+//      is a ::before pseudo-element on the body (defined in global.css)
+//      and is always present.
+//
+// Phase 1 acceptance criterion 1: "No FOUT on refresh" — handled by
+// preloading the two most-important font files AND font-display:swap.
+// Phase 1 acceptance criterion 3: "Persisted on refresh, no flash" —
+// handled by the synchronous inline theme-init script placed at the
+// start of the document head.
+
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Adit Mehta · अदित मेहता',
+  description = 'Personal website of Adit Mehta. Essays and photographs.',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    {/* ───────── Pre-paint theme init ─────────
+        Runs synchronously, blocks first paint by design. Reads
+        localStorage and applies `dark` class BEFORE the browser
+        paints anything, so there's never a flash of the wrong theme.
+        Per §3.5: default on first visit is dark (overrides OS pref).
+
+        We deliberately don't `await` or defer this — the whole point
+        is that it runs before any styled content renders. Its cost
+        is ~1ms; the flash-of-wrong-theme it prevents is ~100ms. */}
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          // Default: dark, unless the user has explicitly chosen light.
+          var theme = stored === 'light' ? 'light' : 'dark';
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {
+          // localStorage blocked → fall back to dark default.
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* Preload the two critical fonts — body Latin 400 and the Devanagari
+        400 used in the wordmark. The rest load on-demand via font-display:swap.
+        `crossorigin` is required on font preloads per spec. */}
+    <link
+      rel="preload"
+      href="/fonts/newsreader-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/fonts/kalam-devanagari-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+
+    {/* Favicon — Phase 5 will ship a real one; for Phase 1 use a transparent
+        1×1 SVG so the browser doesn't 404-request favicon.ico on every page. */}
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
+    />
+
+    <title>{title}</title>
+    <link rel="canonical" href={canonical} />
+
+    {/* Open Graph / Twitter cards are stubbed for Phase 1; fleshed out in Phase 5. */}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+
+    {/* Tell search engines the site language is primarily English with
+        Hindi fragments (the wordmark). Good for Indian search context (§6). */}
+    <meta http-equiv="content-language" content="en" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,181 @@
+---
+// ThemeToggle.astro
+//
+// The site's most-visible piece of interactivity (§3.5).
+// Behavior:
+//   - Default theme on first visit: dark (overrides prefers-color-scheme).
+//   - Persists choice to localStorage under key 'theme'.
+//   - Theme-init runs inline BEFORE first paint (from inside BaseLayout)
+//     so there's no flash-of-wrong-theme.
+//   - On click: View Transitions API + clip-path animation expanding a
+//     circle from the click point. Fallback: instant swap (Firefox, or
+//     prefers-reduced-motion).
+//   - Icon: sun in dark mode (click to go light), moon in light mode.
+//     Icons are hand-drawn inline SVGs — not a Lucide import — so stroke
+//     weight matches the site's text.
+//
+// This file ships exactly one inline script. The toggle is small enough
+// that a framework island is overkill; a plain script tag runs once per
+// page load and attaches a listener.
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  id="theme-toggle"
+  aria-label="Switch theme"
+  aria-live="polite"
+>
+  {/* Sun icon — shown in dark mode (meaning: click to switch to light).
+      Small circle + eight short rays. Stroke weight 1.5 matches body
+      serif at ~1.25rem — not too delicate, not too assertive. */}
+  <svg
+    class="icon-sun"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <line x1="12" y1="3" x2="12" y2="5"></line>
+    <line x1="12" y1="19" x2="12" y2="21"></line>
+    <line x1="3" y1="12" x2="5" y2="12"></line>
+    <line x1="19" y1="12" x2="21" y2="12"></line>
+    <line x1="5.6" y1="5.6" x2="7" y2="7"></line>
+    <line x1="17" y1="17" x2="18.4" y2="18.4"></line>
+    <line x1="5.6" y1="18.4" x2="7" y2="17"></line>
+    <line x1="17" y1="7" x2="18.4" y2="5.6"></line>
+  </svg>
+  {/* Moon icon — shown in light mode (meaning: click to switch to dark).
+      A crescent formed by one path, not two overlapping circles, so the
+      edge is a single smooth curve. */}
+  <svg
+    class="icon-moon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path>
+  </svg>
+</button>
+
+<style>
+  /* Which icon is visible depends on the current theme class on <html>.
+     Both SVGs are always in the DOM; we just toggle opacity + display
+     so the cross-fade (150ms, per §3.5) reads as instant but smooth. */
+  .theme-toggle .icon-sun,
+  .theme-toggle .icon-moon {
+    position: absolute;
+  }
+  /* Dark mode → sun visible (click to go light) */
+  :global(html.dark) .theme-toggle .icon-sun { opacity: 1; }
+  :global(html.dark) .theme-toggle .icon-moon { opacity: 0; }
+  /* Light mode → moon visible (click to go dark) */
+  :global(html:not(.dark)) .theme-toggle .icon-sun { opacity: 0; }
+  :global(html:not(.dark)) .theme-toggle .icon-moon { opacity: 1; }
+</style>
+
+<script>
+  // Client-side theme toggle, inlined.
+  //
+  // Why not an island? Islands are for component frameworks (React/Vue).
+  // This is 30 lines of vanilla JS — a plain inline script tag is lighter
+  // and runs once per page without hydration overhead.
+  //
+  // NOTE: The pre-paint init that sets the `dark` class on the document
+  // element lives in BaseLayout (inside the document head), not here. By
+  // the time this script runs (at the end of the body), the class is
+  // already correct.
+
+  const THEME_KEY = 'theme';
+
+  function currentTheme(): 'dark' | 'light' {
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme: 'dark' | 'light') {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // localStorage disabled (private mode / storage denied) — ignore.
+      // The theme will simply reset to default on next page load.
+    }
+    updateAriaLabel();
+  }
+
+  function updateAriaLabel() {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.setAttribute(
+      'aria-label',
+      currentTheme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode',
+    );
+  }
+
+  function toggleTheme(event: MouseEvent) {
+    const next = currentTheme() === 'dark' ? 'light' : 'dark';
+
+    // Feature-detect View Transitions API, and respect reduced-motion.
+    // If either is missing, swap instantly — the existing CSS background
+    // transition on the document body provides a graceful 200ms fade
+    // fallback.
+    const prefersReduced =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // @ts-ignore — startViewTransition is new; TS lib may not have it yet.
+    const supportsVT = typeof document.startViewTransition === 'function';
+
+    if (!supportsVT || prefersReduced) {
+      applyTheme(next);
+      return;
+    }
+
+    // Origin point = mouse click location. Fall back to button center
+    // for keyboard-triggered clicks (which have clientX/Y = 0,0).
+    const btn = event.currentTarget as HTMLElement | null;
+    let x = event.clientX;
+    let y = event.clientY;
+    if ((x === 0 && y === 0) && btn) {
+      const r = btn.getBoundingClientRect();
+      x = r.left + r.width / 2;
+      y = r.top + r.height / 2;
+    }
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    // @ts-ignore
+    const transition = document.startViewTransition(() => applyTheme(next));
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 500,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          pseudoElement: '::view-transition-new(root)',
+        },
+      );
+    });
+  }
+
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', toggleTheme as EventListener);
+    updateAriaLabel();
+  }
+</script>

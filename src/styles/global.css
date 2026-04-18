@@ -1,0 +1,330 @@
+/* ─────────────────────────────────────────────────────────────────────
+   global.css — the root of the site's visual system.
+
+   Structure:
+     1. @font-face declarations (self-hosted WOFF2s in /public/fonts)
+     2. Design tokens — CSS custom properties for both themes (§3.3)
+     3. Base typography (§3.4)
+     4. Grain overlay (§3.6)
+     5. Utility & accessibility (focus, reduced-motion, selection)
+     6. View Transitions tweaks for the theme toggle (§3.5)
+     7. Tailwind layers (we injected `applyBaseStyles:false` so this file
+        is the single source of truth)
+   ───────────────────────────────────────────────────────────────────── */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── 1. Fonts ─────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/newsreader-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/newsreader-400-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/newsreader-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Kalam';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  /* unicode-range limits Kalam to the Devanagari block — the Latin glyphs
+     of Kalam are handwritten and we never want them rendering any Latin
+     content (§3.4). This lets us write `font-family: 'Newsreader', 'Kalam'`
+     on mixed-script elements and have the browser pick Kalam only for
+     Devanagari codepoints. */
+  unicode-range: U+0900-097F, U+A8E0-A8FF, U+1CD0-1CFF, U+200C-200D, U+25CC;
+  src: url('/fonts/kalam-devanagari-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Kalam';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0900-097F, U+A8E0-A8FF, U+1CD0-1CFF, U+200C-200D, U+25CC;
+  src: url('/fonts/kalam-devanagari-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-400.woff2') format('woff2');
+}
+
+/* ─── 2. Design tokens (§3.3) ──────────────────────────────────────── */
+
+:root {
+  /* Light theme (Paul-style) */
+  --bg: #faf8f3;
+  --bg-elevated: #ffffff;
+  --text: #1a1814;
+  --text-muted: #6a6358;
+  --accent: #8a5a2b;
+  --border: #e8e2d4;
+  --grain-opacity: 0.015;
+
+  /* Fluid type scale — the inner values use clamp so they scale smoothly
+     between the mobile and desktop targets from §3.4 without needing a
+     media query. Min value = mobile target, max value = desktop target. */
+  --fs-body: clamp(1.125rem, 0.95rem + 0.45vw, 1.25rem); /* 18→20 */
+  --fs-h1: clamp(1.875rem, 1.4rem + 1.75vw, 2.25rem);     /* 30→36 */
+  --fs-h2: clamp(1.375rem, 1.125rem + 0.8vw, 1.625rem);   /* 22→26 */
+  --fs-h3: clamp(1.125rem, 1.0625rem + 0.25vw, 1.25rem);  /* 18→20 */
+  --fs-small: 0.9375rem;
+
+  --lh-body: 1.65;
+  --lh-heading: 1.2;
+}
+
+:root.dark {
+  /* Dark theme (Dario-style, warm off-white on warm near-black) */
+  --bg: #181818;
+  --bg-elevated: #1f1f1f;
+  --text: #e8e4dc;
+  --text-muted: #a0978a;
+  --accent: #d4a574;
+  --border: #2a2a2a;
+  --grain-opacity: 0.04;
+}
+
+/* ─── 3. Base typography ───────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* 16px root — type scale is derived from this. */
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  /* Newsreader for Latin; Kalam's unicode-range ensures Devanagari codepoints
+     (if mixed into body text anywhere, though per spec they shouldn't be)
+     fall through to Kalam then Noto. */
+  font-family: 'Newsreader', 'Kalam', 'Charter', 'Georgia', serif;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Background and color transition on theme switch — the View Transitions
+     clip-path animation layers *on top of* this, but if VT isn't available
+     (Firefox pre-support), this provides a graceful ~200ms fade fallback. */
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Headings — serif, tighter line-height, normal weight per Dario. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Newsreader', 'Charter', 'Georgia', serif;
+  line-height: var(--lh-heading);
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+p {
+  margin: 0 0 1.1em 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.18em;
+  transition: color 150ms ease, text-decoration-color 150ms ease;
+}
+a:hover {
+  color: var(--text);
+  text-decoration-color: var(--accent);
+}
+
+small, .small {
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+
+code, kbd, samp, pre {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ─── 4. Grain overlay (§3.6) ──────────────────────────────────────── */
+
+/* Fixed-position full-viewport overlay. pointer-events:none so it never
+   intercepts clicks; z-index high enough to sit over content but NOT over
+   the theme-toggle's view-transition pseudo-element, which renders on its
+   own layer managed by the UA. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  background-image: url('/textures/grain.png');
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+}
+
+/* ─── 5. Accessibility: focus + reduced-motion ────────────────────── */
+
+/* Keyboard focus ring. Uses accent color, 2px offset, never blue. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Honor reduced-motion system preference. The theme toggle's JS checks
+   this too (§3.5); this block handles any CSS animations we add later. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── 6. View Transitions — theme toggle (§3.5) ───────────────────── */
+
+/* Disable the UA's default cross-fade so our clip-path animation is the
+   only thing happening. Without this, you get an ugly double animation. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Old theme paints first, new theme paints on top inside the expanding
+   clip-path circle. Stacking order matters. */
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* ─── 7. Utility / layout primitives ──────────────────────────────── */
+
+/* The centered home card (§3.7). Used by the home page only. */
+.home-card {
+  width: 100%;
+  max-width: var(--card-max, 40rem);
+  margin-inline: auto;
+  padding: 1.5rem;
+}
+
+/* Wordmark typography — mixed-script string "Adit Mehta · अदित मेहता".
+   font-family lists both families; unicode-range on Kalam ensures the
+   Devanagari chars get Kalam while the Latin chars get Newsreader. */
+.wordmark {
+  font-family: 'Newsreader', 'Kalam', serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text);
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.3;
+}
+.wordmark:hover {
+  color: var(--accent);
+}
+/* The Devanagari portion is slightly larger visually at the same pt size —
+   Kalam's x-height is taller than Newsreader's. Nudge it down fractionally
+   so the two visually match. */
+.wordmark .devanagari {
+  font-family: 'Kalam', 'Noto Sans Devanagari', sans-serif;
+  font-weight: 400;
+  font-size: 0.92em;
+}
+.wordmark .dot {
+  /* Middle dot — keep the same color as surrounding text, no special treatment. */
+  margin: 0 0.35em;
+  opacity: 0.6;
+}
+/* On very narrow screens, drop the dot and stack (§3.1). */
+@media (max-width: 479px) {
+  .wordmark {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+  }
+  .wordmark .dot { display: none; }
+}
+
+/* Theme-toggle button — fixed position, top-right of viewport.
+   Icons animate via the wordmark, not the button itself (§3.5). */
+.theme-toggle {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  cursor: pointer;
+  z-index: 200;
+  transition: border-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.theme-toggle:active {
+  transform: scale(0.96);
+}
+.theme-toggle svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  /* Cross-fade the icon swap per §3.5 (instant-ish, 150ms). */
+  transition: opacity 150ms ease;
+}
