@@ -49,9 +49,13 @@ const cities = [
   { name: 'Pune', href: '/cities/#pune' },
 ];
 
-// Primary contact — also referenced in the doc's author line. Kept in a
-// const so Phase 5's OG-image generator can reuse it if we want.
-const email = 'ad1t.mehta00@gmail.com';
+// Primary contact. Displayed as plain text in an obfuscated form —
+// no mailto:, no standard "local@domain.tld" substring — to reduce
+// exposure to casual scrapers. A reader can still reconstruct the
+// address visually. Per Phase 3.5 feedback. If we ever want to revert
+// to a clickable mailto: link, the real address is ad1t.mehta00@gmail.com
+// and the original code was:  <a href={`mailto:${email}`}>{email}</a>.
+const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
 ---
 
 <BaseLayout
@@ -121,9 +125,19 @@ const email = 'ad1t.mehta00@gmail.com';
           of the card as a signature. Kalam would feel right for the
           "handwritten" vibe, but §3.4 forbids Kalam for Latin — so we
           use Newsreader italic instead, which is our established body
-          face and carries warmth without jumping scripts. */}
+          face and carries warmth without jumping scripts.
+
+          Phase 3.5 changes:
+            - Rendered as a <span>, not a mailto: link — the string
+              itself is obfuscated (<at>/<dot> instead of @/.) to
+              reduce scraper exposure. Astro's JSX interpolation
+              escapes the angle brackets to &lt;/&gt;, so the literal
+              characters render safely as text.
+            - Centered within the card (text-align: center in the
+              scoped style below) to read as a signed sign-off rather
+              than a left-aligned paragraph. */}
       <p class="signoff">
-        <a href={`mailto:${email}`} class="signoff__email">{email}</a>
+        <span class="signoff__email">{emailObfuscated}</span>
       </p>
     </article>
   </main>
@@ -185,19 +199,23 @@ const email = 'ad1t.mehta00@gmail.com';
     color: var(--accent);
   }
 
-  /* Section headings ("Essays", "Cities") — smaller than an essay H2;
-     these sit inline with the body text, not as page-level chapter
-     breaks. Rhythm: 2.5rem top margin for section, 0.5rem gap before
-     the list. */
+  /* Section headings ("Essays", "Cities") — per §3.2 these sit inline
+     with the body text rather than as page-level chapter breaks.
+     Phase 3.5: bumped from --fs-h3 (21→23) to an explicit 22→24 clamp
+     so they sit a clear 2px above body (now 20→22) on every viewport.
+     The earlier --fs-h3 value landed too close to body — sections and
+     items read as the same hierarchy. This is a small, deliberate step
+     up: still a section heading, not a title. */
   .home-section {
     margin-top: 2.5rem;
   }
   .home-section__heading {
-    font-size: var(--fs-h3);
+    font-size: clamp(1.375rem, 1.25rem + 0.3vw, 1.5rem); /* 22→24 */
     font-weight: 600;
     margin-bottom: 0.5rem;
-    /* Slight letter-spacing loosening on small caps feel — kept subtle. */
-    letter-spacing: -0.005em;
+    /* Slight letter-spacing tightening — keeps the heading from
+       looking loose at the larger size. */
+    letter-spacing: -0.01em;
   }
 
   /* Vertical list of links — no bullet markers, generous spacing.
@@ -234,21 +252,19 @@ const email = 'ad1t.mehta00@gmail.com';
 
   /* Email line — the business-card signature. §3.2 wants this to read
      as part of the card, not a footer. No top border, no separator.
-     Italic Newsreader in accent color, sized small. */
+     Italic Newsreader in accent color, sized small.
+     Phase 3.5: centered (was left-aligned to match the bio / lists
+     above), and no longer a link — so the underline-on-hover rule
+     that used to live on .signoff__email was dropped. The remaining
+     .signoff__email rule is plain styling for the text. */
   .signoff {
     margin-top: 3rem;
     margin-bottom: 0;
     font-style: italic;
     font-size: var(--fs-small);
+    text-align: center;
   }
   .signoff__email {
     color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 150ms ease;
-  }
-  .signoff__email:hover,
-  .signoff__email:focus-visible {
-    border-bottom-color: var(--accent);
   }
 </style>

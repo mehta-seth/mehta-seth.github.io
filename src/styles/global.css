@@ -82,11 +82,23 @@
 
   /* Fluid type scale — the inner values use clamp so they scale smoothly
      between the mobile and desktop targets from §3.4 without needing a
-     media query. Min value = mobile target, max value = desktop target. */
-  --fs-body: clamp(1.125rem, 0.95rem + 0.45vw, 1.25rem); /* 18→20 */
-  --fs-h1: clamp(1.875rem, 1.4rem + 1.75vw, 2.25rem);     /* 30→36 */
-  --fs-h2: clamp(1.375rem, 1.125rem + 0.8vw, 1.625rem);   /* 22→26 */
-  --fs-h3: clamp(1.125rem, 1.0625rem + 0.25vw, 1.25rem);  /* 18→20 */
+     media query. Min value = mobile target, max value = desktop target.
+
+     Body bumped from 18→20 to 20→22 after Phase 3.5 side-by-side against
+     darioamodei.com/essay/machines-of-loving-grace — the earlier scale
+     read as cramped next to Dario's. h3 bumped proportionally (18→20 to
+     21→23) so it stays clearly above body in the hierarchy now that body
+     is at 22. h1 bumped 30→36 to 40→56 in the same pass: the essay title
+     is the single most important element on its page, and the earlier
+     value held back. 40→56 is confident without being theatrical given
+     the typical length of the titles ("Four Shopkeepers & a Trillion
+     Transactions" is already a mouthful — larger than this and it looks
+     over-amplified). h2 left unchanged — its relationship to body still
+     works and the essay H2s shouldn't compete with the title. */
+  --fs-body: clamp(1.25rem, 1.1rem + 0.4vw, 1.375rem);     /* 20→22 */
+  --fs-h1: clamp(2.5rem, 1.8125rem + 2.15vw, 3.5rem);      /* 40→56 */
+  --fs-h2: clamp(1.375rem, 1.125rem + 0.8vw, 1.625rem);    /* 22→26 */
+  --fs-h3: clamp(1.3125rem, 1.1875rem + 0.3vw, 1.4375rem); /* 21→23 */
   --fs-small: 0.9375rem;
 
   --lh-body: 1.65;
@@ -273,6 +285,18 @@ body::before {
 .wordmark:hover {
   color: var(--accent);
 }
+/* Latin portion of the wordmark — bold. Carries the visual weight of
+   the name on every page. Added in Phase 3.5 after comparing against
+   Dario's "Dario Amodei" homepage wordmark; at weight 400 the name
+   read as flat against body prose. Weight 600 (semibold) rather than
+   true bold (700) to stay congruent with essay H1/H2 weights and not
+   overwhelm the Devanagari side. Newsreader 600 is already loaded in
+   section 1. Devanagari stays at 400 deliberately — Kalam's handwritten
+   shapes don't need extra weight, and a bold Kalam would visually
+   dominate the whole line. */
+.wordmark .latin {
+  font-weight: 600;
+}
 /* The Devanagari portion is slightly larger visually at the same pt size —
    Kalam's x-height is taller than Newsreader's. Nudge it down fractionally
    so the two visually match. */
@@ -297,7 +321,11 @@ body::before {
 }
 
 /* Theme-toggle button — fixed position, top-right of viewport.
-   Icons animate via the wordmark, not the button itself (§3.5). */
+   Phase 3.5: the earlier circular pill (border + border-radius) was
+   removed. The icon itself is now the entire affordance, floating in
+   the corner — closer to a monochrome mark than a UI control. The 2.5rem
+   box is still a generous tap target on touch devices; it's just
+   invisible until interacted with. */
 .theme-toggle {
   position: fixed;
   top: 1.25rem;
@@ -308,23 +336,24 @@ body::before {
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 999px;
+  border: none;
   color: var(--text);
   cursor: pointer;
   z-index: 200;
-  transition: border-color 150ms ease, color 150ms ease, transform 150ms ease;
+  transition: color 150ms ease, transform 150ms ease;
 }
 .theme-toggle:hover {
-  border-color: var(--accent);
   color: var(--accent);
 }
 .theme-toggle:active {
   transform: scale(0.96);
 }
 .theme-toggle svg {
-  width: 1.15rem;
-  height: 1.15rem;
+  /* Icon nudged up from 1.15rem to 1.25rem since the border is gone —
+     without the circle to anchor it, a 1.15rem icon felt lost in the
+     corner. 1.25rem reads as deliberate without becoming a logo. */
+  width: 1.25rem;
+  height: 1.25rem;
   /* Cross-fade the icon swap per §3.5 (instant-ish, 150ms). */
   transition: opacity 150ms ease;
 }

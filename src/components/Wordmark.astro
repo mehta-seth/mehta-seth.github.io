@@ -35,12 +35,17 @@ const sizeClass = size === 'small' ? 'wordmark--small' : '';
 
 <style>
   .wordmark {
-    /* H1-ish on home, per the red-rectangle sketch — not actually an <h1>
-       because the home page may want a real <h1> elsewhere. Visual weight
-       only. */
+    /* Display-size on the home page, where the wordmark IS the page
+       header and earns real real estate. */
     font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.875rem);
   }
   .wordmark--small {
-    font-size: 1.125rem;
+    /* Header-size on essay & index pages. At 18px (original) this sat
+       BELOW body size and read as apologetic — the wordmark is the
+       brand mark on every page and should anchor, not shrink. 22→24
+       puts it comfortably above body (20→22) and clearly below the
+       essay title (40→56): its correct role is primary identity, not
+       display or decoration. */
+    font-size: clamp(1.375rem, 1.25rem + 0.3vw, 1.5rem);
   }
 </style>

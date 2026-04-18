@@ -112,8 +112,12 @@ const headDescription = subtitle ?? title;
   }
 
   .essay-header__archive {
-    /* Subdued link — present, but secondary to the wordmark. */
-    font-size: var(--fs-small);
+    /* Secondary nav, not primary identity — stays smaller than the
+       wordmark. Bumped from var(--fs-small) (15px) to 1rem (16px)
+       after the wordmark grew to 22→24; at 15 the archive link read
+       as orphaned/undersized next to the new wordmark. 16 keeps its
+       secondary role intact while balancing the header as a pair. */
+    font-size: 1rem;
     color: var(--text-muted);
     text-decoration: none;
     border-bottom: 1px solid transparent;
@@ -191,13 +195,25 @@ const headDescription = subtitle ?? title;
     font-size: var(--fs-h1);
     font-weight: 600;
     letter-spacing: -0.015em;
-    margin-bottom: 0.5rem;
+    /* Tighter line-height than the base heading value — at 40→56px,
+       var(--lh-heading) of 1.2 leaves gulfs of space between wrapped
+       lines. 1.1 reads as a single tight title block, which is what
+       a title wants to be. */
+    line-height: 1.1;
+    /* Bumped from 0.5rem to 0.75rem — at the new 40→56 title size the
+       subtitle needed slightly more air, otherwise it felt glued to
+       the last line of the title. */
+    margin-bottom: 0.75rem;
   }
   .essay__subtitle {
     font-style: italic;
-    font-size: 1.125rem;
+    /* Bumped from 1.125rem (18px) to 1.25rem (20px) — sits comfortably
+       between the large title (40→56) and body (20→22), reading as a
+       deliberate second register rather than an afterthought. */
+    font-size: 1.25rem;
     color: var(--text-muted);
     margin: 0 0 1rem 0;
+    line-height: 1.4;
   }
   .essay__date {
     font-size: var(--fs-small);

@@ -41,15 +41,24 @@ const tocItems = headings.filter((h) => h.depth === 2);
 
 <style>
   .toc {
-    font-size: var(--fs-small);
-    line-height: 1.45;
+    /* Items at 17px rather than 15px (var(--fs-small)). The ToC is
+       functional navigation — readability beats visual restraint.
+       The 0.77 ratio against body (22px) keeps it clearly secondary
+       without forcing the reader to squint. Line-height 1.55 matches
+       body so multi-line items breathe properly. */
+    font-size: 1.0625rem;
+    line-height: 1.55;
   }
   .toc__label {
+    /* Label bumped from 12→14px. At 12 it was decoration masquerading
+       as information; 14 is still unmistakably "small caps hierarchy"
+       but reads at a glance. Letter-spacing preserved for the
+       section-heading flavour. */
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     color: var(--text-muted);
-    margin: 0 0 0.75rem 0;
+    margin: 0 0 0.875rem 0;
     font-weight: 600;
   }
   .toc__list {
@@ -67,7 +76,11 @@ const tocItems = headings.filter((h) => h.depth === 2);
   }
   .toc__link {
     display: block;
-    padding: 0.4rem 0 0.4rem 0.85rem;
+    /* Vertical padding bumped from 0.4→0.5rem to accommodate the
+       larger text without items feeling cramped. Left padding bumped
+       from 0.85→1rem so the indicator bar and text have a consistent
+       gutter relationship at the new size. */
+    padding: 0.5rem 0 0.5rem 1rem;
     color: var(--text-muted);
     text-decoration: none;
     transition: color 150ms ease;
