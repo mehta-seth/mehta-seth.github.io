@@ -64,17 +64,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
     {/* Preload the two critical fonts — body Latin 400 and the Devanagari
         400 used in the wordmark. The rest load on-demand via font-display:swap.
-        `crossorigin` is required on font preloads per spec. */}
+        `crossorigin` is required on font preloads per spec.
+
+        ?v=<N> must match the version used in src/styles/global.css @font-face
+        src URLs. When fonts are refreshed, bump BOTH places. The scripts/
+        check-fonts.mjs script verifies they match as a pre-build safety net. */}
     <link
       rel="preload"
-      href="/fonts/newsreader-400.woff2"
+      href="/fonts/newsreader-400.woff2?v=2"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
     />
     <link
       rel="preload"
-      href="/fonts/kalam-devanagari-400.woff2"
+      href="/fonts/kalam-devanagari-400.woff2?v=2"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"

@@ -18,54 +18,121 @@
 
 /* ─── 1. Fonts ─────────────────────────────────────────────────────── */
 
+/* ══ Cache-busting convention ══════════════════════════════════════════
+   Every font URL below carries a ?v=<N> query string. When a WOFF2 file
+   in /public/fonts/ is ever replaced or re-subsetted, bump the number
+   here AND in BaseLayout.astro's <link rel="preload"> tags.
+
+   Why: browsers cache fonts aggressively. Replacing a file at the same
+   URL leaves existing users (or existing tabs) serving the stale copy
+   for days. A new query string = new cache key = guaranteed fresh fetch.
+
+   Phase 1 shipped with buggy Cyrillic-subset WOFF2s mislabeled as Latin;
+   when they were fixed, Safari loaded the new files but Arc kept serving
+   the 14 KB Cyrillic copy from cache. Renaming the URLs avoids that
+   class of bug entirely — the old URL simply isn't requested anymore.
+   Current font version: v=2.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Newsreader · Latin subset ──
+   unicode-range tells the browser the exact codepoints this file serves.
+   If a page uses ONLY these codepoints, the browser still fetches just
+   this file (not latin-ext, not greek, etc.). If a page uses an out-of-
+   range codepoint (e.g. "ā" at U+0101), the browser falls through to the
+   next @font-face that covers it (latin-ext below) without touching this
+   one. This is performance AND correctness: it stops the browser from
+   "guessing" that Newsreader has the glyph when the file it loaded
+   doesn't — which is precisely what masked the Phase 1 Cyrillic bug. */
 @font-face {
   font-family: 'Newsreader';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/newsreader-400.woff2') format('woff2');
+  src: url('/fonts/newsreader-400.woff2?v=2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: 'Newsreader';
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/newsreader-400-italic.woff2') format('woff2');
+  src: url('/fonts/newsreader-400-italic.woff2?v=2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: 'Newsreader';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('/fonts/newsreader-600.woff2') format('woff2');
+  src: url('/fonts/newsreader-600.woff2?v=2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
+/* ── Newsreader · Latin-Extended subset ──
+   Covers macrons (ā ē ī ō ū), Eastern European diacritics (ř ž ń ś ł ż),
+   Vietnamese tone marks, Māori vowels, etc. Not loaded unless a page
+   actually contains a codepoint in this range — which is the point. The
+   first real essay that uses "café", "résumé", or any non-ASCII Latin
+   character will transparently pick this up; English-only pages never
+   pay the ~15 KB cost. */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/newsreader-400-ext.woff2?v=2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/newsreader-400-italic-ext.woff2?v=2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/newsreader-600-ext.woff2?v=2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ── Kalam · Devanagari ──
+   unicode-range limits Kalam to the Devanagari block — the Latin glyphs
+   of Kalam are handwritten and we never want them rendering any Latin
+   content (§3.4). This lets us write `font-family: 'Newsreader', 'Kalam'`
+   on mixed-script elements and have the browser pick Kalam only for
+   Devanagari codepoints. */
 @font-face {
   font-family: 'Kalam';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  /* unicode-range limits Kalam to the Devanagari block — the Latin glyphs
-     of Kalam are handwritten and we never want them rendering any Latin
-     content (§3.4). This lets us write `font-family: 'Newsreader', 'Kalam'`
-     on mixed-script elements and have the browser pick Kalam only for
-     Devanagari codepoints. */
+  src: url('/fonts/kalam-devanagari-400.woff2?v=2') format('woff2');
   unicode-range: U+0900-097F, U+A8E0-A8FF, U+1CD0-1CFF, U+200C-200D, U+25CC;
-  src: url('/fonts/kalam-devanagari-400.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Kalam';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
+  src: url('/fonts/kalam-devanagari-700.woff2?v=2') format('woff2');
   unicode-range: U+0900-097F, U+A8E0-A8FF, U+1CD0-1CFF, U+200C-200D, U+25CC;
-  src: url('/fonts/kalam-devanagari-700.woff2') format('woff2');
 }
+
+/* ── JetBrains Mono · Latin (inline code only) ──
+   Same Latin unicode-range as Newsreader — inline code in essays is
+   English source, never accented or Devanagari. */
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/jetbrains-mono-400.woff2') format('woff2');
+  src: url('/fonts/jetbrains-mono-400.woff2?v=2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 /* ─── 2. Design tokens (§3.3) ──────────────────────────────────────── */
