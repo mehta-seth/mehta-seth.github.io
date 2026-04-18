@@ -1,0 +1,48 @@
+name: Deploy to GitHub Pages
+
+# Trigger on every push to main, plus manual runs from the Actions tab.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least-privilege token: read the repo, write Pages artifacts, and use the
+# OIDC token to authenticate the deploy step to the Pages service.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Serialise deploys. If a new push lands while another deploy is mid-flight,
+# queue it — don't kill the in-flight one (cancel-in-progress: false), so a
+# half-deployed site never replaces a fully-deployed one.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build with Astro
+        uses: withastro/action@v3
+        with:
+          node-version: 22
+          # package-manager: npm@latest is auto-detected from the lockfile.
+          # path: "." is the default; we're not using monorepo paths.
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
