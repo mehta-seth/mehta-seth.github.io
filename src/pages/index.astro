@@ -74,16 +74,23 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
         <Wordmark href="/" />
       </header>
 
-      {/* Bio — §8.1 verbatim. The "More" link is a visual placeholder
-          per the plan; in v2 it becomes an /about link or inline
-          expansion. Left as href="#" today so hover/focus states still
-          demo correctly. */}
+      {/* Bio. Replaces the §8.1 placeholder lorem with the real
+          v1 voice. Two pulls — ambition vs. sufficiency — mirrors
+          core_values §1.9 (Tolstoy/Nietzsche tension) and the §1.8
+          self-audit move. The "More" link from v0 was removed in
+          April 2026: with no /about page yet and no inline-expand
+          mechanism in v1, it pointed nowhere; cleaner to leave the
+          bio as a closed paragraph until /about exists. */}
       <p class="bio">
-        Adit Mehta is a student at the London School of Economics. He writes
-        occasionally about markets, cities, and whatever else is keeping him
-        up at night. He grew up in Kolhapur, spent his twenties in Bangalore
-        and Pune, and is now learning to miss them both from London.{' '}
-        <a href="#" class="bio__more">More</a>
+        Two pulls live in Adit Mehta and neither has won. One says
+        ambition is duty and lukewarm is no good. The other wants a
+        quiet life in the country with work one hopes may be of some
+        use, and rest, and books, and the company of people one loves.
+        He is trying to do the first long enough to earn the second,
+        and to notice when he's lying to himself about which one he's
+        actually in. He grew up in Kolhapur, spent his twenties in
+        Bangalore and Pune, and is now learning to miss them both
+        from London.
       </p>
 
       {/* Essays. Plain <ul> with list-style removed — semantically a
@@ -185,18 +192,6 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
        wordmark is the primary voice, the bio is context. */
     color: var(--text);
     max-width: 36rem;
-  }
-
-  /* The inline "More" link — visually subdued so it doesn't steal focus
-     from the bio itself. Keeps the accent color on hover. */
-  .bio__more {
-    color: var(--text-muted);
-    text-decoration: underline;
-    text-decoration-thickness: 0.04em;
-    text-underline-offset: 0.2em;
-  }
-  .bio__more:hover {
-    color: var(--accent);
   }
 
   /* Section headings ("Essays", "Cities") — per §3.2 these sit inline
