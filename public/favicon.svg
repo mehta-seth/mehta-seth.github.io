@@ -36,9 +36,14 @@
     installed (the glyph then renders as tofu, but that's a degenerate
     OS configuration we don't optimize for).
 
-    Color choice: the warm-amber accent in dark theme (#d4a574). It
-    has higher contrast against white than the light-theme accent
-    (#8a5a2b would also work but reads slightly muddy at 16px).
+    Color choice (April 2026 update): the glyph was originally rendered
+    in the warm-amber accent (#d4a574). At browser-tab sizes (16–24px)
+    that read muddy against the cream background — the amber's hue and
+    the cream's hue sit too close together on the spectrum. Switched
+    to #1a1814, the light-theme `text` token (warm near-black, not pure
+    #000000). Black-on-cream gives the highest possible contrast at
+    16px and feels of-a-piece with the site's body text, rather than
+    fighting it.
 
     Background corner radius: 12px on a 64px viewBox = ~19% — matches
     the iOS/macOS app icon convention and the rounded-corner aesthetic
@@ -60,6 +65,6 @@
     font-family="'Noto Sans Devanagari', 'Kalam', system-ui, sans-serif"
     font-size="56"
     font-weight="400"
-    fill="#d4a574"
+    fill="#1a1814"
   >अ</text>
 </svg>

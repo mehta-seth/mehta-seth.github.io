@@ -430,12 +430,11 @@ const headDescription = subtitle
     text-decoration: none;
     color: var(--accent);
     padding: 0 0.15em;
-    /* `cursor: help` (the question-mark variant) hints to mouse users
-       that the marker has a popover to surface — a small honest signal
-       that hovering does something. Falls back gracefully on touch
-       (no cursor concept) and at the system level (browsers respect
-       this hint, screen readers ignore it). */
-    cursor: help;
+    /* No `cursor: help` — the styled popover that appears on hover is
+       its own strong visual signal that something is happening. The
+       question-mark cursor read as fussy on top of that. The default
+       browser link cursor (the hand) is what shows now, which matches
+       every other anchor on the site. */
   }
   .essay__body .footnote-ref a:hover {
     text-decoration: underline;
