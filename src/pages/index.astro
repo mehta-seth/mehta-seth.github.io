@@ -29,6 +29,12 @@ import ThemeToggle from '../components/ThemeToggle.astro';
 // When the second essay is written, drop it in here; when a third comes
 // along, consider whether it's time to spin up /essays/ (the archive
 // page, deferred to v2 per §7 decision 2).
+//
+// April 2026: the placeholder slot for an unwritten second essay (a
+// muted "—" dash) was removed. With one essay published and the home
+// page acting as the index, an explicit empty-slot affordance read as
+// promissory rather than honest. The list shows what exists; when a
+// second essay lands, it's a one-line addition here.
 const essays = [
   {
     title: 'Four Shopkeepers & a Trillion Transactions',
@@ -36,10 +42,6 @@ const essays = [
     // Date is intentionally omitted from v1 display per §3.2: "date/meta
     // optional". Dario's home list is title-only; we follow him.
   },
-  // Item 2 per §5/Phase 2: "a placeholder '—' or a greyed-out item".
-  // Rendered as a non-link, muted, so it reads as "coming soon" rather
-  // than a broken affordance.
-  null,
 ];
 
 // v1: anchors on the cities index page (§5/Phase 2). v2: real routes.
@@ -74,23 +76,23 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
         <Wordmark href="/" />
       </header>
 
-      {/* Bio. Replaces the §8.1 placeholder lorem with the real
-          v1 voice. Two pulls — ambition vs. sufficiency — mirrors
+      {/* Bio. First-person voice — Adit speaking, not a third-person
+          narrator. Two pulls — ambition vs. sufficiency — mirrors
           core_values §1.9 (Tolstoy/Nietzsche tension) and the §1.8
-          self-audit move. The "More" link from v0 was removed in
-          April 2026: with no /about page yet and no inline-expand
-          mechanism in v1, it pointed nowhere; cleaner to leave the
-          bio as a closed paragraph until /about exists. */}
+          self-audit move ("noticing when I am lying to myself"). The
+          "More" link from v0 was removed in April 2026: with no /about
+          page yet and no inline-expand mechanism in v1, it pointed
+          nowhere; cleaner to leave the bio as a closed paragraph until
+          /about exists. */}
       <p class="bio">
-        Two pulls live in Adit Mehta and neither has won. One says
-        ambition is duty and lukewarm is no good. The other wants a
-        quiet life in the country with work one hopes may be of some
-        use, and rest, and books, and the company of people one loves.
-        He is trying to do the first long enough to earn the second,
-        and to notice when he's lying to himself about which one he's
-        actually in. He grew up in Kolhapur, spent his twenties in
-        Bangalore and Pune, and is now learning to miss them both
-        from London.
+        Two pulls live in me and neither has won. One says ambition is
+        duty and lukewarm is no good. The other wants a quiet life in
+        the country with work one hopes may be of some use, and rest,
+        and books, and the company of people one loves. I am trying to
+        do the first long enough to earn the second, and to notice when
+        I am lying to myself about which one I am actually in. I grew
+        up in Kolhapur, spent my early twenties in Bangalore and Pune,
+        and am now learning to miss them both from London.
       </p>
 
       {/* Essays. Plain <ul> with list-style removed — semantically a
@@ -99,17 +101,11 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
       <section class="home-section" aria-labelledby="h-essays">
         <h2 id="h-essays" class="home-section__heading">Essays</h2>
         <ul class="linklist">
-          {essays.map((essay) =>
-            essay ? (
-              <li class="linklist__item">
-                <a href={essay.href}>{essay.title}</a>
-              </li>
-            ) : (
-              <li class="linklist__item linklist__item--placeholder" aria-hidden="true">
-                <span>—</span>
-              </li>
-            ),
-          )}
+          {essays.map((essay) => (
+            <li class="linklist__item">
+              <a href={essay.href}>{essay.title}</a>
+            </li>
+          ))}
         </ul>
       </section>
 
@@ -237,12 +233,6 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
   .linklist__item a:focus-visible {
     color: var(--accent);
     border-bottom-color: var(--accent);
-  }
-  /* The "—" placeholder for the unwritten second essay. Muted, no
-     affordance, no hover state. */
-  .linklist__item--placeholder {
-    color: var(--text-muted);
-    user-select: none;
   }
 
   /* Email line — the business-card signature. §3.2 wants this to read
