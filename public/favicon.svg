@@ -1,35 +1,63 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <!--
-    Favicon for aditmehta.com.
+    Favicon for aditmehta.com (April 2026 redesign).
 
-    Design rationale: the single Devanagari letter "अ" (the first letter
-    of "अदित", and of the Sanskrit/Hindi alphabet). Matches the site's
-    bilingual wordmark better than a Latin "A" would — Latin "A" carries
-    no semantic weight on a site whose identity explicitly mixes scripts.
+    Composition: a white rounded-square background with the Devanagari
+    letter "अ" (the first letter of "अदित", and of the Sanskrit/Hindi
+    alphabet) centered on top in the warm-amber accent color.
 
-    Rendered as plain text (not path-traced) so it inherits whichever
-    Devanagari font the browser/OS has available, keeping the SVG tiny
-    and always legible. This is acceptable because the whole point of
-    SVG favicon support is text + basic shapes; for a single glyph at
-    small sizes, text-with-font-fallback is more robust than a
-    rasterizable path.
+    Why this shape: the previous version was a transparent SVG with the
+    glyph alone, relying on the browser tab's chrome for contrast. That
+    rendered inconsistently — invisible against light tabs in some
+    themes, washed out in others. A solid white rounded card gives the
+    glyph a stable surface in every browser/OS chrome combination,
+    matching the favicon convention used by most contemporary editorial
+    sites (e.g., darioamodei.com).
 
-    Color: the warm-amber accent in both themes (#d4a574 dark, #8a5a2b
-    light). We serve the DARK accent here because (a) the dark theme is
-    the site's default, (b) most modern browsers show favicons on their
-    native (not page) chrome, so the background is unknown — warm amber
-    reads legibly against both light and dark tab bars.
+    Why white (not theme-aware): browser favicons live outside the page
+    and don't receive the page's theme. A neutral light background
+    works for both dark and light browser chromes. The amber glyph
+    reads against white at all sizes from 16px up.
 
-    Size: the SVG viewBox is 64×64, not 16×16, so anti-aliased scaling
-    is smooth down to 16px. Browser will render at whatever size the
-    consumer requests (16, 32, 64, etc.).
+    Why "अ" rendered as text (not path): keeps the SVG tiny (~700 bytes)
+    and inherits the OS Devanagari font, which means it always looks
+    correct regardless of font availability. This is acceptable because
+    SVG favicon support is built around text + basic shapes; for one
+    glyph, font-fallback is more robust than a rasterizable path.
+
+    Font-family note: "Noto Sans Devanagari" is listed first because
+    it's the de-facto open-source Devanagari font shipped with
+    Linux/Android/most server-side renderers. macOS/iOS ignore that
+    name and fall through to their system Devanagari (Devanagari MT,
+    Kohinoor Devanagari). The site's primary face Kalam is NOT used
+    here — browsers don't apply page CSS to favicons, so the @font-face
+    rules don't reach this file. Listing system-ui/sans-serif as the
+    final fallback covers any environment without a Devanagari font
+    installed (the glyph then renders as tofu, but that's a degenerate
+    OS configuration we don't optimize for).
+
+    Color choice: the warm-amber accent in dark theme (#d4a574). It
+    has higher contrast against white than the light-theme accent
+    (#8a5a2b would also work but reads slightly muddy at 16px).
+
+    Background corner radius: 12px on a 64px viewBox = ~19% — matches
+    the iOS/macOS app icon convention and the rounded-corner aesthetic
+    of contemporary site favicons.
   -->
-  <rect width="64" height="64" fill="none" />
+  <rect
+    x="0"
+    y="0"
+    width="64"
+    height="64"
+    rx="12"
+    ry="12"
+    fill="#faf8f3"
+  />
   <text
     x="32"
     y="50"
     text-anchor="middle"
-    font-family="'Kalam', 'Noto Sans Devanagari', system-ui, sans-serif"
+    font-family="'Noto Sans Devanagari', 'Kalam', system-ui, sans-serif"
     font-size="56"
     font-weight="400"
     fill="#d4a574"
