@@ -82,12 +82,15 @@ const headDescription = subtitle
 <BaseLayout title={headTitle} description={headDescription} ogType="article">
   <ThemeToggle />
 
-  {/* Page header — wordmark left, archive link right. The fixed theme
-      toggle floats over the right side from global.css; the header has
-      enough right padding to keep the archive link clear of it. */}
+  {/* Page header — wordmark only. The fixed theme toggle floats over
+      the right side from global.css; the header has enough right
+      padding to keep the wordmark clear of it on narrow viewports.
+      The Archive link was removed in April 2026: with only one essay
+      shipped and the home page already serving as the index, the link
+      had nowhere meaningful to point. Reintroduce when /essays/
+      becomes a real archive page. */}
   <header class="essay-header" id="top">
     <Wordmark href="/" size="small" />
-    <a href="/" class="essay-header__archive">Archive</a>
   </header>
 
   {/* Apply a class on the wrapper that toggles between single-column
@@ -126,35 +129,18 @@ const headDescription = subtitle
 
 <style>
   /* ─── Page header ─────────────────────────────────────────────────
-     Wordmark left, archive link right. padding-right leaves room for
-     the fixed theme toggle (top:1.25rem, right:1.25rem, ~2.5rem wide)
-     so the archive link doesn't visually crash into it. */
+     Just the wordmark, sitting left. padding-right leaves room for the
+     fixed theme toggle (top:1.25rem, right:1.25rem, ~2.5rem wide) so
+     the toggle never visually crashes into the wordmark on narrow
+     viewports. (The Archive link that used to sit on the right was
+     removed in April 2026 — see header comment.) */
   .essay-header {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
     padding: 2rem 1.5rem 0;
     padding-right: 4.5rem;
     max-width: 80rem;
     margin-inline: auto;
-  }
-
-  .essay-header__archive {
-    /* Secondary nav, not primary identity — stays smaller than the
-       wordmark. Bumped from var(--fs-small) (15px) to 1rem (16px)
-       after the wordmark grew to 22→24; at 15 the archive link read
-       as orphaned/undersized next to the new wordmark. 16 keeps its
-       secondary role intact while balancing the header as a pair. */
-    font-size: 1rem;
-    color: var(--text-muted);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: color 150ms ease, border-color 150ms ease;
-  }
-  .essay-header__archive:hover,
-  .essay-header__archive:focus-visible {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
   }
 
   /* ─── Layout shell ────────────────────────────────────────────────
@@ -435,13 +421,17 @@ const headDescription = subtitle
        vertical space in the line. */
     line-height: 0;
     font-size: 0.7em;
+    /* position: relative is the anchor for the absolutely-positioned
+       .footnote-preview popover (see below). Required even when the
+       preview isn't present — costs nothing, simplifies the rule. */
+    position: relative;
   }
   .essay__body .footnote-ref a {
     text-decoration: none;
     color: var(--accent);
     padding: 0 0.15em;
     /* `cursor: help` (the question-mark variant) hints to mouse users
-       that the marker has a tooltip to surface — a small honest signal
+       that the marker has a popover to surface — a small honest signal
        that hovering does something. Falls back gracefully on touch
        (no cursor concept) and at the system level (browsers respect
        this hint, screen readers ignore it). */
@@ -453,10 +443,113 @@ const headDescription = subtitle
     text-underline-offset: 0.15em;
   }
 
+  /* ─── Footnote preview popover (Dario-style) ─────────────────────
+     Hover the inline marker → a styled card surfaces with the
+     footnote's content, set in body serif. Styled via plain CSS,
+     positioned absolutely above the marker, hidden by default,
+     shown on :hover and :focus-within. Zero JS.
+
+     Positioning notes:
+       - The popover is a child of the <sup>, which is position: relative.
+       - bottom: calc(100% + ...) puts it above the marker. With the sup's
+         line-height: 0, "100%" is effectively the cap-height of the
+         marker glyph, so we add ~1.4em of clearance to lift the popover
+         clear of the line below it.
+       - Centered horizontally on the marker via left: 50% / translateX(-50%).
+         If the marker is near the right edge of the viewport, the popover
+         can clip — max-width: min(26rem, calc(100vw - 2rem)) prevents
+         overflow on narrow viewports; viewport-edge cases on desktop
+         are rare and acceptable for v1. (Anchor Positioning API would
+         solve this cleanly but Safari/Firefox support is still partial.)
+
+     Typography reset:
+       The popover inherits .footnote-ref's font-size: 0.7em and
+       line-height: 0 from its parent. Both are explicitly reset to
+       body values so the popover content reads as ordinary prose, not
+       superscripted text.
+
+     Touch handling:
+       @media (hover: none) hides the popover entirely on touch devices.
+       Tapping the marker just navigates to the bottom-of-essay footnote,
+       which is the right behavior on mobile. */
+  .essay__body .footnote-preview {
+    /* Hidden by default; shown on hover/focus. */
+    position: absolute;
+    bottom: calc(100% + 1.4em);
+    left: 50%;
+    transform: translateX(-50%);
+
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease, visibility 150ms ease;
+
+    /* Sizing — wide enough to read comfortably, capped on mobile. */
+    width: max-content;
+    max-width: min(26rem, calc(100vw - 2rem));
+
+    /* Reset inherited <sup> styling so the body reads as ordinary prose. */
+    font-family: var(--font-serif);
+    font-size: var(--fs-small);
+    font-style: normal;
+    font-weight: 400;
+    vertical-align: baseline;
+    line-height: 1.55;
+    text-align: left;
+    letter-spacing: 0;
+    color: var(--text);
+
+    /* Card styling — slightly elevated background, subtle border, soft
+       shadow. Reads as a quiet card sitting on top of the page, not as
+       a heavy modal. */
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.95rem 1.15rem;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+
+    /* Stack above body content. ThemeToggle sits at z-index higher
+       (it's fixed-positioned chrome); 50 keeps the popover above
+       prose, blockquotes, and images without fighting site UI. */
+    z-index: 50;
+  }
+
+  .essay__body .footnote-ref:hover .footnote-preview,
+  .essay__body .footnote-ref:focus-within .footnote-preview {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* The footnote number prefix inside the popover ("¹ The shop is …").
+     Mirrors the visual format of the bottom-of-essay footnote items so
+     hovering and reading-down feel like the same thing. */
+  .essay__body .footnote-preview__num {
+    display: inline;
+    font-size: 0.72em;
+    vertical-align: super;
+    color: var(--text-muted);
+    margin-right: 0.4em;
+    font-weight: 500;
+    /* Reset any inherited line-height from the popover so the
+       superscript number doesn't shift the surrounding line. */
+    line-height: 0;
+  }
+
+  /* Touch devices: hover doesn't apply meaningfully. Hide the popover
+     entirely — tapping the marker should just navigate to the footnote
+     item at the bottom of the essay. */
+  @media (hover: none) {
+    .essay__body .footnote-preview {
+      display: none;
+    }
+  }
+
   /* ─── Footnote items (bottom of essay) ───────────────────────────
      The Footnote component renders each item as a div with the
-     classes below. The "## Footnotes" heading is authored manually in
-     the MDX. Items are siblings under that heading. */
+     classes below. No heading is authored above them in MDX — the
+     items are siblings at the end of the essay body, separated from
+     the prose by the body paragraph rhythm. Their muted color and
+     smaller size do the visual work of marking them as apparatus. */
   .essay__body .footnote-item {
     display: flex;
     gap: 0.5em;

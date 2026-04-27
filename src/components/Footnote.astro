@@ -8,47 +8,60 @@
 //   <Footnote id="1">Body</Footnote> → list-item at the bottom of the essay
 //
 // The two shapes are linked by id naming convention:
-//   - Inline marker:  <sup id="fn-ref-1"><a href="#fn-1" title="…">1</a></sup>
+//   - Inline marker:  <sup id="fn-ref-1"><a href="#fn-1">1</a><span class="footnote-preview">…</span></sup>
 //   - Item:           <div id="fn-1"> ... <a href="#fn-ref-1">↩</a> </div>
 //
 // Click behavior: clicking the inline ref jumps to the body; the back-
 // link in the body jumps back to the source. Standard academic footnote
 // pattern, no JS required.
 //
-// Hover behavior (added April 2026): the inline marker accepts an
-// optional `preview` prop which is rendered as the anchor's `title`
-// attribute. Hovering the superscript surfaces the footnote text as a
-// native browser tooltip — restoring the hover-preview behavior the
-// site previously had. Implementation is zero-JS and works in every
-// browser, at the cost of native tooltip limitations: no styling, slow
-// to appear (~700ms), and absent on touch devices. A richer custom
-// tooltip (CSS positioned popover) is possible later if needed.
+// Hover behavior (rewritten April 2026, second pass): the inline marker
+// accepts an optional `preview` prop. When present, the marker renders
+// a styled popover (a <span class="footnote-preview">) inside the <sup>.
+// The popover is positioned absolute, hidden by default, and revealed
+// on `:hover` / `:focus-within` via CSS in EssayLayout.astro. No JS.
+//
+// This replaces the earlier `title` attribute approach. The native
+// browser tooltip looked plain and system-fonted, broke the body-serif
+// typography, and took ~700ms to appear. The styled popover matches
+// Dario Amodei's footnote behavior — same body face, immediate hover,
+// proper card styling.
+//
+// On touch devices (where :hover doesn't apply meaningfully) the popover
+// is suppressed via @media (hover: none) — tapping the marker just
+// navigates to the footnote item at the bottom, which is correct.
 //
 // Why a `preview` prop and not auto-derived from the matching item:
 //   The inline marker is rendered before the body content in source
 //   order. There's no clean way at compile time for the marker to read
 //   the eventual body of <Footnote id="1">…</Footnote> further down the
-//   document. The simplest honest answer is: authors pass the same text
-//   twice — once as `preview` on the marker, once as the body of the
-//   item below. Cheap to do, easy to read in the MDX source, no magic.
+//   document. The honest answer is: authors pass the same text twice —
+//   once as `preview` on the marker, once as the body of the item below.
+//   Cheap to do, easy to read in the MDX source, no magic.
 //
 // Backwards compatibility: `preview` is optional. Markers authored
-// without it (the placeholder essay's <Footnote id="1" />) continue to
-// render as before — clickable, no tooltip. Only markers that opt in
-// get hover-preview text.
+// without it render as a plain superscript link with no hover behavior.
 //
-// The styles for both shapes live in EssayLayout.astro's <style is:global>
-// block (under `.essay__body .footnote-*`) because they need to coordinate
-// with the surrounding essay typography. This component contributes only
-// the markup and the id wiring.
+// Accessibility: the popover is `aria-hidden="true"` because screen
+// readers can already read the canonical footnote at the bottom via the
+// existing href jump. Duplicating it in the popover would just add
+// noise. The marker's `aria-label="Jump to footnote N"` and the
+// `cursor: help` hint do the visible-affordance work for sighted users.
+//
+// The styles for both shapes (marker, popover, item) live in
+// EssayLayout.astro's <style is:global> block (under
+// `.essay__body .footnote-*`) because they need to coordinate with the
+// surrounding essay typography. This component contributes only the
+// markup and the id wiring.
 
 interface Props {
   id: string | number;
   /**
-   * Preview text shown on hover as a native browser tooltip. Only used
-   * by the marker shape (self-closing usage). Pass the same prose as
-   * the matching <Footnote id="…">…</Footnote> item further down the
-   * document — duplication is the cost of a zero-JS implementation.
+   * Preview text shown on hover as a styled popover (Dario-style).
+   * Pass the same prose as the matching <Footnote id="…">…</Footnote>
+   * item further down the document — duplication is the cost of a
+   * zero-JS implementation. Plain text only; no Markdown / MDX
+   * rendering inside the popover (it's a string prop, not a slot).
    */
   preview?: string;
 }
@@ -77,7 +90,11 @@ const isItem = Astro.slots.has('default');
     <a
       href={`#fn-${id}`}
       aria-label={`Jump to footnote ${id}`}
-      title={preview}
     >{id}</a>
+    {preview && (
+      <span class="footnote-preview" aria-hidden="true">
+        <span class="footnote-preview__num">{id}</span>{preview}
+      </span>
+    )}
   </sup>
 )}
