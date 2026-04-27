@@ -624,6 +624,14 @@ const headDescription = subtitle
     margin-left: 0.4em;
     text-decoration: none;
     color: var(--text-muted);
+    /* Force text-glyph rendering on the ↩ arrow. The U+FE0E variation
+       selector in the markup does most of the work; this CSS rule is
+       belt-and-braces for browsers that ignore VS-15 but support
+       font-variant-emoji (Chrome 131+, Safari 17.4+, Firefox 141+).
+       Without these, iOS Safari renders ↩ as Apple's colored RETURN
+       ARROW emoji button, which breaks the typography of the
+       footnote list. */
+    font-variant-emoji: text;
   }
   .essay__body .footnote-backref:hover {
     color: var(--accent);

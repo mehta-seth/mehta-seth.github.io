@@ -9,7 +9,17 @@
 //
 // The two shapes are linked by id naming convention:
 //   - Inline marker:  <sup id="fn-ref-1"><a href="#fn-1">1</a><span class="footnote-preview">…</span></sup>
-//   - Item:           <div id="fn-1"> ... <a href="#fn-ref-1">↩</a> </div>
+//   - Item:           <div id="fn-1"> ... <a href="#fn-ref-1">↩︎</a> </div>
+//
+// The back-link arrow ↩ (U+21A9) is followed by U+FE0E (VARIATION
+// SELECTOR-15, "text style") in the markup. Without it, iOS Safari
+// renders the arrow as the colored "RETURN ARROW" emoji from Apple
+// Color Emoji — a blue rounded-square button that breaks the
+// typography. The variation selector forces the text-glyph rendering
+// across iOS, Android, and most desktop browsers. Authored as the
+// HTML entity `&#xFE0E;` because the literal U+FE0E character is
+// zero-width and invisible in source code; the entity makes the
+// intent legible to anyone reading the file.
 //
 // Click behavior: clicking the inline ref jumps to the body; the back-
 // link in the body jumps back to the source. Standard academic footnote
@@ -82,7 +92,7 @@ const isItem = Astro.slots.has('default');
         href={`#fn-ref-${id}`}
         class="footnote-backref"
         aria-label={`Back to footnote ${id} in the text`}
-      >↩</a>
+      >↩&#xFE0E;</a>
     </span>
   </div>
 ) : (
