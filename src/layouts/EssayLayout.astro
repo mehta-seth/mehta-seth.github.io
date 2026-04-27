@@ -8,15 +8,21 @@
 //   - Top-right: "Archive" link (points at / for v1) — ThemeToggle is
 //                fixed-positioned by global.css and floats above this.
 //   - Body:      centered ~42.5rem column (max-w-essay).
-//   - Sidebar:   sticky ToC on left at ≥1024px, hidden on mobile.
+//   - Sidebar:   sticky ToC on left at ≥1024px, ONLY WHEN the essay has
+//                H2 headings to populate it. Hidden on mobile, and
+//                entirely absent (grid collapses to a single column)
+//                when the essay has no H2s.
 //   - Footer:    "Back to top" link.
 //
 // Notes on structure:
-//   - The 3-column grid (left margin / essay column / right margin)
-//     keeps the essay column perfectly centered in the viewport even
-//     when the ToC is shown — the ToC sits in the LEFT margin column,
-//     not pushing the essay rightward. This is the key Dario-layout
-//     trick.
+//   - When `hasToc` is true, the layout uses a 3-column grid (left
+//     margin / essay column / right margin). The ToC sits in the LEFT
+//     margin column, not pushing the essay rightward. This is the key
+//     Dario-layout trick.
+//   - When `hasToc` is false (essay has no H2s — the case for the
+//     "Four Shopkeepers" essay), the layout uses a single centered
+//     column. No empty grid columns, no ToC affordances. The essay
+//     centers cleanly in the viewport.
 //   - id="top" on the page header is the target for the back-to-top
 //     anchor at the bottom.
 //   - Body typography for MDX-rendered HTML lives in the
@@ -37,6 +43,15 @@ interface Props {
 }
 
 const { title, subtitle, date, headings } = Astro.props;
+
+// Only render the ToC chrome (the aside, the grid 3-column shape) when
+// there's actually a ToC to populate. The TableOfContents component
+// already returns null when there are no H2s — but the layout's
+// grid-template-columns and the .essay-toc-wrap aside still occupied
+// space, leaving the essay column visually offset to the right of
+// viewport center on essays with no headings. Computing `hasToc` here
+// and gating both the grid and the aside on it fixes that cleanly.
+const hasToc = headings.some((h) => h.depth === 2);
 
 // Date format: "April 2026" — month + year, matching Dario's pattern.
 // en-GB locale chosen for consistency with the rest of the site (LSE /
@@ -75,13 +90,15 @@ const headDescription = subtitle
     <a href="/" class="essay-header__archive">Archive</a>
   </header>
 
-  <div class="essay-grid">
-    {/* Sticky ToC sidebar. The component itself decides what to render
-        (filters to H2s); the layout decides where to PUT it. Hidden by
-        CSS below 1024px per spec §3.2. */}
-    <aside class="essay-toc-wrap" aria-label="Table of contents">
-      <TableOfContents headings={headings} />
-    </aside>
+  {/* Apply a class on the wrapper that toggles between single-column
+      (no ToC) and three-column-grid (with ToC) layouts. CSS does the
+      rest. */}
+  <div class:list={['essay-grid', hasToc && 'essay-grid--has-toc']}>
+    {hasToc && (
+      <aside class="essay-toc-wrap" aria-label="Table of contents">
+        <TableOfContents headings={headings} />
+      </aside>
+    )}
 
     <article class="essay">
       <header class="essay__head">
@@ -140,11 +157,15 @@ const headDescription = subtitle
     border-bottom-color: var(--accent);
   }
 
-  /* ─── Three-column grid ───────────────────────────────────────────
-     Default (mobile): single column, essay full-width within padding.
-     Desktop (≥1024px): 1fr | essay | 1fr. ToC slots into the left
-     column, right column stays empty for symmetry — keeping the essay
-     column perfectly centered in the viewport. */
+  /* ─── Layout shell ────────────────────────────────────────────────
+     Default (mobile, AND any essay regardless of ToC presence):
+     single column, essay full-width within padding.
+     Desktop with ToC (≥1024px AND .essay-grid--has-toc): three columns
+     (1fr | essay | 1fr). ToC slots into column 1, right column stays
+     empty for symmetry — keeping the essay column perfectly centered
+     in the viewport.
+     Desktop without ToC: stays single-column — essay centers in the
+     viewport on its own max-width without grid scaffolding. */
   .essay-grid {
     display: block;
     max-width: 42.5rem;
@@ -153,12 +174,17 @@ const headDescription = subtitle
   }
 
   .essay-toc-wrap {
-    /* Hidden on mobile per §3.2: "Hide on mobile". */
+    /* Hidden on mobile per §3.2: "Hide on mobile". (When .essay-grid
+       --has-toc is absent, the aside isn't rendered at all, so this
+       rule matters only when there IS a ToC and we're below 1024px.) */
     display: none;
   }
 
   @media (min-width: 1024px) {
-    .essay-grid {
+    /* The 3-column grid only applies when the layout has been told
+       there's a ToC to host. Without --has-toc, the desktop shape
+       stays single-column with a wider top padding for breathing room. */
+    .essay-grid--has-toc {
       display: grid;
       grid-template-columns:
         minmax(0, 1fr)
@@ -168,7 +194,7 @@ const headDescription = subtitle
       column-gap: 0;
       padding: 6rem 2rem 8rem;
     }
-    .essay-toc-wrap {
+    .essay-grid--has-toc .essay-toc-wrap {
       display: block;
       grid-column: 1;
       justify-self: end;
@@ -185,8 +211,13 @@ const headDescription = subtitle
       max-height: calc(100vh - 8rem);
       overflow-y: auto;
     }
-    .essay {
+    .essay-grid--has-toc .essay {
       grid-column: 2;
+    }
+    /* No-ToC desktop: keep the column centered, just give it a touch
+       more vertical breathing room than the mobile padding. */
+    .essay-grid:not(.essay-grid--has-toc) {
+      padding: 6rem 2rem 8rem;
     }
   }
 
@@ -312,6 +343,26 @@ const headDescription = subtitle
     color: var(--accent);
   }
 
+  /* Section break — generous vertical air between movements without a
+     visible rule. Authors signal a break in the MDX with the standard
+     `---` (which renders as <hr>); we hide the rule itself and convert
+     it into pure breathing room. The 3.5em / 3em values are deliberately
+     larger than a paragraph break (1.4em) so the eye registers a
+     genuine pause, not just another paragraph.
+
+     If a future essay wants a VISIBLE ornament (`* * *`, dot leaders,
+     etc.), it can be added by introducing a class on the hr or by
+     authoring an explicit ornament in the MDX. v1 prefers the quietest
+     option. */
+  .essay__body hr {
+    border: 0;
+    height: 0;
+    margin: 3.5em 0 3em;
+    /* Belt-and-braces: kill any UA default outline/border that might
+       slip through across browsers. */
+    background: transparent;
+  }
+
   /* Blockquote — left bar in the warm border color, italic body, a bit
      of left padding. Distinct enough to read as a quote at a glance,
      not so dramatic that pull-quotes shout. */
@@ -389,6 +440,12 @@ const headDescription = subtitle
     text-decoration: none;
     color: var(--accent);
     padding: 0 0.15em;
+    /* `cursor: help` (the question-mark variant) hints to mouse users
+       that the marker has a tooltip to surface — a small honest signal
+       that hovering does something. Falls back gracefully on touch
+       (no cursor concept) and at the system level (browsers respect
+       this hint, screen readers ignore it). */
+    cursor: help;
   }
   .essay__body .footnote-ref a:hover {
     text-decoration: underline;

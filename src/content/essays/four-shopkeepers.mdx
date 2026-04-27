@@ -9,31 +9,37 @@ draft: false
     Replaces the Phase 3 Lorem placeholder. Same slug
     (four-shopkeepers) so /essays/four-shopkeepers/ keeps resolving.
 
-    Structure: three movements separated by <hr> rules. No H2s by
-    design — the ToC sidebar will render empty, which is the intended
-    quieter shape for this piece (cf. writing_values §4.4).
+    Structure: three movements separated by `---` (renders as <hr>).
+    The hr itself is hidden by EssayLayout's global CSS — what shows
+    is just generous vertical breathing room between sections.
+
+    No H2s, by design. The ToC sidebar is gated on heading presence in
+    EssayLayout, so this essay renders without ToC chrome — the essay
+    column centers in the full viewport with no empty grid columns.
 
     Footnotes use the existing <Footnote> component (provided to MDX
     via the `components` prop in src/pages/essays/[...slug].astro).
-    Inline marker uses the self-closing form; the items at the bottom
-    use the slot form.
+    Each inline marker is given a `preview` prop matching the body of
+    the corresponding <Footnote id="…">…</Footnote> item below — that
+    text becomes a native browser tooltip on hover. The duplication is
+    the cost of a zero-JS hover preview; small price for the behavior.
 
     Italicization rules followed in this file:
       - All Hindi/Marathi phrases italic, untranslated (writing_values §2.2)
       - All quoted speech italic — the four load-bearing lines and
         Indralal's "We have Google Pay" — same treatment for consistency. */}
 
-The motorcycle was parked across the entrance to the perfume shop in Hathipol<Footnote id="1" />, and nobody had asked the owner to move it. The blue-bladed fan at the back was switched on when I arrived, stirring the evening air between the rows of glass bottles. The shop smelled of rose and sandalwood and *mitti ka ittr*<Footnote id="2" />. When I held up my phone to pay, the old uncle smiled and said, *"Beta, we accept only cash."*
+The motorcycle was parked across the entrance to the perfume shop in Hathipol<Footnote id="1" preview="A bustling old-city market gate and surrounding bazaar in Udaipur, Rajasthan. Named for the elephant gate of the city's palace. A place where shops have outlasted dynasties." />, and nobody had asked the owner to move it. The blue-bladed fan at the back was switched on when I arrived, stirring the evening air between the rows of glass bottles. The shop smelled of rose and sandalwood and *mitti ka ittr*<Footnote id="2" preview="A traditional perfume, capturing the scent of the earth after the first monsoon rain." />. When I held up my phone to pay, the old uncle smiled and said, *"Beta, we accept only cash."*
 
 The uncle chuckled when he said it. The phrase had the ease of something said often, to people like me. The shop had belonged to his grandfather first, who came from Palanpur seeking fortunes under the Maharaja of Mewar; then to his father; now to him. Three generations behind the same counter. The glass bottles along the wall were older than most of the people walking past outside.
 
 There was no resentment in the refusal. It was not a statement about modernity. The uncle had said it the way someone might say the shop closes at six on Fridays. Regulars know. Visitors learn. I paid in cash. He wrapped the small glass vial in old newspaper. A man walked in as I left, nodded at the uncle, and began a conversation that had clearly been going on for thirty years.
 
-India processes more than 700 million UPI<Footnote id="3" /> transactions a day, more than the rest of the world's real-time payment systems combined. The system has been called the most successful digital payments infrastructure ever built. My friends have told me they cannot remember the last time they used a banknote. None of those transactions came from this shop. In the national data, it is a rounding error. More often it does not appear at all.
+India processes more than 700 million UPI<Footnote id="3" preview="Unified Payments Interface, India's real-time digital payment system, launched in 2016. UPI lets anyone with a bank account and a phone send money to anyone else in seconds, by scanning a QR code or typing a virtual address." /> transactions a day, more than the rest of the world's real-time payment systems combined. The system has been called the most successful digital payments infrastructure ever built. My friends have told me they cannot remember the last time they used a banknote. None of those transactions came from this shop. In the national data, it is a rounding error. More often it does not appear at all.
 
 A few days later, in Chittorgarh, Puneet was walking me up to the fort at two in the afternoon, when the stone is hot enough through a shoe to make you pay attention. He told the story of Rani Padmini — the siege, the jauhar. He paused where the story paused. When I took out cash to pay him at the end, he shook his head.
 
-*Sirji, online hi kardo, cash kharach ho jayega.*<Footnote id="4" />
+*Sirji, online hi kardo, cash kharach ho jayega.*<Footnote id="4" preview={`"Sir, just pay online, the cash will get spent."`} />
 
 The UPI went to an account he had set up specifically so that money could sit somewhere he would not touch. Cash in the pocket vanished by evening; a balance on the app stayed until he needed it. He had inverted the technology into a savings device. The designers had not planned for that.
 
