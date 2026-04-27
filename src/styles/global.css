@@ -354,7 +354,22 @@ body::before {
    from the top-left with an accent pill. Enter jumps to #main-content
    (the wrapper around the page's <slot />), which is the page's
    logical starting point (past the fixed theme toggle and page
-   chrome). */
+   chrome).
+
+   ─── iOS Safari fix (April 2026) ───
+   Original implementation used the bare `:focus` pseudo-class, which
+   exposed a real bug on iOS Safari: the link surfaced visually after
+   page-load and back/forward navigation, even though no keyboard
+   focus had occurred. iOS occasionally auto-focuses the first
+   focusable element when the page is restored from the bfcache, and
+   touch-based gestures sometimes leave a stray focus state on
+   anchors. `:focus` matches all of those; `:focus-visible` does not.
+
+   `:focus-visible` is the correct pseudo-class for this use case. It
+   fires only when the user-agent decides a visible focus indicator
+   is appropriate — typically Tab key navigation, never touch or
+   click. Supported in Safari 15.4+, Chrome 86+, Firefox 85+, all of
+   which long predate the deployment target. */
 .skip-link {
   position: fixed;
   top: 0.5rem;
@@ -372,7 +387,6 @@ body::before {
   transform: translateY(-150%);
   transition: transform 150ms ease;
 }
-.skip-link:focus,
 .skip-link:focus-visible {
   transform: translateY(0);
   /* Suppress the default focus outline on this specific element —
