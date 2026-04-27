@@ -14,10 +14,14 @@ draft: false
     is just generous vertical breathing room between sections.
 
     No headings of any kind in this essay. The ToC sidebar is gated on
-    H2 presence in EssayLayout, so this piece renders without ToC chrome
-    — the essay column centers cleanly in the viewport. The footnote
-    items at the bottom render as a visually distinct list without
-    needing a "Notes" heading; the heading was removed deliberately.
+    H2 presence in EssayLayout, so this piece renders without ToC
+    chrome — the essay column centers cleanly in the viewport.
+
+    A <FootnoteSection /> component sits between the body and the
+    footnote items. It renders an asterism divider (⁂) followed by a
+    "Footnotes" label. The label is rendered as a styled <p>, NOT an
+    <h2>, so it never pollutes the ToC even when future essays use
+    body H2s.
 
     Footnotes use the existing <Footnote> component (provided to MDX
     via the `components` prop in src/pages/essays/[...slug].astro).
@@ -75,6 +79,8 @@ What would change if we treated the people inside the system not as the subjects
 The frameworks for measuring what AI is doing to the economy are still being built. What they end up seeing is what we will treat as real, for a long time. The shape they take in the next few years matters more than it will once they harden. The four people I met in Rajasthan were not researchers. They were paying attention to what was happening in their own lives, and what they knew was real. The people whose lives are reshaped by a technology learn things about it that the people measuring it, however careful, never quite learn. The questions they were carrying, in the small ways their lives carried them, are the same questions we are carrying now.
 
 What is gained when we move forward? And what, irreversibly, is left behind?
+
+<FootnoteSection />
 
 <Footnote id="1">A bustling old-city market gate and surrounding bazaar in Udaipur, Rajasthan. Named for the elephant gate of the city's palace. A place where shops have outlasted dynasties.</Footnote>
 

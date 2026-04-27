@@ -17,6 +17,7 @@ import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import EssayLayout from '@/layouts/EssayLayout.astro';
 import Footnote from '@/components/Footnote.astro';
+import FootnoteSection from '@/components/FootnoteSection.astro';
 
 export async function getStaticPaths() {
   // Filter drafts out of the production build. In dev (npm run dev)
@@ -49,9 +50,14 @@ const { Content, headings } = await render(essay);
   date={essay.data.date}
   headings={headings}
 >
-  {/* Pass the Footnote component through MDX's `components` prop so
-      essays can use <Footnote id="..." /> without an import statement
-      in their frontmatter. Adding more components later (Figure,
-      Aside, etc.) is a one-line change here. */}
-  <Content components={{ Footnote }} />
+  {/* Pass MDX-callable components through. Authors use these inside
+      essays without an import statement at the top of the .mdx file:
+
+        <Footnote id="1" preview="..." />     — inline marker
+        <Footnote id="1">Body text.</Footnote> — bottom item
+        <FootnoteSection />                    — divider + "Footnotes" label
+
+      Adding more components later (Figure, Aside, etc.) is a one-line
+      change here. */}
+  <Content components={{ Footnote, FootnoteSection }} />
 </EssayLayout>

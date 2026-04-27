@@ -544,6 +544,48 @@ const headDescription = subtitle
     }
   }
 
+  /* ─── Asterism divider + Footnotes heading ───────────────────────
+     Marks the transition from essay body to footnote apparatus. Both
+     elements are rendered by <FootnoteSection /> in MDX. The label is
+     a <p>, not an <h2>, deliberately — keeps it out of the rehype-slug
+     heading tree and therefore out of the auto-generated ToC. Future
+     essays with real body H2s will show a clean ToC of just those
+     headings, with no "Footnotes" entry. */
+
+  /* The asterism. ⁂ (U+2042) is the typographic standard for a
+     stronger-than-paragraph section break. Centered, muted, with
+     letter-spacing to give the glyph air. The vertical margins are
+     larger than a normal paragraph break — this is the strongest
+     visual break in the essay. */
+  .essay__body .essay-asterism {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.4em;
+    line-height: 1;
+    margin: 4em 0 2em;
+    letter-spacing: 0.4em;
+    /* Account for the letter-spacing pushing the glyph right of true
+       center: pull back by half a unit. */
+    text-indent: 0.4em;
+    /* Disable any user selection — it's an ornament, not content. */
+    user-select: none;
+  }
+
+  /* "Footnotes" label. Sized like a section heading but rendered as a
+     <p> for ToC-isolation reasons (see comment above). Visual weight
+     mirrors the H2 styling used in essays that have body sections,
+     so a reader can't tell from typography alone that this isn't a
+     "real" heading — only the ToC knows. */
+  .essay__body .essay-footnote-heading {
+    font-family: var(--font-serif);
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin: 0 0 1.2em;
+  }
+
   /* ─── Footnote items (bottom of essay) ───────────────────────────
      The Footnote component renders each item as a div with the
      classes below. No heading is authored above them in MDX — the
