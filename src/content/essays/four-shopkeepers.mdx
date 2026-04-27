@@ -1,60 +1,78 @@
 ---
-title: "Four Shopkeepers & a Trillion Transactions"
-subtitle: "A note on the texture of Indian retail"
-date: 2026-04-18
+title: "Four Shopkeepers and a Trillion Transactions"
+subtitle: "Notes from Rajasthan, on what measurement misses"
+date: 2026-04-01
 draft: false
 ---
 
-{/* Placeholder essay per §8.2 of the v1 plan. Its job is to exercise
-    every block type the EssayLayout supports — H2, H3, paragraph,
-    inline code, bold, italics, link, blockquote, ordered list,
-    unordered list, image, and two footnotes — so we have proof the
-    typography and the footnote/ToC plumbing all work end to end.
+{/* Adit Mehta — first published essay.
+    Replaces the Phase 3 Lorem placeholder. Same slug
+    (four-shopkeepers) so /essays/four-shopkeepers/ keeps resolving.
 
-    The <Footnote> component is provided to MDX via the `components`
-    prop in src/pages/essays/[...slug].astro, so no import is needed
-    here.
+    Structure: three movements separated by <hr> rules. No H2s by
+    design — the ToC sidebar will render empty, which is the intended
+    quieter shape for this piece (cf. writing_values §4.4).
 
-    Replace this content when the real essay is written. */}
+    Footnotes use the existing <Footnote> component (provided to MDX
+    via the `components` prop in src/pages/essays/[...slug].astro).
+    Inline marker uses the self-closing form; the items at the bottom
+    use the slot form.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua<Footnote id="1" />. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Italicization rules followed in this file:
+      - All Hindi/Marathi phrases italic, untranslated (writing_values §2.2)
+      - All quoted speech italic — the four load-bearing lines and
+        Indralal's "We have Google Pay" — same treatment for consistency. */}
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The motorcycle was parked across the entrance to the perfume shop in Hathipol<Footnote id="1" />, and nobody had asked the owner to move it. The blue-bladed fan at the back was switched on when I arrived, stirring the evening air between the rows of glass bottles. The shop smelled of rose and sandalwood and *mitti ka ittr*<Footnote id="2" />. When I held up my phone to pay, the old uncle smiled and said, *"Beta, we accept only cash."*
 
-## A first observation
+The uncle chuckled when he said it. The phrase had the ease of something said often, to people like me. The shop had belonged to his grandfather first, who came from Palanpur seeking fortunes under the Maharaja of Mewar; then to his father; now to him. Three generations behind the same counter. The glass bottles along the wall were older than most of the people walking past outside.
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+There was no resentment in the refusal. It was not a statement about modernity. The uncle had said it the way someone might say the shop closes at six on Fridays. Regulars know. Visitors learn. I paid in cash. He wrapped the small glass vial in old newspaper. A man walked in as I left, nodded at the uncle, and began a conversation that had clearly been going on for thirty years.
 
-> The shopkeeper, the customer, and the rupee note are the three essential nouns of an Indian high street — everything else is verb.
+India processes more than 700 million UPI<Footnote id="3" /> transactions a day, more than the rest of the world's real-time payment systems combined. The system has been called the most successful digital payments infrastructure ever built. My friends have told me they cannot remember the last time they used a banknote. None of those transactions came from this shop. In the national data, it is a rounding error. More often it does not appear at all.
 
-When measured in transactions per minute, the average kirana store outpaces a small bank branch. Try to verify this with `count(transactions, per='minute')` and the data is more interesting than tidy.
+A few days later, in Chittorgarh, Puneet was walking me up to the fort at two in the afternoon, when the stone is hot enough through a shoe to make you pay attention. He told the story of Rani Padmini — the siege, the jauhar. He paused where the story paused. When I took out cash to pay him at the end, he shook his head.
 
-### A finer point
+*Sirji, online hi kardo, cash kharach ho jayega.*<Footnote id="4" />
 
-The argument splits into three parts:
+The UPI went to an account he had set up specifically so that money could sit somewhere he would not touch. Cash in the pocket vanished by evening; a balance on the app stayed until he needed it. He had inverted the technology into a savings device. The designers had not planned for that.
 
-1. The shopkeeper as a **clearing house** — credit, change, mediator.
-2. The shopkeeper as an *informal banker* — keeping a running tab.
-3. The shopkeeper as a [community node](#) — the smallest unit of trust.
+Indralal makes silver and gold jewellery in Bada Bazaar. Bangles, nose rings, anklets, whatever the wedding season demands. He is old enough that anything requiring a phone gets handled by his son. When I asked him how he took payments, he waved a hand at the QR code stuck above the counter and said, *"We have Google Pay,"* with the cheerfulness of someone relieved to have an answer. His son had set that up too. Indralal stood at the counter as he had for forty years.
 
-Each role compounds the others. None can be removed without breaking the whole.
+Lalit runs a small gallery, up a staircase precarious enough that I stopped halfway to look at where my feet were going. Portraits of his great-grandfather, his grandfather, and his father look down from the walls. I asked him where his own portrait would go. He smiled before he answered. *"There will be none. This business dies with me."* His hands were stained with pigment, and he kept them folded on the table while we spoke. He takes UPI now. He had resisted it for a while; the customers insisted. He adopted because the alternative was losing them. The QR code stayed on his wall. It was not progress. It was not a problem either. It was just there now.
 
-## A second section heading
+Same country, same technology, same year. Four completely different human experiences. A dataset would record all four as a row with `adopted: yes/no`. It would capture nothing about why.
 
-There are days, walking through a market in Kolhapur or Pune, when you can almost watch this in motion. Some quick examples:
+---
 
-- A grandmother buys eggs and pays next week.
-- A delivery boy picks up rice on his employer's tab.
-- A child is sent for half a kilo of sugar with no money at all.
+Months later, in a different country, the four of them keep returning to me.
 
-Every one of these is a transaction. Every one is also a relationship. The accounting and the social fabric are the same thing<Footnote id="2" />.
+They keep returning because the same questions are being asked again, of a different technology, at a much larger scale. The questions about what a new technology means in an actual life, and what the data captures, and what it does not. Frontier labs and the largest companies in the field have begun publishing data on how AI is actually being used. The patterns are already visible. The data sees rich countries more clearly than poor ones. Usage is dominated by a narrow set of tasks, mostly coding and writing. Experienced users get measurably better outcomes than newcomers. The work is real. It is more than was available for any previous technology at this stage of its arrival.
 
-![Placeholder photograph — replace with a real market scene from Kolhapur.](https://images.unsplash.com/photo-1604881991720-f91add269bed?w=1600&q=80)
+The perfumer was not refusing UPI. The shop had its own coherence, and there was nowhere for a QR code to sit in it. There is work like that everywhere — work where hands and attention and years of practice matter, where a tool from outside has nothing to attach to. These are not refusers. The data does not record absences like this. It does not see them at all.
 
-Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur quis autem vel eum iure reprehenderit.
+Puneet's savings trick was not what UPI was built for. He had told me cash in his pocket vanished by evening. The account was where he kept it from himself. The same is happening now, with people fitting AI around the shape of their own days. Most of these inversions never appear in any account of what this superior intelligence is doing to the economy.
 
-## Footnotes
+Indralal's son had set up the QR code. In the data, Indralal is the adopter. The shape is everywhere now: the firm that subscribes, the school that rolls out the tools, the parent whose child sets up the system at home. The data records the adopter, not who chose.
 
-<Footnote id="1">A version of this argument appears in earlier work on retail informality. The framing is different but the core observation is the same.</Footnote>
+Lalit had not wanted UPI. The customers insisted. He adopted because the alternative was losing them. This is the most common adoption pattern: the yes given because the no has been made too expensive. The AI tool in the workflow, the system the colleague has begun using, the resume that has to match what the polished ones look like. Each yes was a yes the user could not afford to refuse.
 
-<Footnote id="2">This is the part of the essay where the real version would add a second example — for the placeholder we leave it as one. See [further reading](#) for the longer treatment.</Footnote>
+The framework sees one kind of adoption. The other kinds keep happening anyway.
+
+What would change if we treated the people inside the system not as the subjects of measurement, but as people who have already learned something the rest of us have not?
+
+---
+
+The frameworks for measuring what AI is doing to the economy are still being built. What they end up seeing is what we will treat as real, for a long time. The shape they take in the next few years matters more than it will once they harden. The four people I met in Rajasthan were not researchers. They were paying attention to what was happening in their own lives, and what they knew was real. The people whose lives are reshaped by a technology learn things about it that the people measuring it, however careful, never quite learn. The questions they were carrying, in the small ways their lives carried them, are the same questions we are carrying now.
+
+What is gained when we move forward? And what, irreversibly, is left behind?
+
+## Notes
+
+<Footnote id="1">A bustling old-city market gate and surrounding bazaar in Udaipur, Rajasthan. Named for the elephant gate of the city's palace. A place where shops have outlasted dynasties.</Footnote>
+
+<Footnote id="2">A traditional perfume, capturing the scent of the earth after the first monsoon rain.</Footnote>
+
+<Footnote id="3">Unified Payments Interface, India's real-time digital payment system, launched in 2016. UPI lets anyone with a bank account and a phone send money to anyone else in seconds, by scanning a QR code or typing a virtual address.</Footnote>
+
+<Footnote id="4">"Sir, just pay online, the cash will get spent."</Footnote>
