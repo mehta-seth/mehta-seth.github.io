@@ -84,6 +84,18 @@ const ogImageAbsolute = new URL(ogImage, Astro.site).toString();
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
+    {/* Google Search Console verification. The token below proves
+        ownership of mehta-seth.github.io to Search Console, which
+        unlocks indexing controls, sitemap submission, search-traffic
+        analytics, and crawl error reporting. Google re-verifies
+        periodically — if the tag is removed, Search Console access
+        is revoked. Keep this in place permanently.
+
+        On every page (not just /) because Google's verifier may pick
+        any URL on the site to check, depending on the signup flow.
+        Cost is negligible (one tag per page). */}
+    <meta name="google-site-verification" content="ug9dXKRrH46iK8XkB7dqFK0QFGRWUT0kXfwpyyQe1CU" />
+
     {/* ───────── theme-color ─────────
         Tints mobile browser chrome (Safari iOS status bar, Chrome
         Android URL bar) to match the current theme. Two tags with
