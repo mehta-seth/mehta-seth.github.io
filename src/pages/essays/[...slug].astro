@@ -50,6 +50,7 @@ const { Content, headings } = await render(essay);
   title={essay.data.title}
   subtitle={essay.data.subtitle}
   date={essay.data.date}
+  cover={essay.data.cover}
   headings={headings}
 >
   {/* Pass MDX-callable components through. Authors use these inside

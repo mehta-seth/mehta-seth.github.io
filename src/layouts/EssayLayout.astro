@@ -41,9 +41,16 @@ interface Props {
   subtitle?: string;
   date: Date;
   headings: MarkdownHeading[];
+  /**
+   * Optional per-essay OG image. Forwarded to BaseLayout as `ogImage`,
+   * which resolves it against Astro.site to an absolute URL for
+   * social-media crawlers. When undefined, BaseLayout falls back to
+   * the site-wide /og-default.png.
+   */
+  cover?: string;
 }
 
-const { title, subtitle, date, headings } = Astro.props;
+const { title, subtitle, date, headings, cover } = Astro.props;
 
 // Only render the ToC chrome (the aside, the grid 3-column shape) when
 // there's actually a ToC to populate. The TableOfContents component
@@ -80,7 +87,12 @@ const headDescription = subtitle
   : `${title}. An essay by Adit Mehta.`;
 ---
 
-<BaseLayout title={headTitle} description={headDescription} ogType="article">
+<BaseLayout
+  title={headTitle}
+  description={headDescription}
+  ogType="article"
+  ogImage={cover}
+>
   <ThemeToggle />
 
   {/* The lightbox dialog markup. Renders empty/hidden by default; its

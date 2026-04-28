@@ -32,6 +32,13 @@ const essays = defineCollection({
     // getStaticPaths filter. They remain visible in `getEntry` calls
     // (e.g. for previewing a specific draft URL while writing).
     draft: z.boolean().default(false),
+    // Per-essay OG card. Path is relative to the site root (i.e. resolves
+    // inside /public/), NOT an ESM import — OG images are referenced by
+    // absolute URL by social-media crawlers, not processed by Astro's
+    // image pipeline. Same shape as og-default.png. Generate one with
+    // scripts/generate-og-card.py and commit the result to /public/og/.
+    // When omitted, BaseLayout falls back to /og-default.png.
+    cover: z.string().optional(),
   }),
 });
 
