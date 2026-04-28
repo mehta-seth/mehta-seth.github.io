@@ -18,6 +18,7 @@ import type { CollectionEntry } from 'astro:content';
 import EssayLayout from '@/layouts/EssayLayout.astro';
 import Footnote from '@/components/Footnote.astro';
 import FootnoteSection from '@/components/FootnoteSection.astro';
+import Figure from '@/components/Figure.astro';
 
 export async function getStaticPaths() {
   // Filter drafts out of the production build. In dev (npm run dev)
@@ -56,8 +57,14 @@ const { Content, headings } = await render(essay);
         <Footnote id="1" preview="..." />     — inline marker
         <Footnote id="1">Body text.</Footnote> — bottom item
         <FootnoteSection />                    — divider + "Footnotes" label
+        <Figure src={img} alt="..." />         — in-essay photograph
+        <Figure src={img} alt="...">caption</Figure>
 
-      Adding more components later (Figure, Aside, etc.) is a one-line
-      change here. */}
-  <Content components={{ Footnote, FootnoteSection }} />
+      Note: <Figure>'s `src` prop takes ImageMetadata, not a string —
+      authors must `import photoName from '../../assets/.../file.jpg'`
+      at the top of the .mdx file and pass the imported binding.
+
+      Adding more components later (FigureRow, Aside, etc.) is a
+      one-line change here. */}
+  <Content components={{ Footnote, FootnoteSection, Figure }} />
 </EssayLayout>

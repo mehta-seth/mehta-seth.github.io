@@ -399,17 +399,106 @@ const headDescription = subtitle
     color: var(--text);
   }
 
-  /* Images: full column width, slight top/bottom margin, barely-
-     perceptible rounded corners. The alt text serves as a caption-ish
-     fallback for screen readers; for figured images with explicit
-     captions, authors can use <figure><img/><figcaption/></figure>
-     directly in MDX (deferred from v1 placeholder). */
+  /* Bare images (markdown `![alt](path)` syntax). For most in-essay
+     photographs, use the <Figure> component instead — it handles
+     responsive variants (AVIF/WebP/JPEG at 5 widths), captions, and
+     the wide/full size variants. This rule remains as a sensible
+     default for any plain <img> that ends up in the essay body
+     (icons, screenshots, etc.). */
   .essay__body img {
     display: block;
     max-width: 100%;
     height: auto;
     margin: 2.4em auto;
     border-radius: 2px;
+  }
+
+  /* ─── In-essay figures (Figure.astro) ────────────────────────────
+     Three size variants:
+       column = default. Fits inside the 42.5rem essay column.
+       wide   = breaks past the column at ≥1280px. On smaller
+                viewports it behaves like column.
+       full   = edge-to-edge of the viewport. Caption stays
+                column-width for readability.
+
+     Tall-aspect handling: max-height: 80vh on the image keeps a
+     portrait-orientation photograph from dominating the page. The
+     image is still visible without the user having to scroll past
+     it to find more text. object-fit: contain preserves the
+     aspect ratio inside the constrained box.
+
+     The figure block itself uses the same vertical rhythm as a
+     paragraph break (1.4em) plus a touch more (2.4em total) so
+     figures read as visual pauses, not as continuations of prose.
+  */
+
+  .essay__body .figure {
+    margin: 2.4em auto;
+  }
+
+  .essay__body .figure__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 2px;
+    margin: 0 auto;
+  }
+
+  /* Caption — muted serif, italic, body-small size, generous top
+     margin so it's clearly under-the-photo and not crashing into
+     it. Stays column-width even when the image goes wide/full,
+     so the prose-and-caption rhythm is consistent across sizes. */
+  .essay__body .figure__caption {
+    font-family: 'Newsreader', 'Charter', 'Georgia', serif;
+    font-size: var(--fs-small);
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0.9em auto 0;
+    max-width: 42.5rem;
+    text-align: left;
+  }
+
+  /* Caption inline emphasis (the * * markdown markers) — flip to
+     roman so emphasised words read as MORE emphatic against the
+     surrounding italic, not less. Standard typographic convention
+     for italic-set captions. */
+  .essay__body .figure__caption em {
+    font-style: normal;
+  }
+
+  /* Column = the default. No size-specific rules needed; the figure
+     and image fill 100% of the essay column (42.5rem). */
+
+  /* Wide — breaks out past the essay column on ≥1280px viewports.
+     The breakout is symmetric (negative margin on both sides) so
+     the figure stays centered within the column. Below 1280px, no
+     breakout — the image stays at column width. */
+  @media (min-width: 1280px) {
+    .essay__body .figure--wide {
+      width: calc(100% + 12.5rem);
+      margin-left: -6.25rem;
+      margin-right: -6.25rem;
+    }
+  }
+
+  /* Full — edge-to-edge of the viewport. The image goes full-bleed;
+     the figcaption inside it stays column-width (its own rule above
+     constrains it). The classic "50% - 50vw" trick gets the image
+     out to the viewport edges from inside a centered column.
+     border-radius: 0 because corner radius on a full-bleed photo
+     looks wrong — it implies the photo is a card, not the moment. */
+  .essay__body .figure--full .figure__img {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    border-radius: 0;
+    /* Allow more height for full-bleed — the image IS the focus
+       at this size. */
+    max-height: 90vh;
   }
 
   /* ─── Footnote refs (inline) ─────────────────────────────────────

@@ -1,0 +1,124 @@
+---
+// src/components/Figure.astro
+//
+// In-essay photograph component. Wraps Astro's <Picture> with the
+// site's standard responsive widths and the three size variants used
+// in essay layouts.
+//
+// MDX usage (see content/essays/*.mdx for live examples):
+//
+//   import lalit from '../../assets/essays/four-shopkeepers/lalit.jpg';
+//
+//   <Figure src={lalit} alt="Lalit at the table in his studio." />
+//
+//   With caption (slot):
+//   <Figure src={lalit} alt="...">
+//     Lalit, painter, in his Udaipur studio. *July 2024.*
+//   </Figure>
+//
+//   Wider — breaks past the essay column on desktop (≥1280px):
+//   <Figure src={img} alt="..." size="wide" />
+//
+//   Full-bleed (edge to edge of viewport):
+//   <Figure src={img} alt="..." size="full" />
+//
+//   First figure in an essay (LCP candidate):
+//   <Figure src={img} alt="..." priority />
+//
+// The `src` prop takes Astro's ImageMetadata (the object returned by
+// `import` of an image file). It does NOT take a string path. Authors
+// import the image at the top of the .mdx file and pass the binding
+// in. The component never knows or cares where the file lives on disk
+// — that's the .mdx file's concern. Move the image, update the import,
+// done.
+//
+// Why <Picture> and not <Image>: Picture emits a real <picture> element
+// with one <source srcset> PER format, so the browser picks AVIF if it
+// can, falls back to WebP, falls back to JPEG. <Image> emits one <img>
+// in a single format. CityCard uses Picture for the same reason.
+//
+// Widths: [640, 1024, 1600, 2400, 3000] — the 3000 entry covers the
+// full-bleed-on-4K-display worst case. Source files are normalised to
+// 3000px max-edge by scripts/prep-photo.sh, so the 3000 variant equals
+// the source and Astro/Sharp does not upscale.
+//
+// Quality: 85 — applied per format by Sharp. AVIF at this level is
+// visually indistinguishable from source on photographic content;
+// WebP and JPEG land slightly heavier but at the same perceived
+// quality. (Per-format quality overrides require routing through
+// getImage() rather than <Picture>; deferred until we have a reason
+// to need it.)
+
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  /**
+   * Imported ImageMetadata, e.g.
+   *   import photo from '../../assets/essays/<slug>/<file>.jpg';
+   */
+  src: ImageMetadata;
+  /**
+   * Alt text. Describe what's in the frame and what role the image
+   * plays in the essay's argument, in one sentence. Required — there
+   * is no default.
+   */
+  alt: string;
+  /**
+   * column = default. Fits inside the 42.5rem essay column.
+   * wide   = breaks out beyond the column on ≥1280px viewports.
+   * full   = edge-to-edge of the viewport (caption stays column-width).
+   */
+  size?: 'column' | 'wide' | 'full';
+  /**
+   * Set true on the first figure in an essay only. Forces eager
+   * loading + sync decode so the LCP candidate isn't delayed. Every
+   * other figure should be lazy (the default).
+   */
+  priority?: boolean;
+}
+
+const { src, alt, size = 'column', priority = false } = Astro.props;
+
+// Widths array. The fifth entry (3000) matches the source max-edge so
+// the largest variant never upscales. The smaller widths cover phone
+// (640), tablet (1024), desktop column (1600), and desktop wide/zoom
+// (2400) cases.
+const widths = [640, 1024, 1600, 2400, 3000];
+
+// `sizes` tells the browser the rendered width at each viewport
+// breakpoint BEFORE layout. Browser uses this to pick the right
+// srcset candidate to fetch. Mismatched sizes = browser fetches a
+// too-large or too-small variant.
+const sizesMap: Record<typeof size, string> = {
+  column: '(min-width: 768px) 42.5rem, 100vw',
+  wide:   '(min-width: 1280px) 55rem, (min-width: 768px) 42.5rem, 100vw',
+  full:   '100vw',
+};
+
+const loading = priority ? 'eager' : 'lazy';
+const decoding = priority ? 'sync' : 'async';
+
+// Caption slot detection. If the author wrote <Figure>caption</Figure>
+// (with children), render <figcaption>. If <Figure ... /> self-closing,
+// no caption element. Mirrors the Footnote component's dual-mode trick.
+const hasCaption = Astro.slots.has('default');
+---
+
+<figure class:list={['figure', `figure--${size}`]}>
+  <Picture
+    src={src}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    widths={widths}
+    sizes={sizesMap[size]}
+    quality={85}
+    alt={alt}
+    loading={loading}
+    decoding={decoding}
+    class="figure__img"
+  />
+  {hasCaption && (
+    <figcaption class="figure__caption"><slot /></figcaption>
+  )}
+</figure>

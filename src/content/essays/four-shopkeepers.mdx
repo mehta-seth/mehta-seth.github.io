@@ -5,6 +5,19 @@ date: 2026-04-01
 draft: false
 ---
 
+{/* Photo imports.
+
+    Each photograph used in this essay is imported here at the top.
+    Astro's MDX integration runs these imports at build time and
+    produces an ImageMetadata object (NOT a string path) that
+    <Figure src={...}> consumes. Sharp generates AVIF/WebP/JPEG
+    variants at the widths declared in Figure.astro.
+
+    Path is relative to THIS file. Move a photo on disk → update the
+    path here → no other file needs to know. The Figure component
+    itself never sees a path; it sees the imported binding. */}
+import lalitPhoto from '../../assets/essays/four-shopkeepers/lalit.jpg';
+
 {/* Adit Mehta — first published essay.
     Replaces the Phase 3 Lorem placeholder. Same slug
     (four-shopkeepers) so /essays/four-shopkeepers/ keeps resolving.
@@ -75,6 +88,11 @@ The framework sees one kind of adoption. The other kinds keep happening anyway.
 What would change if we treated the people inside the system not as the subjects of measurement, but as people who have already learned something the rest of us have not?
 
 ---
+
+<Figure
+  src={lalitPhoto}
+  alt="Lalit at the table in his Udaipur studio."
+/>
 
 The frameworks for measuring what AI is doing to the economy are still being built. What they end up seeing is what we will treat as real, for a long time. The shape they take in the next few years matters more than it will once they harden. The four people I met in Rajasthan were not researchers. They were paying attention to what was happening in their own lives, and what they knew was real. The people whose lives are reshaped by a technology learn things about it that the people measuring it, however careful, never quite learn. The questions they were carrying, in the small ways their lives carried them, are the same questions we are carrying now.
 
