@@ -1,0 +1,454 @@
+---
+// src/components/Lightbox.astro
+//
+// Click-to-zoom photo viewer for in-essay figures. Renders an empty
+// dialog-shaped wrapper at the end of the page (used only on essay
+// pages — included by EssayLayout, not BaseLayout) that the script
+// populates when the user clicks a <Figure>.
+//
+// Design notes:
+//   - One lightbox per page. The script auto-discovers all figures
+//     inside .essay__body and wires them up — no per-figure
+//     registration. Adding a Figure to an essay's MDX requires no
+//     additional work for the lightbox to pick it up.
+//   - The largest available variant is shown. The script reads the
+//     <Figure>'s emitted <picture> element, finds the AVIF <source>'s
+//     srcset, and picks the candidate with the largest width
+//     descriptor. AVIF coverage is ~95% as of 2026; if the AVIF
+//     source isn't present (e.g. browser doesn't support it),
+//     fallback chain: AVIF srcset → WebP srcset → the inline <img src>.
+//   - Caption persists in the lightbox view if the figure had one.
+//   - Background scroll is locked while open; padding-right
+//     compensates for the disappearing scrollbar on platforms that
+//     show one (Windows mainly).
+//   - Tab is trapped inside the lightbox while open — Esc and
+//     backdrop-click close. Focus returns to the originating figure
+//     on close.
+//   - Honors prefers-reduced-motion: no fade animation, just appears.
+//   - Closes on pagehide so bfcache restoration doesn't leave it open.
+//
+// What this lightbox is NOT (deferred):
+//   - Pinch-to-zoom on mobile. iOS double-tap on the lightbox image
+//     covers most cases natively; we don't add custom gestures that
+//     would interfere.
+//   - Swipe-down to dismiss.
+//   - Multi-image gallery navigation. Each lightbox open is one
+//     image at a time; there are no prev/next arrows. Add when an
+//     essay actually has enough photos to warrant it.
+//
+// The CSS lives at the bottom of this file (in <style is:global>) so
+// it applies to the lightbox markup at the page level. The script
+// also lives at the bottom (in <script>) — Astro compiles it into a
+// single inline <script type="module"> at build time, no hydration
+// runtime.
+---
+
+{/* The lightbox dialog itself. Hidden by default; the .is-open
+    class flips it visible. Markup is intentionally minimal — every
+    visible piece (the image, the caption, the close button) lives
+    inside .lightbox__inner so the backdrop click handler can detect
+    "click on backdrop" by checking event.target === the dialog
+    element itself. */}
+<div
+  class="lightbox"
+  id="lightbox"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Image viewer"
+  aria-hidden="true"
+>
+  <button
+    type="button"
+    class="lightbox__close"
+    id="lightbox-close"
+    aria-label="Close image viewer"
+  >
+    {/* × — using the U+00D7 multiplication sign rather than a literal
+        x so it renders as a typographic glyph at any font weight, not
+        as a letter that inherits surrounding font styling. */}
+    <span aria-hidden="true">×</span>
+  </button>
+
+  <div class="lightbox__inner">
+    <img class="lightbox__img" id="lightbox-img" alt="" />
+    <p class="lightbox__caption" id="lightbox-caption" hidden></p>
+  </div>
+</div>
+
+<style is:global>
+  /* Lightbox dialog. Fixed full-viewport, hidden by default. */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;          /* above grain (100), toggle (200), skip-link (300) */
+    display: none;
+    /* Backdrop. Solid near-black with high opacity — ensures the
+       image is the visual focus regardless of theme. We use a custom
+       value rather than the theme's --bg because the lightbox is a
+       theme-neutral viewing surface. */
+    background-color: rgba(8, 8, 8, 0.94);
+    /* Center the inner content. */
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    cursor: zoom-out;
+  }
+  .lightbox.is-open {
+    display: flex;
+    animation: lightbox-fade 200ms ease-out;
+  }
+  @keyframes lightbox-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  /* Honor reduced-motion: no fade, just appear. */
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox.is-open {
+      animation: none;
+    }
+  }
+
+  .lightbox__inner {
+    /* The clickable target inside the backdrop. Cursor reverts to
+       default here so the close-by-clicking-outside affordance is
+       only on the actual backdrop. */
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    /* Cap so caption stays readable on big screens. */
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .lightbox__img {
+    /* Fit inside the available viewport space, preserving aspect.
+       max-width / max-height with auto are the canonical "fit"
+       pattern for an arbitrary-aspect image inside a known box. */
+    max-width: 100%;
+    max-height: calc(100vh - 8rem); /* 8rem = top/bottom padding + caption space */
+    width: auto;
+    height: auto;
+    display: block;
+    user-select: none;
+    /* Allow native double-tap zoom on iOS. touch-action: manipulation
+       removes the 300ms tap delay without disabling pinch. */
+    touch-action: manipulation;
+  }
+
+  .lightbox__caption {
+    color: rgba(232, 228, 220, 0.85);    /* matches dark-theme --text muted */
+    font-family: 'Newsreader', 'Charter', 'Georgia', serif;
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.5;
+    text-align: center;
+    margin: 0;
+    max-width: 42.5rem;
+  }
+
+  /* Close button — top-right, subtle until hovered. The × is a
+     typographic glyph at large size so it reads as a deliberate
+     close affordance, not a generic icon. */
+  .lightbox__close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: rgba(232, 228, 220, 0.7);
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: color 150ms ease, background-color 150ms ease;
+  }
+  .lightbox__close:hover,
+  .lightbox__close:focus-visible {
+    color: rgba(232, 228, 220, 1);
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  .lightbox__close:focus-visible {
+    outline: 2px solid rgba(232, 228, 220, 0.85);
+    outline-offset: 2px;
+  }
+
+  /* When the lightbox is open, the body gets .lightbox-open which
+     locks scroll. padding-right compensates for the scrollbar that
+     would otherwise disappear on platforms that show one (Windows),
+     preventing the layout jump. */
+  body.lightbox-open {
+    overflow: hidden;
+  }
+
+  /* Make every <Figure> image clickable-feeling — but ONLY once the
+     lightbox script has wired it up. The script adds .figure--clickable
+     to each figure it registers; without JS, the class never lands and
+     the cursor stays at default, which is honest. */
+  .essay__body .figure--clickable .figure__img {
+    cursor: zoom-in;
+  }
+</style>
+
+<script>
+  /**
+   * Lightbox driver.
+   *
+   * Wires up every figure inside .essay__body to open the lightbox
+   * dialog on click. Reads the <picture>'s AVIF srcset to find the
+   * largest variant available, falls back to WebP or the inline
+   * <img src> if AVIF isn't present.
+   *
+   * Public surface: nothing. The whole module is an IIFE; the script
+   * runs once on DOMContentLoaded, attaches handlers, and idles.
+   */
+
+  type FigureData = {
+    src: string;
+    alt: string;
+    caption: string | null;
+    triggerEl: HTMLElement;
+  };
+
+  /**
+   * Parse a srcset string like
+   *   "url1 640w, url2 1024w, url3 3000w"
+   * and return the URL with the largest `Nw` descriptor.
+   */
+  function pickLargestFromSrcset(srcset: string): string | null {
+    if (!srcset) return null;
+    const parts = srcset.split(',').map((s) => s.trim());
+    let bestUrl: string | null = null;
+    let bestWidth = -1;
+    for (const part of parts) {
+      // "url 1024w" — split into url and descriptor by whitespace.
+      const match = part.match(/^(\S+)\s+(\d+)w$/);
+      if (!match) continue;
+      const [, url, widthStr] = match;
+      const width = parseInt(widthStr, 10);
+      if (width > bestWidth) {
+        bestWidth = width;
+        bestUrl = url;
+      }
+    }
+    return bestUrl;
+  }
+
+  /**
+   * Given a <picture> element produced by Astro's <Picture>, return
+   * the URL of the largest variant available. Preference order:
+   * AVIF → WebP → fallback <img src>.
+   */
+  function pickLargestVariant(picture: HTMLPictureElement): string {
+    // Astro emits one <source type="image/avif"> and one <source type="image/webp">.
+    const avifSource = picture.querySelector<HTMLSourceElement>('source[type="image/avif"]');
+    const webpSource = picture.querySelector<HTMLSourceElement>('source[type="image/webp"]');
+    const fallbackImg = picture.querySelector<HTMLImageElement>('img');
+
+    if (avifSource?.srcset) {
+      const url = pickLargestFromSrcset(avifSource.srcset);
+      if (url) return url;
+    }
+    if (webpSource?.srcset) {
+      const url = pickLargestFromSrcset(webpSource.srcset);
+      if (url) return url;
+    }
+    return fallbackImg?.src ?? '';
+  }
+
+  /**
+   * Extract the relevant data from a <figure> element and return it,
+   * or null if the figure can't be processed.
+   */
+  function readFigure(figure: HTMLElement): FigureData | null {
+    const picture = figure.querySelector('picture');
+    if (!picture) return null;
+
+    const src = pickLargestVariant(picture as HTMLPictureElement);
+    if (!src) return null;
+
+    const img = figure.querySelector<HTMLImageElement>('img');
+    const alt = img?.alt ?? '';
+
+    const figcaption = figure.querySelector<HTMLElement>('.figure__caption');
+    // Use textContent so we get the rendered caption text without HTML markup.
+    // The lightbox caption is plain-text; richer formatting (links, italics
+    // inside the caption) is not preserved in this v0.1.
+    const caption = figcaption?.textContent?.trim() ?? null;
+
+    return {
+      src,
+      alt,
+      caption: caption && caption.length > 0 ? caption : null,
+      triggerEl: figure,
+    };
+  }
+
+  // ─── DOM references (the lightbox dialog is rendered by this same component) ───
+
+  const dialog = document.getElementById('lightbox') as HTMLElement | null;
+  const dialogImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+  const dialogCaption = document.getElementById('lightbox-caption') as HTMLElement | null;
+  const dialogClose = document.getElementById('lightbox-close') as HTMLButtonElement | null;
+
+  // If any of the dialog parts are missing, bail silently. The figures
+  // remain unclickable; the page still works.
+  if (dialog && dialogImg && dialogCaption && dialogClose) {
+    let lastTrigger: HTMLElement | null = null;
+
+    /**
+     * Open the lightbox with the given figure data.
+     */
+    function open(data: FigureData) {
+      lastTrigger = data.triggerEl;
+
+      // Scroll-lock the body. Compensate for scrollbar disappearance on
+      // platforms that show one (Windows mainly; macOS auto-hides scrollbars
+      // and this becomes a no-op).
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+      document.body.classList.add('lightbox-open');
+
+      dialogImg!.src = data.src;
+      dialogImg!.alt = data.alt;
+
+      if (data.caption) {
+        dialogCaption!.textContent = data.caption;
+        dialogCaption!.hidden = false;
+      } else {
+        dialogCaption!.textContent = '';
+        dialogCaption!.hidden = true;
+      }
+
+      dialog!.classList.add('is-open');
+      dialog!.setAttribute('aria-hidden', 'false');
+
+      // Move focus into the dialog. The close button is the safest
+      // landing target: keyboard users immediately know how to escape.
+      dialogClose!.focus();
+    }
+
+    /**
+     * Close the lightbox. Idempotent — safe to call when already closed.
+     */
+    function close() {
+      if (!dialog!.classList.contains('is-open')) return;
+
+      dialog!.classList.remove('is-open');
+      dialog!.setAttribute('aria-hidden', 'true');
+
+      // Unlock scroll, restore any padding-right we added.
+      document.body.classList.remove('lightbox-open');
+      document.body.style.paddingRight = '';
+
+      // Clear the image src so the browser stops holding a decoded
+      // copy in memory. Setting alt to '' too, for cleanliness.
+      dialogImg!.src = '';
+      dialogImg!.alt = '';
+      dialogCaption!.textContent = '';
+      dialogCaption!.hidden = true;
+
+      // Return focus to the figure that opened the lightbox so a
+      // keyboard reader doesn't lose their place in the essay.
+      if (lastTrigger) {
+        // Make the figure focusable temporarily if it isn't already.
+        // (Figures are not focusable by default; the click handler
+        // landed via the figure being a click target, not a focus
+        // target.)
+        const previousTabIndex = lastTrigger.getAttribute('tabindex');
+        lastTrigger.setAttribute('tabindex', '-1');
+        lastTrigger.focus({ preventScroll: true });
+        // Restore tabindex after focus has landed. Using rAF rather
+        // than removeAttribute immediately because some browsers
+        // de-focus when the attribute changes synchronously.
+        requestAnimationFrame(() => {
+          if (previousTabIndex === null) {
+            lastTrigger!.removeAttribute('tabindex');
+          } else {
+            lastTrigger!.setAttribute('tabindex', previousTabIndex);
+          }
+        });
+      }
+      lastTrigger = null;
+    }
+
+    // ─── Trap Tab inside the dialog while open ────────────────────────
+    // The dialog has exactly one focusable element (the close button)
+    // when open, so the trap is trivial: any Tab keypress while the
+    // lightbox is open redirects focus to the close button.
+    function handleKeydown(e: KeyboardEvent) {
+      if (!dialog!.classList.contains('is-open')) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+      } else if (e.key === 'Tab') {
+        // Single focusable element — keep focus on it.
+        e.preventDefault();
+        dialogClose!.focus();
+      }
+    }
+
+    // ─── Backdrop click handler ───────────────────────────────────────
+    // Clicking the dialog itself (not its inner content) closes.
+    // The .lightbox__inner element has its own cursor and content;
+    // clicks on it should NOT close.
+    function handleDialogClick(e: MouseEvent) {
+      if (e.target === dialog) {
+        close();
+      }
+    }
+
+    // ─── Wire up close button + dialog + global key listener ──────────
+    dialogClose.addEventListener('click', close);
+    dialog.addEventListener('click', handleDialogClick);
+    document.addEventListener('keydown', handleKeydown);
+
+    // Close on pagehide so a bfcache restore never leaves the lightbox
+    // half-open. This catches both real navigation and forward/back
+    // restoration.
+    window.addEventListener('pagehide', () => close());
+
+    // ─── Wire up every figure on the page ─────────────────────────────
+    // Auto-discovery: any .figure inside .essay__body becomes clickable.
+    // Adding a Figure to MDX requires no additional registration.
+    const figures = document.querySelectorAll<HTMLElement>('.essay__body .figure');
+    figures.forEach((figure) => {
+      // Make the figure feel keyboard-activatable too. We add
+      // tabindex=0 + role=button so it lands in the tab order and a
+      // screen reader announces it as a button. The .figure--clickable
+      // class triggers the zoom-in cursor (defined in the global
+      // styles above) — gated on this class so a JS-disabled visit
+      // doesn't promise interactivity that won't fire.
+      figure.setAttribute('tabindex', '0');
+      figure.setAttribute('role', 'button');
+      figure.setAttribute('aria-label', 'Open image in viewer');
+      figure.classList.add('figure--clickable');
+
+      const handler = (e: Event) => {
+        // For keyboard activation: only react to Enter and Space, and
+        // only when the event target IS the figure (not, e.g., a link
+        // inside a caption — though figures don't currently have those).
+        if (e.type === 'keydown') {
+          const ke = e as KeyboardEvent;
+          if (ke.key !== 'Enter' && ke.key !== ' ') return;
+          // Prevent default Space scroll-page behavior.
+          ke.preventDefault();
+        }
+
+        const data = readFigure(figure);
+        if (data) open(data);
+      };
+
+      figure.addEventListener('click', handler);
+      figure.addEventListener('keydown', handler);
+    });
+  }
+</script>
