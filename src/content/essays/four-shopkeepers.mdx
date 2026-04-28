@@ -22,19 +22,25 @@ import lalitPhoto from '../../assets/essays/four-shopkeepers/lalit.jpg';
     Replaces the Phase 3 Lorem placeholder. Same slug
     (four-shopkeepers) so /essays/four-shopkeepers/ keeps resolving.
 
-    Structure: three movements separated by `---` (renders as <hr>).
-    The hr itself is hidden by EssayLayout's global CSS — what shows
-    is just generous vertical breathing room between sections.
+    Structure: three movements. Section breaks are marked either by
+    `---` (renders as <hr>, hidden by EssayLayout's global CSS — what
+    shows is just generous vertical breathing room) OR by a <Figure />
+    placed between the two sections. When a Figure sits at a section
+    boundary, it serves as the divider on its own — DO NOT also write
+    a `---` adjacent to it; the stacked whitespace reads as a gap, not
+    a pause. Rule: photo OR rule, never both.
 
     No headings of any kind in this essay. The ToC sidebar is gated on
     H2 presence in EssayLayout, so this piece renders without ToC
     chrome — the essay column centers cleanly in the viewport.
 
-    A <FootnoteSection /> component sits between the body and the
-    footnote items. It renders an asterism divider (⁂) followed by a
-    "Footnotes" label. The label is rendered as a styled <p>, NOT an
-    <h2>, so it never pollutes the ToC even when future essays use
-    body H2s.
+    The footnote apparatus uses two components, <EssayBreak /> and
+    <FootnotesHeading />, with optional editorial content in between
+    (here: a one-line photo credit, set in italic). EssayBreak renders
+    the asterism (⁂) marking the boundary between body and apparatus.
+    FootnotesHeading renders the "Footnotes" label — as a styled <p>,
+    NOT an <h2>, so it never pollutes the ToC even when future essays
+    use body H2s.
 
     Footnotes use the existing <Footnote> component (provided to MDX
     via the `components` prop in src/pages/essays/[...slug].astro).
@@ -47,7 +53,10 @@ import lalitPhoto from '../../assets/essays/four-shopkeepers/lalit.jpg';
     Italicization rules followed in this file:
       - All Hindi/Marathi phrases italic, untranslated (writing_values §2.2)
       - All quoted speech italic — the four load-bearing lines and
-        Indralal's "We have Google Pay" — same treatment for consistency. */}
+        Indralal's "We have Google Pay" — same treatment for consistency.
+      - The credit line below the asterism is italic — standard
+        typographic convention for editorial apparatus that's not part
+        of the essay body proper. */}
 
 The motorcycle was parked across the entrance to the perfume shop in Hathipol<Footnote id="1" preview="A bustling old-city market gate and surrounding bazaar in Udaipur, Rajasthan. Named for the elephant gate of the city's palace. A place where shops have outlasted dynasties." />, and nobody had asked the owner to move it. The blue-bladed fan at the back was switched on when I arrived, stirring the evening air between the rows of glass bottles. The shop smelled of rose and sandalwood and *mitti ka ittr*<Footnote id="2" preview="A traditional perfume, capturing the scent of the earth after the first monsoon rain." />. When I held up my phone to pay, the old uncle smiled and said, *"Beta, we accept only cash."*
 
@@ -87,18 +96,20 @@ The framework sees one kind of adoption. The other kinds keep happening anyway.
 
 What would change if we treated the people inside the system not as the subjects of measurement, but as people who have already learned something the rest of us have not?
 
----
-
 <Figure
   src={lalitPhoto}
-  alt="Lalit at the table in his Udaipur studio."
+  alt="Lalit with some of his work."
 />
 
 The frameworks for measuring what AI is doing to the economy are still being built. What they end up seeing is what we will treat as real, for a long time. The shape they take in the next few years matters more than it will once they harden. The four people I met in Rajasthan were not researchers. They were paying attention to what was happening in their own lives, and what they knew was real. The people whose lives are reshaped by a technology learn things about it that the people measuring it, however careful, never quite learn. The questions they were carrying, in the small ways their lives carried them, are the same questions we are carrying now.
 
 What is gained when we move forward? And what, irreversibly, is left behind?
 
-<FootnoteSection />
+<EssayBreak />
+
+*Photos here are by me and Shreya, who'll take fifty frames of the same thing until one of them is right. Thank you, S.*
+
+<FootnotesHeading />
 
 <Footnote id="1">A bustling old-city market gate and surrounding bazaar in Udaipur, Rajasthan. Named for the elephant gate of the city's palace. A place where shops have outlasted dynasties.</Footnote>
 

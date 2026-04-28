@@ -17,7 +17,8 @@ import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import EssayLayout from '@/layouts/EssayLayout.astro';
 import Footnote from '@/components/Footnote.astro';
-import FootnoteSection from '@/components/FootnoteSection.astro';
+import EssayBreak from '@/components/EssayBreak.astro';
+import FootnotesHeading from '@/components/FootnotesHeading.astro';
 import Figure from '@/components/Figure.astro';
 
 export async function getStaticPaths() {
@@ -56,15 +57,21 @@ const { Content, headings } = await render(essay);
 
         <Footnote id="1" preview="..." />     — inline marker
         <Footnote id="1">Body text.</Footnote> — bottom item
-        <FootnoteSection />                    — divider + "Footnotes" label
+        <EssayBreak />                         — the asterism (⁂)
+        <FootnotesHeading />                   — the "Footnotes" label
         <Figure src={img} alt="..." />         — in-essay photograph
         <Figure src={img} alt="...">caption</Figure>
+
+      EssayBreak and FootnotesHeading replaced the older single
+      <FootnoteSection /> component in April 2026. The split allows
+      arbitrary editorial content (photo credits, acknowledgments)
+      to live between the two in MDX.
 
       Note: <Figure>'s `src` prop takes ImageMetadata, not a string —
       authors must `import photoName from '../../assets/.../file.jpg'`
       at the top of the .mdx file and pass the imported binding.
 
-      Adding more components later (FigureRow, Aside, etc.) is a
-      one-line change here. */}
-  <Content components={{ Footnote, FootnoteSection, Figure }} />
+      Adding more components later (FigureRow, Lightbox, Aside, etc.)
+      is a one-line change here. */}
+  <Content components={{ Footnote, EssayBreak, FootnotesHeading, Figure }} />
 </EssayLayout>

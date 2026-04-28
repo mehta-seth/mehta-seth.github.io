@@ -663,7 +663,16 @@ const headDescription = subtitle
      <p> for ToC-isolation reasons (see comment above). Visual weight
      mirrors the H2 styling used in essays that have body sections,
      so a reader can't tell from typography alone that this isn't a
-     "real" heading — only the ToC knows. */
+     "real" heading — only the ToC knows.
+
+     Top margin of 2em provides breathing room from whatever sits
+     above. In the simple case (asterism directly above), this margin
+     collapses with the asterism's 2em bottom margin → still 2em gap.
+     In the case with editorial content between them (a photo credit,
+     an acknowledgments line), the 2em top margin collapses with
+     whatever bottom margin the editorial paragraph carries (typically
+     1.4em from .essay__body p) → 2em gap. Symmetric in both cases
+     thanks to CSS's margin-collapse rules. */
   .essay__body .essay-footnote-heading {
     font-family: var(--font-serif);
     font-size: var(--fs-h3);
@@ -671,7 +680,7 @@ const headDescription = subtitle
     line-height: 1.25;
     letter-spacing: -0.01em;
     color: var(--text);
-    margin: 0 0 1.2em;
+    margin: 2em 0 1.2em;
   }
 
   /* ─── Footnote items (bottom of essay) ───────────────────────────

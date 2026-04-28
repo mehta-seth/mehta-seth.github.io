@@ -1,0 +1,40 @@
+---
+// src/components/FootnotesHeading.astro
+//
+// The "Footnotes" label that introduces the footnote items at the
+// bottom of an essay. Rendered as a styled <p>, NOT an <h2>, so it
+// never lands in the rehype-slug heading tree — meaning the auto-
+// generated table of contents stays clean for essays that have body
+// H2s. (The "Footnotes" entry would otherwise pollute every ToC.)
+//
+// Pairs with <EssayBreak />, which renders the asterism above the
+// footnote apparatus. Standard authoring shape in MDX:
+//
+//   <EssayBreak />
+//
+//   <FootnotesHeading />
+//
+//   <Footnote id="1">First footnote text.</Footnote>
+//
+// Or with editorial content between them (acknowledgments, etc.):
+//
+//   <EssayBreak />
+//
+//   *Some prose, e.g. photo credits.*
+//
+//   <FootnotesHeading />
+//
+//   <Footnote id="1">...</Footnote>
+//
+// If you ever want a different label ("Notes", "References"), add an
+// optional `label` prop here. v1 is fixed at "Footnotes" because that's
+// what these are.
+//
+// Replaced the previous <FootnoteSection /> component (April 2026)
+// alongside <EssayBreak />.
+//
+// Styles for .essay-footnote-heading live in EssayLayout.astro's
+// <style is:global> block; this component contributes only the markup.
+---
+
+<p class="essay-footnote-heading">Footnotes</p>

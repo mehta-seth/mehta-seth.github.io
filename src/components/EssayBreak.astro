@@ -1,0 +1,36 @@
+---
+// src/components/EssayBreak.astro
+//
+// The asterism divider (⁂) — a typographic ornament marking a stronger
+// pause than a paragraph break or an in-body `---` (which we render
+// invisibly). Used at the end of an essay to separate the body from
+// the footnote apparatus, with optional editorial content (e.g. a
+// photo credit line) sitting between this and <FootnotesHeading />.
+//
+// Authoring shape in MDX:
+//
+//   ...essay body ends.
+//
+//   <EssayBreak />
+//
+//   *Photos here are by me and Shreya. Thank you, S.*
+//
+//   <FootnotesHeading />
+//
+//   <Footnote id="1">First footnote.</Footnote>
+//
+// If there's no editorial content between the break and the heading,
+// just write them back-to-back — the spacing is tuned to look right
+// in either case.
+//
+// Replaced the previous <FootnoteSection /> component (April 2026),
+// which rendered both the asterism AND the "Footnotes" label as a
+// single block. Splitting allows arbitrary editorial prose
+// (acknowledgments, photo credits, dedications) to live between them
+// in MDX, where the author has full typographic control.
+//
+// Styles for .essay-asterism live in EssayLayout.astro's <style is:global>
+// block; this component contributes only the markup.
+---
+
+<div class="essay-asterism" role="separator" aria-hidden="true">⁂</div>
