@@ -632,31 +632,57 @@ const headDescription = subtitle
     }
   }
 
-  /* ─── Asterism divider + Footnotes heading ───────────────────────
-     Marks the transition from essay body to footnote apparatus. Both
-     elements are rendered by <FootnoteSection /> in MDX. The label is
-     a <p>, not an <h2>, deliberately — keeps it out of the rehype-slug
-     heading tree and therefore out of the auto-generated ToC. Future
-     essays with real body H2s will show a clean ToC of just those
-     headings, with no "Footnotes" entry. */
+  /* ─── Asterism + apparatus heading ───────────────────────────────
+     Marks the transition from essay body to footnote apparatus. The
+     asterism is rendered by <EssayBreak />, the heading by
+     <FootnotesHeading />. Optional editorial content (acknowledgments,
+     photo credits) sits between them in MDX. */
 
   /* The asterism. ⁂ (U+2042) is the typographic standard for a
      stronger-than-paragraph section break. Centered, muted, with
-     letter-spacing to give the glyph air. The vertical margins are
-     larger than a normal paragraph break — this is the strongest
-     visual break in the essay. */
+     letter-spacing to give the glyph air. Top margin reduced from
+     4em to 2.5em (April 2026): with editorial content (a credit
+     line) now landing below the asterism rather than the footnotes
+     heading directly, the previous 4em pushed the closing line of
+     the essay too far up the page on long essays — the gap above the
+     asterism read as forgotten whitespace, not as a deliberate beat.
+     2.5em reads as a clear pause without leaving the reader hanging. */
   .essay__body .essay-asterism {
     text-align: center;
     color: var(--text-muted);
     font-size: 1.4em;
     line-height: 1;
-    margin: 4em 0 2em;
+    margin: 2.5em 0 2em;
     letter-spacing: 0.4em;
     /* Account for the letter-spacing pushing the glyph right of true
        center: pull back by half a unit. */
     text-indent: 0.4em;
     /* Disable any user selection — it's an ornament, not content. */
     user-select: none;
+  }
+
+  /* Editorial line below the asterism — photo credit, acknowledgment,
+     dedication, etc. Authored explicitly in MDX as
+       <p class="essay-credits"><em>...</em></p>
+     rather than relying on rendered markdown italic, so the smaller
+     size + muted color land predictably regardless of which markdown
+     mood the author was in. Sits at 1.0625rem (17px) — the same size
+     the footnote items use, so all bottom-of-essay apparatus shares
+     one type size. The first-pass attempt at --fs-small (15px) read
+     as too quiet against 22px body; 17px sits in the right zone:
+     clearly apparatus, comfortably readable, doesn't compete with
+     body voice. The italic comes from the <em> authored inside; this
+     rule does not set font-style itself, so a non-italic credit line
+     (e.g. a dedication) would also style correctly with the same
+     wrapper. */
+  .essay__body p.essay-credits {
+    font-size: 1.0625rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin: 0 0 1.4em;
+    /* Stays column-width even on essays where surrounding figures are
+       wide/full — the credit is prose, prose belongs in the column. */
+    max-width: 42.5rem;
   }
 
   /* "Footnotes" label. Sized like a section heading but rendered as a
@@ -687,12 +713,23 @@ const headDescription = subtitle
      The Footnote component renders each item as a div with the
      classes below. No heading is authored above them in MDX — the
      items are siblings at the end of the essay body, separated from
-     the prose by the body paragraph rhythm. Their muted color and
-     smaller size do the visual work of marking them as apparatus. */
+     the prose by the body paragraph rhythm. Their muted color does
+     most of the work of marking them as apparatus.
+
+     Font-size bumped from 0.9375rem (15px) to 1.0625rem (17px) in
+     April 2026. The original 15px was sized down on the assumption
+     that footnote previews would carry most of the reading load.
+     In practice, on touch devices (where hover doesn't apply) and
+     for readers who prefer to read footnotes after the body rather
+     than inline, the bottom-of-essay items ARE the canonical reading
+     surface — and 15px against 22px body was close to unreadable.
+     17px matches the ToC items (the established "secondary
+     apparatus" size) and reads comfortably without competing with
+     body. */
   .essay__body .footnote-item {
     display: flex;
     gap: 0.5em;
-    font-size: 0.9375rem;
+    font-size: 1.0625rem;
     line-height: 1.55;
     color: var(--text-muted);
     margin-bottom: 0.9em;
