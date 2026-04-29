@@ -137,8 +137,25 @@ const ogImageAbsolute = new URL(ogImage, Astro.site).toString();
     />
 
     {/* ───────── Icons ─────────
-        favicon.svg — monogram, scales crisply at every size.
-        apple-touch-icon.png — 180×180, iOS home-screen. */}
+        Favicon delivered in multiple formats for different consumers:
+          - favicon.ico (multi-resolution: 16/32/48): legacy browsers,
+            and importantly Google's search-result favicon crawler,
+            which doesn't consume SVG and prefers a real bitmap at the
+            root of the site.
+          - favicon-96x96.png and favicon-192x192.png: modern bitmap
+            options. Google specifically requires multiples of 48
+            (96, 144, 192...) to display a favicon in search results.
+          - favicon.svg: vector, scales crisply at every size for
+            modern browsers' tab rendering. Listed after the bitmaps
+            so legacy crawlers find a usable format first.
+          - apple-touch-icon.png: 180×180, iOS home-screen.
+
+        All bitmap variants are generated from favicon.svg by
+        scripts/generate-favicons.py. Re-run that script if the SVG
+        ever changes. */}
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
