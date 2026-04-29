@@ -22,7 +22,9 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Wordmark from '@/components/Wordmark.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
 import CityCard from '@/components/CityCard.astro';
+import { Picture } from 'astro:assets';
 import { cities } from '@/data/cities';
+import artistPhoto from '@/assets/cities/artist.jpg';
 
 // Page-level SEO. Phase 5 will layer on OG images + richer meta; for
 // Phase 4 the title + description are enough.
@@ -44,6 +46,31 @@ const description =
   </header>
 
   <main class="cities-stage">
+    {/* ───────── Header photograph ─────────
+        A single page-anchoring image at the top of the cities index.
+        Inline <Picture> rather than the <Figure> component because
+        Figure's CSS is scoped to .essay__body and this isn't an essay
+        — keeping the styling local to this page is cleaner than
+        broadening Figure's scope.
+
+        Uses the same widths array and AVIF/WebP/JPEG output chain as
+        CityCard. LCP candidate on this page, so loading="eager" +
+        decoding="sync". */}
+    <figure class="cities-hero">
+      <Picture
+        src={artistPhoto}
+        formats={['avif', 'webp']}
+        fallbackFormat="jpg"
+        widths={[640, 1024, 1600, 2400, 3000]}
+        sizes="(min-width: 50rem) 50rem, 100vw"
+        quality={85}
+        alt="Photograph by Adit Mehta."
+        loading="eager"
+        decoding="sync"
+        class="cities-hero__img"
+      />
+    </figure>
+
     {/* ───────── In-progress notice (§5/Phase 5.7) ─────────
         A single quiet editorial line above the first card, explaining
         that the covers are still placeholders. Deliberately NOT a box,
@@ -54,15 +81,12 @@ const description =
         No role="note", no aria-live — it's static content, plain prose
         read top-to-bottom with the rest of the page. */}
     <p class="cities-notice">
-      Photos coming soon — real cities, real rolls of film. These covers
-      are placeholders.
+      Photos coming soon. These covers are placeholders.
     </p>
 
-    {/* Stack of cards. The first card is the LCP candidate on this
-        page, so it gets loading="eager" + decoding="sync"; the others
-        are lazy. Per §5/Phase 4 acceptance: "LCP image is eagerly
-        loaded, others are lazy." */}
-    {cities.map((city, i) => (
+    {/* Stack of cards. With the hero image above now serving as the
+        page's LCP candidate (loading="eager"), every card is lazy. */}
+    {cities.map((city) => (
       <CityCard
         name={city.name}
         slug={city.slug}
@@ -70,7 +94,7 @@ const description =
         image={city.image}
         meta={city.meta}
         alt={city.alt}
-        loading={i === 0 ? 'eager' : 'lazy'}
+        loading="lazy"
       />
     ))}
   </main>
@@ -107,6 +131,23 @@ const description =
     .cities-stage {
       padding: 4rem 2rem 10rem;
     }
+  }
+
+  /* ── Header photograph (page anchor, above the notice) ──
+     Sits at the top of the page, sized to match the cards container
+     beneath it (50rem). Bottom margin gives the image room before the
+     notice, then the notice has its own margin before the first card.
+     The figure wrapper carries margin; the img inside is full-width of
+     the figure with auto height so the natural aspect is preserved.
+     Slight border-radius to match CityCard's image rendering. */
+  .cities-hero {
+    margin: 0 0 2.5rem 0;
+  }
+  .cities-hero__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
   }
 
   /* ── In-progress notice (§5/Phase 5.7) ──

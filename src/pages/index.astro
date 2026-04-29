@@ -44,11 +44,16 @@ const essays = [
   },
 ];
 
-// v1: anchors on the cities index page (§5/Phase 2). v2: real routes.
+// Cities listed as plain names on the home page — the section heading
+// "Cities" is the link to /cities/. The names below are temporarily
+// non-clickable while real photographs are pending; once the
+// photographs ship and per-city pages exist, each name will become a
+// link to /cities/<slug>/. v1 placeholder behavior; revisit when v2
+// of the cities page lands.
 const cities = [
-  { name: 'Kolhapur', href: '/cities/#kolhapur' },
-  { name: 'Bangalore', href: '/cities/#bangalore' },
-  { name: 'Pune', href: '/cities/#pune' },
+  { name: 'Kolhapur' },
+  { name: 'Bangalore' },
+  { name: 'Pune' },
 ];
 
 // Primary contact. Displayed as plain text in an obfuscated form —
@@ -109,14 +114,22 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
         </ul>
       </section>
 
-      {/* Cities. v1 hrefs are anchors on /cities/ (which Phase 4 builds). */}
+      {/* Cities. The section heading "Cities" is the link to /cities/
+          — the city names below are plain text, intentionally non-
+          clickable until per-city pages exist (currently /cities/ only
+          has the index, with placeholder covers, no detail routes).
+          When the photographs ship in v2, each city name flips back to
+          a link, the same way the Four Shopkeepers entry is a link
+          today. The aria-labelledby still points at the H2 for
+          screen-reader semantics; the link inside the H2 is just
+          interactive content within the heading. */}
       <section class="home-section" aria-labelledby="h-cities">
-        <h2 id="h-cities" class="home-section__heading">Cities</h2>
+        <h2 id="h-cities" class="home-section__heading home-section__heading--linked">
+          <a href="/cities/">Cities</a>
+        </h2>
         <ul class="linklist">
           {cities.map((city) => (
-            <li class="linklist__item">
-              <a href={city.href}>{city.name}</a>
-            </li>
+            <li class="linklist__item linklist__item--plain">{city.name}</li>
           ))}
         </ul>
       </section>
@@ -209,6 +222,26 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
     letter-spacing: -0.01em;
   }
 
+  /* Section heading that is itself a link (currently used by Cities,
+     which points the heading at /cities/). The heading inherits all
+     its sizing/weight from .home-section__heading; this rule only
+     handles the anchor inside. Same hover convention as the link
+     items in .linklist below — text color shifts to accent and a
+     hairline border appears underneath, without an at-rest underline.
+     Reading at rest, the linked and non-linked headings look identical;
+     the link reveals itself only on hover/focus. */
+  .home-section__heading--linked a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+  .home-section__heading--linked a:hover,
+  .home-section__heading--linked a:focus-visible {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
   /* Vertical list of links — no bullet markers, generous spacing.
      Both the Essays list and the Cities list use this. */
   .linklist {
@@ -220,6 +253,14 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
     margin: 0;
     padding: 0.15rem 0;
     line-height: 1.55;
+  }
+  /* Plain (non-linked) list item — used for the city names while
+     per-city pages don't yet exist. Same color and spacing as a
+     linked item at rest, just no anchor and no hover state. When
+     per-city pages ship in v2, items go back to using the anchor
+     pattern below and this rule can be removed. */
+  .linklist__item--plain {
+    color: var(--text);
   }
   .linklist__item a {
     /* On list items, the default underlined-on-rest link style feels
