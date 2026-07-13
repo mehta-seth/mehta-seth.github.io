@@ -122,41 +122,52 @@ const headDescription = summary
 
 <style>
   /* ─── Chrome ──────────────────────────────────────────────────────
-     Left-anchored (no auto side margins) to sit above the note body's
-     left edge. Right padding clears the fixed theme toggle. */
+     Identical to EssayLayout's .essay-header (80rem centred box, 1.5rem
+     left padding, 4.5rem right to clear the fixed toggle). Matching the
+     rule exactly means the wordmark lands in the same position, and at
+     the same size, as on the essay — at every viewport width. */
   .note-header {
-    max-width: 72rem;
-    padding: 2rem 4.5rem 0 1.5rem;
+    display: flex;
+    align-items: baseline;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding: 2rem 1.5rem 0;
+    padding-right: 4.5rem;
   }
 
   /* ─── Shell + article ─────────────────────────────────────────────
-     The shell is wider than the essay column and LEFT-ANCHORED: no auto
-     margins, so on wide screens the content sits to the left and the
-     spare space falls to the right, rather than centring. It's still
-     capped (72rem) so it never runs fully edge-to-edge on large monitors.
+     Same 80rem centred box as the header, so the whole page sits where
+     the essay does: a real left margin on wide screens, not hugging the
+     edge. The note CONTENT is then indented ~4.5rem past the wordmark by
+     the shell's left padding (1.5rem wordmark inset + 4.5rem gutter =
+     6rem content inset), which also reserves room for the collapsible-ToC
+     hamburger (Phase 3). The reading margin lands at roughly half the
+     essay's across normal desktop widths — these are explainers, so they
+     use more of the page while still reading comfortably. The space this
+     leaves on the RIGHT is deliberate: figures and charts go there
+     (Phase 4).
 
-     Width knobs live on .note as custom properties:
-       --note-measure  readable prose width (text elements are capped here)
-       --note-wide     breakout width for equations / boxes / figures
-     Both are one-line tunables. 54rem for prose is already near the upper
-     bound of comfortable line length at this font size — raise it only if
-     you want longer lines; raise --note-wide to give maths more room. */
+     Width knobs on .note:
+       --note-measure  readable prose width (flowing text is capped here)
+       --note-wide     breakout width for figures / equations / boxes,
+                       reaching into the right-hand space
+     Both are one-line tunables. */
   .note-shell {
-    max-width: 72rem;
-    padding: 2.5rem 1.5rem 8rem;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding: 2.5rem 1.5rem 8rem;   /* mobile: content aligns with wordmark */
   }
   .note {
-    --note-measure: 54rem;
+    --note-measure: 50rem;
     --note-wide: 66rem;
-    max-width: var(--note-wide);
   }
 
   @media (min-width: 1024px) {
-    .note-header { padding: 2.5rem 4.5rem 0 2rem; }
-    .note-shell  { padding: 3.5rem 2rem 9rem; }
-    /* Desktop gutter: indent the note content, leaving a left margin to
-       host the collapsible-ToC hamburger (Phase 3). */
-    .note { padding-left: 4.5rem; }
+    /* Content indents to a 6rem left inset (4.5rem past the 1.5rem
+       wordmark inset). The right padding keeps a small gutter before the
+       page edge; the figure space is what's left between the ~50rem prose
+       and the ~72rem content box. */
+    .note-shell { padding: 3.5rem 2rem 9rem 6rem; }
   }
 
   /* ─── Note head ───────────────────────────────────────────────────*/
