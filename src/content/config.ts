@@ -42,4 +42,39 @@ const essays = defineCollection({
   }),
 });
 
-export const collections = { essays };
+// ─── notes — "help me learn" (HML) ──────────────────────────────────
+// Individual explainer pages ("notes") published under /learn/<slug>/.
+// Same modern content-layer shape as `essays`. Notes are published one at
+// a time now; a bundling section (e.g. Stochastic Processes) comes later,
+// once there are enough of them — hence the hidden `branch` field, which
+// is stored for future grouping but never rendered.
+//
+// New note: src/content/notes/<slug>.mdx  →  /learn/<slug>/  (auto-routed).
+const notes = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/notes' }),
+  schema: z.object({
+    // Plain-text title — the browser tab, OG card, home list, and SEO.
+    // Keep it ASCII (e.g. "Sigma-Algebras"): the on-page H1 gets the real
+    // symbol from `titleDisplay` below.
+    title: z.string(),
+    // Optional display title for the on-page H1. May contain `$…$` math
+    // (e.g. "$\\sigma$-Algebras") so a Greek letter renders as a true math
+    // glyph via KaTeX rather than a Unicode char our Newsreader subset
+    // can't draw. Rendered from Phase 2 on; falls back to `title`.
+    titleDisplay: z.string().optional(),
+    // One-line summary used as the meta description (SEO). Not displayed.
+    summary: z.string().optional(),
+    date: z.coerce.date(),
+    // Optional "last updated" — notes are living documents.
+    updated: z.coerce.date().optional(),
+    draft: z.boolean().default(false),
+    // Organisational grouping, e.g. "stochastic-processes". Stored, never
+    // shown, until the bundling section exists.
+    branch: z.string().optional(),
+    // Optional per-note OG card (path in /public/og/). Falls back to
+    // /og-default.png when absent.
+    cover: z.string().optional(),
+  }),
+});
+
+export const collections = { essays, notes };

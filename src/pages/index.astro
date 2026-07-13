@@ -44,17 +44,21 @@ const essays = [
   },
 ];
 
-// Cities listed as plain names on the home page — the section heading
-// "Cities" is the link to /cities/. The names below are temporarily
-// non-clickable while real photographs are pending; once the
-// photographs ship and per-city pages exist, each name will become a
-// link to /cities/<slug>/. v1 placeholder behavior; revisit when v2
-// of the cities page lands.
-const cities = [
-  { name: 'Kolhapur' },
-  { name: 'Bangalore' },
-  { name: 'Pune' },
+// "help me learn" (HML) notes — a curated list, like the essays above,
+// linking to individual pages under /learn/. Like Essays, this section
+// has no index page of its own, so its heading is plain text (not a
+// link). When a second note lands, drop it in here.
+const notes = [
+  {
+    title: 'Sigma-Algebras',
+    href: '/learn/sigma-algebras/',
+  },
 ];
+
+// The home Cities section now shows only the linked "Cities" heading —
+// the city-name list that used to sit here was removed (July 2026). The
+// /cities/ page itself (src/data/cities.ts + src/pages/cities/) is
+// unchanged.
 
 // Primary contact. Displayed as plain text in an obfuscated form —
 // no mailto:, no standard "local@domain.tld" substring — to reduce
@@ -114,24 +118,29 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
         </ul>
       </section>
 
-      {/* Cities. The section heading "Cities" is the link to /cities/
-          — the city names below are plain text, intentionally non-
-          clickable until per-city pages exist (currently /cities/ only
-          has the index, with placeholder covers, no detail routes).
-          When the photographs ship in v2, each city name flips back to
-          a link, the same way the Four Shopkeepers entry is a link
-          today. The aria-labelledby still points at the H2 for
-          screen-reader semantics; the link inside the H2 is just
-          interactive content within the heading. */}
+      {/* help me learn — individual explainer notes under /learn/. Like
+          Essays, this section has no index page of its own, so the
+          heading is plain text (not a link). Lowercase "help me learn"
+          matches the section's identity across the site. Sits between
+          Essays and Cities. */}
+      <section class="home-section" aria-labelledby="h-hml">
+        <h2 id="h-hml" class="home-section__heading">help me learn</h2>
+        <ul class="linklist">
+          {notes.map((note) => (
+            <li class="linklist__item">
+              <a href={note.href}>{note.title}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Cities. The heading links to /cities/. The city-name list that
+          used to sit beneath it was removed (July 2026): the home now
+          shows only the linked heading. The /cities/ page is unchanged. */}
       <section class="home-section" aria-labelledby="h-cities">
         <h2 id="h-cities" class="home-section__heading home-section__heading--linked">
           <a href="/cities/">Cities</a>
         </h2>
-        <ul class="linklist">
-          {cities.map((city) => (
-            <li class="linklist__item linklist__item--plain">{city.name}</li>
-          ))}
-        </ul>
       </section>
 
       {/* Email line. Per §3.2: "styled the same as the red handwritten
@@ -253,14 +262,6 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
     margin: 0;
     padding: 0.15rem 0;
     line-height: 1.55;
-  }
-  /* Plain (non-linked) list item — used for the city names while
-     per-city pages don't yet exist. Same color and spacing as a
-     linked item at rest, just no anchor and no hover state. When
-     per-city pages ship in v2, items go back to using the anchor
-     pattern below and this rule can be removed. */
-  .linklist__item--plain {
-    color: var(--text);
   }
   .linklist__item a {
     /* On list items, the default underlined-on-rest link style feels

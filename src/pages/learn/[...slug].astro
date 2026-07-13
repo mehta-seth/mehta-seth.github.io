@@ -1,0 +1,49 @@
+---
+// src/pages/learn/[...slug].astro
+//
+// Dynamic route for the `notes` collection ("help me learn"). Any
+// .md/.mdx under src/content/notes/ becomes /learn/<slug>/ with no extra
+// code — the same pattern as the essays route.
+//
+// URL base is /learn/ (not /help-me-learn/): short, readable, and
+// keyword-relevant ("learn <topic>"), which is the SEO-preferred shape.
+// The rest param [...slug] also allows nested paths later (e.g.
+// src/content/notes/stochastic-processes/foo.mdx → /learn/stochastic-processes/foo/)
+// with no change here.
+
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import NoteLayout from '@/layouts/NoteLayout.astro';
+
+export async function getStaticPaths() {
+  // Drafts are excluded from the production build (same rule as essays).
+  const notes = await getCollection('notes', ({ data }) => !data.draft);
+  return notes.map((note) => ({
+    params: { slug: note.id },
+    props: { note },
+  }));
+}
+
+interface Props {
+  note: CollectionEntry<'notes'>;
+}
+
+const { note } = Astro.props;
+const { Content, headings } = await render(note);
+
+// MDX-callable components for notes — <Boxed>, <Ref>, <Figure> — are
+// injected here in later phases (Phase 3 / Phase 4). Phase-1 notes are
+// plain prose, so none are passed yet. Adding one is a one-line change.
+---
+
+<NoteLayout
+  title={note.data.title}
+  titleDisplay={note.data.titleDisplay}
+  summary={note.data.summary}
+  date={note.data.date}
+  updated={note.data.updated}
+  cover={note.data.cover}
+  headings={headings}
+>
+  <Content />
+</NoteLayout>
