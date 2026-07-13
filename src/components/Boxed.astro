@@ -1,0 +1,57 @@
+---
+// src/components/Boxed.astro
+//
+// A natural, hand-drawn highlight box for HML notes. Wraps arbitrary slotted
+// content (an equation, a key definition, a short passage) in a container
+// whose outline is a slightly irregular, non-rectangular hand-drawn stroke,
+// drawn in the accent colour to read as highlighted.
+//
+// The look is a CSS border-image (a 9-slice of an inline SVG) with ZERO
+// JavaScript. All of its styling lives in NoteLayout's .note__body
+// `<style is:global>` block, alongside the other note-body rules, for two
+// reasons: the border-image colour is baked into the SVG (it can't read a CSS
+// var, so the light/dark swap is a :root.dark rule kept with the rest of the
+// note theming), and a display equation dropped inside the box is
+// MDX-rendered content that scoped styles can't reach.
+//
+// VARIANTS. There are several shape variants (.boxed--v1 … in that global
+// block); they share one core and differ only in their specific wobbles, the
+// way hand-drawn boxes from one hand differ stroke to stroke. Rather than
+// pick one at random (which would reshuffle every box on each rebuild), we
+// hash the box's own rendered content and map it to a variant. That is
+// deterministic — a given box always draws the same way, and it stays stable
+// across builds (the same spirit as the fixed-seed grain texture) — while
+// different boxes almost always land on different variants. This is why the
+// component renders its slot via `set:html` (it needs the content as a string
+// to hash) rather than a plain <slot />; the injected HTML is exactly what a
+// <slot /> would emit, so KaTeX, MathML, and the margin/scroll rules are
+// unaffected.
+//
+// Usage in MDX:
+//   <Boxed>
+//
+//   $$ E = mc^2 $$
+//
+//   </Boxed>
+// (Blank lines around block maths inside the tags let MDX parse the `$$`.)
+
+// Keep in step with the number of .boxed--vN rules in NoteLayout.
+const VARIANT_COUNT = 6;
+
+const html = await Astro.slots.render('default');
+
+// FNV-1a (32-bit): a tiny, stable string hash. `>>> 0` makes it unsigned so
+// the modulo lands in [0, VARIANT_COUNT).
+function pickVariant(input: string, count: number): number {
+  let hash = 2166136261;
+  for (let i = 0; i < input.length; i++) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return ((hash >>> 0) % count) + 1;
+}
+
+const variant = pickVariant(html, VARIANT_COUNT);
+---
+
+<div class={`boxed boxed--v${variant}`} set:html={html}></div>

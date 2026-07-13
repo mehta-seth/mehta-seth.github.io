@@ -1,0 +1,47 @@
+---
+// src/components/Ref.astro
+//
+// Cross-reference link for HML notes. Looks the `to` term up in the central
+// registry (src/data/hml-links.ts):
+//   - registered   -> <a class="note-ref"> to the note's URL
+//   - not registered -> <span class="note-ref--pending"> (plain text)
+//
+// The pending case is deliberate: a note can reference a topic that has not
+// been written yet (a forward reference) and it renders as ordinary prose
+// until that note is published and its term added to the registry — no dead
+// links, no build break.
+//
+// Styling lives in NoteLayout's .note__body global block (muted at rest,
+// accent + hairline underline on hover/focus), because these links appear
+// inside MDX-rendered body content that scoped styles can't reach.
+//
+// Usage in MDX:  <Ref to="sigma-algebra">σ-algebra</Ref>
+
+import { hmlLinks } from '@/data/hml-links';
+
+interface Props {
+  /** Registry key to resolve (see src/data/hml-links.ts). */
+  to: string;
+}
+
+const { to } = Astro.props;
+const entry = hmlLinks[to];
+
+// Dev-only nudge so a typo'd or not-yet-registered term is noticed while
+// authoring, without affecting the production build or the reader.
+if (import.meta.env.DEV && !entry) {
+  console.warn(
+    `[Ref] term "${to}" is not in hml-links.ts — rendering as plain text ` +
+      `(a pending forward reference). Add it to the registry once its note ` +
+      `is published.`,
+  );
+}
+---
+
+{
+  entry ? (
+    <a class="note-ref" href={entry.url}><slot /></a>
+  ) : (
+    <span class="note-ref--pending"><slot /></span>
+  )
+}

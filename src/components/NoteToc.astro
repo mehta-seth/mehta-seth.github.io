@@ -1,0 +1,367 @@
+---
+// src/components/NoteToc.astro
+//
+// Collapsible table of contents for an HML note. Unlike the essay's sticky
+// sidebar ToC (TableOfContents.astro), this is COLLAPSED by default and
+// opened by a hamburger button that lives in the note's left gutter — so the
+// note keeps its full content width until the reader asks for navigation.
+// Same behaviour on desktop and mobile (a left drawer + scrim overlay); only
+// the button's position differs (gutter on desktop, in-flow on mobile). See
+// NoteLayout for the gutter geometry the button pulls into.
+//
+// The current-section highlight reuses the essay ToC's IntersectionObserver
+// "scanline" verbatim in spirit — retargeted to `.note__body h2[id]` and the
+// `.note-toc__link` list here.
+//
+// Built from H2s only (like the essay ToC): H3s stay navigable via their
+// autolink anchors but don't crowd the ToC. The component self-guards on
+// H2 presence, and NoteLayout ALSO gates rendering it on the same condition,
+// so a note with no H2s shows no hamburger at all.
+//
+// Zero framework: a single vanilla <script>, written as plain typed DOM
+// code. Accessibility: the button carries aria-expanded/aria-controls; the
+// panel is a labelled <nav>; when closed it is `inert` and visually hidden
+// (out of the tab order and the a11y tree); focus moves into the panel on
+// open and returns to the button on close; Esc / scrim-click / link-choice
+// all close it. The site-wide prefers-reduced-motion block clamps the slide
+// transition to instant automatically.
+
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2);
+---
+
+{
+  items.length > 0 && (
+    <div class="note-toc">
+      <button
+        class="note-toc__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="note-toc-panel"
+        aria-label="Contents"
+      >
+        <svg
+          class="note-toc__icon"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        >
+          <line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="17" x2="20" y2="17" />
+        </svg>
+      </button>
+
+      <div class="note-toc__scrim" hidden />
+
+      <nav class="note-toc__panel" id="note-toc-panel" aria-label="Contents">
+        <div class="note-toc__header">
+          <p class="note-toc__title">Contents</p>
+          <button
+            class="note-toc__close"
+            type="button"
+            aria-label="Close contents"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            >
+              <line x1="6" y1="6" x2="18" y2="18" />
+              <line x1="18" y1="6" x2="6" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <ol class="note-toc__list">
+          {items.map((h) => (
+            <li class="note-toc__item">
+              <a
+                class="note-toc__link"
+                href={`#${h.slug}`}
+                data-toc-link={h.slug}
+              >
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </div>
+  )
+}
+
+<style>
+  /* ─── Hamburger button ─────────────────────────────────────────────
+     Mobile-first: sits in normal flow at the top of the note head (above
+     the kicker), left-aligned. On desktop it is pulled out into the
+     reserved left gutter (NoteLayout indents the content 6rem; the wordmark
+     sits at 1.5rem, so -4.5rem lands the button at the wordmark's x) and
+     positioned absolutely so it never shifts the content. */
+  .note-toc__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0 0 1.25rem -0.5rem; /* optical: align icon strokes to text edge */
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: color 150ms ease;
+  }
+  .note-toc__toggle:hover,
+  .note-toc__toggle:focus-visible {
+    color: var(--accent);
+  }
+
+  @media (min-width: 1024px) {
+    .note-toc__toggle {
+      position: absolute;
+      /* VISUAL TUNABLES: left pulls into the gutter to the wordmark's x;
+         top aligns the button beside the top of the title block. */
+      left: -4.5rem;
+      top: 0.35rem;
+      margin: 0;
+    }
+  }
+
+  /* ─── Scrim ─────────────────────────────────────────────────────────
+     Dark overlay behind the panel; click to close. Below the panel (250),
+     above the theme toggle (200) and grain (100). */
+  .note-toc__scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 240;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 260ms ease, visibility 0s linear 260ms;
+  }
+  .note-toc__scrim.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 260ms ease, visibility 0s;
+  }
+
+  /* ─── Drawer panel ─────────────────────────────────────────────────
+     Left drawer, collapsed off-screen by default. `inert` (set in script)
+     keeps it out of the tab order + a11y tree while closed; visibility
+     (delayed on close) is belt-and-braces for the rare browser without
+     inert. Slide animates via transform; the global reduced-motion block
+     clamps it to instant. */
+  .note-toc__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 250;
+    display: flex;
+    flex-direction: column;
+    width: min(80vw, 19rem);
+    height: 100%;
+    box-sizing: border-box;
+    padding: 1.75rem 1.5rem 2rem;
+    background: var(--bg-elevated);
+    border-right: 1px solid var(--border);
+    box-shadow: 2px 0 24px rgba(0, 0, 0, 0.16);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform 260ms ease, visibility 0s linear 260ms;
+  }
+  .note-toc__panel.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 260ms ease, visibility 0s;
+  }
+
+  .note-toc__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .note-toc__title {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .note-toc__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-right: -0.35rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: color 150ms ease;
+  }
+  .note-toc__close:hover,
+  .note-toc__close:focus-visible {
+    color: var(--accent);
+  }
+
+  /* ─── List (same 17px functional-nav sizing as the essay ToC) ───────*/
+  .note-toc__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+  .note-toc__item {
+    margin: 0;
+    border-left: 2px solid var(--border);
+    transition: border-color 200ms ease;
+  }
+  .note-toc__link {
+    display: block;
+    padding: 0.5rem 0 0.5rem 1rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+  .note-toc__link:hover {
+    color: var(--text);
+  }
+  /* Active section — set by the IntersectionObserver scanline below. */
+  .note-toc__link[aria-current='true'] {
+    color: var(--accent);
+  }
+  .note-toc__item:has(.note-toc__link[aria-current='true']) {
+    border-left-color: var(--accent);
+  }
+</style>
+
+<script>
+  // Drawer open/close + current-section highlight. Plain typed DOM code
+  // (no template-literal / regex tricks) so the type checker parses it
+  // cleanly and introduces no new diagnostics.
+
+  const toggle = document.querySelector<HTMLButtonElement>('.note-toc__toggle');
+  const panel = document.getElementById('note-toc-panel');
+  const scrim = document.querySelector<HTMLElement>('.note-toc__scrim');
+  const closeBtn = document.querySelector<HTMLButtonElement>('.note-toc__close');
+
+  if (toggle && panel && scrim) {
+    const openPanel = () => {
+      toggle.setAttribute('aria-expanded', 'true');
+      panel.classList.add('is-open');
+      scrim.classList.add('is-open');
+      scrim.hidden = false;
+      panel.removeAttribute('inert');
+      // Move focus into the panel (the close control is first).
+      (closeBtn ?? panel).focus();
+    };
+
+    const closePanel = (returnFocus = true) => {
+      toggle.setAttribute('aria-expanded', 'false');
+      panel.classList.remove('is-open');
+      scrim.classList.remove('is-open');
+      panel.setAttribute('inert', '');
+      if (returnFocus) toggle.focus();
+    };
+
+    toggle.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) closePanel();
+      else openPanel();
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', () => closePanel());
+    scrim.addEventListener('click', () => closePanel());
+
+    document.addEventListener('keydown', (event) => {
+      if (
+        event.key === 'Escape' &&
+        toggle.getAttribute('aria-expanded') === 'true'
+      ) {
+        closePanel();
+      }
+    });
+
+    // Selecting a section closes the drawer (it jumps to the in-page anchor).
+    panel.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.closest('.note-toc__link')) closePanel(false);
+    });
+
+    // Start closed and inert.
+    panel.setAttribute('inert', '');
+    // A restored (bfcache) page should never come back with the drawer open.
+    window.addEventListener('pagehide', () => closePanel(false));
+
+    // ── Current-section highlight (scanline; reused from the essay ToC) ──
+    const headings = Array.from(
+      document.querySelectorAll<HTMLElement>('.note__body h2[id]'),
+    );
+    const links = Array.from(
+      panel.querySelectorAll<HTMLAnchorElement>('.note-toc__link[data-toc-link]'),
+    );
+
+    if (headings.length > 0 && links.length > 0) {
+      const linkBySlug = new Map<string, HTMLAnchorElement>();
+      for (const link of links) {
+        const slug = link.getAttribute('data-toc-link');
+        if (slug) linkBySlug.set(slug, link);
+      }
+
+      const activeSlugs = new Set<string>();
+
+      const applyActive = () => {
+        let chosenSlug: string | null = null;
+        for (const h of headings) {
+          if (activeSlugs.has(h.id)) {
+            chosenSlug = h.id;
+            break;
+          }
+        }
+        for (const link of links) link.removeAttribute('aria-current');
+        if (chosenSlug) {
+          linkBySlug.get(chosenSlug)?.setAttribute('aria-current', 'true');
+        }
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const id = entry.target.id;
+            if (entry.isIntersecting) activeSlugs.add(id);
+            else activeSlugs.delete(id);
+          }
+          applyActive();
+        },
+        { rootMargin: '-80px 0px -70% 0px', threshold: 0 },
+      );
+
+      for (const h of headings) observer.observe(h);
+    }
+  }
+</script>

@@ -18,7 +18,9 @@ draft: false
     The `$…$` / `$$…$$` samples below exist only to exercise the KaTeX build
     path: inline maths in a sentence, a display block, and a deliberately
     wide block that must scroll inside its own container on a narrow screen
-    rather than stretch the page. They state nothing. */}
+    rather than stretch the page. Phase 3 also wraps that wide block in a
+    <Boxed> and adds two <Ref> cross-references (one registered, one not)
+    purely to exercise those components. None of it states anything. */}
 
 _This explainer is being written. What you're reading is the template every help-me-learn note will use — the layout, not the content._
 
@@ -42,14 +44,26 @@ $$
 (\Omega, \mathcal{F}, (\mathcal{F}_t)_{0 \le t \le \infty}, \mathbb{P})
 $$
 
-And a deliberately long one, to confirm that a wide equation scrolls inside its own container on a narrow screen instead of stretching the page:
+And a deliberately long one, placed inside a highlight box, to confirm both that the box draws its hand-made outline and that a wide equation scrolls inside its own container on a narrow screen instead of stretching the page:
+
+<Boxed>
 
 $$
 \underbrace{a_1 + a_2 + a_3 + \cdots + a_n}_{\text{a placeholder expression, wide on purpose, here only to test horizontal scrolling}}
 $$
+
+</Boxed>
 
 ## How to read it
 
 > A short block quotation, set to check the quote treatment at this column width and colour.
 
 Ordinary prose resumes here, so the space above and below block elements can be judged in place. When the real content lands, this is where the intuition, the analogy, and the careful statement of the definition will go.
+
+<Boxed>
+
+A box can also hold a line of prose worth pausing on.
+
+</Boxed>
+
+Cross-references come in two states. A link to a published note becomes a real link; here a <Ref to="sigma-algebra">$\sigma$-algebra</Ref> points back to this very page, standing in for a related topic. A link to a note that has not been written yet, like a <Ref to="martingale">martingale</Ref>, stays plain text until that note exists.
