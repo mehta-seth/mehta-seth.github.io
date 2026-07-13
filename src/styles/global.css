@@ -175,6 +175,32 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* ── HML Script · handwritten "help me learn" kicker (subset) ──
+   Dawning of a New Day, hard-subset to the nine glyphs of the fixed
+   kicker string "help me learn" (a e h l m n p r + space) — the same
+   treatment as the Kalam wordmark. It is used on note pages ONLY, and
+   only ever for that one phrase, so there is no unicode-range: the face
+   never needs to cover anything else, and the sole element that requests
+   it (.note-kicker in NoteLayout) names it explicitly. If the string
+   itself ever changes, re-subset via refresh-fonts.mjs (HML_SCRIPT_TEXT)
+   rather than widening coverage here. The subset lands at ~1.4 KB.
+
+   This is a NEW file, so it ships at the current ?v=3 with NO bump: a URL
+   that has never been served can't be stale in anyone's cache. (Only
+   REPLACING an existing file needs a version bump, in both this file and
+   BaseLayout.astro's preloads.) font-display: swap is fine here — the
+   kicker is decorative and above the fold, and a brief fall-through to
+   the system serif before the file lands does no harm. It is not
+   preloaded (kept deliberately simple; add a preload only if the
+   swap-flash ever proves distracting). */
+@font-face {
+  font-family: 'HML Script';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/hml-script-400.woff2?v=3') format('woff2');
+}
+
 /* ─── 2. Design tokens (§3.3) ──────────────────────────────────────── */
 
 :root {

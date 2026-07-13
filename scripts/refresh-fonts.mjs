@@ -56,6 +56,18 @@ const KALAM_UNICODES = [
   'U+0947', // े  DEVANAGARI VOWEL SIGN E
 ].join(',');
 
+// ── HML "help me learn" kicker subset ───────────────────────────────
+// The handwritten kicker face (Dawning of a New Day) is only ever used
+// for the fixed string "help me learn" on note pages, so — exactly like
+// the Kalam wordmark above — we ship only the glyphs that phrase needs.
+// pyftsubset's --text extracts the letter set for us (nine glyphs:
+// a e h l m n p r + space). If the kicker string ever changes, edit this
+// constant and re-run. If the face itself is swapped, change the MAPPINGS
+// row below — the destination filename is deliberately face-agnostic
+// (hml-script-400.woff2), so a swap is a one-row change. The full upstream
+// WOFF2 is ~18 KB; the subset lands at ~1.5 KB.
+const HML_SCRIPT_TEXT = 'help me learn';
+
 function ensurePyftsubset() {
   try {
     execSync('pyftsubset --help', { stdio: 'ignore' });
@@ -71,6 +83,22 @@ function subsetKalam(filePath) {
   const tmp = filePath + '.tmp.woff2';
   execSync(
     `pyftsubset "${filePath}" --unicodes="${KALAM_UNICODES}" --layout-features='*' --flavor=woff2 --output-file="${tmp}"`,
+    { stdio: 'inherit' },
+  );
+  cpSync(tmp, filePath);
+  rmSync(tmp);
+}
+
+// Mirror of subsetKalam for the handwritten kicker. The only difference
+// is --text (a literal letter set) instead of --unicodes: pyftsubset keeps
+// exactly the glyphs "help me learn" needs. --layout-features='*' is kept
+// as for Kalam so a face swap to a script with contextual/ligature forms
+// still renders correctly (Dawning itself has no GSUB/GPOS, so this is a
+// no-op for it, but the flag stays for the general case).
+function subsetHmlScript(filePath) {
+  const tmp = filePath + '.tmp.woff2';
+  execSync(
+    `pyftsubset "${filePath}" --text="${HML_SCRIPT_TEXT}" --layout-features='*' --flavor=woff2 --output-file="${tmp}"`,
     { stdio: 'inherit' },
   );
   cpSync(tmp, filePath);
@@ -96,6 +124,10 @@ const MAPPINGS = [
   ['@fontsource/kalam/files/kalam-devanagari-700-normal.woff2',          'kalam-devanagari-700.woff2'],
   // package @fontsource/jetbrains-mono — Latin subset
   ['@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2', 'jetbrains-mono-400.woff2'],
+  // package @fontsource/dawning-of-a-new-day — Latin subset (HML kicker).
+  // Destination name is face-agnostic so swapping to another script face
+  // (e.g. homemade-apple, cedarville-cursive) is a one-row change.
+  ['@fontsource/dawning-of-a-new-day/files/dawning-of-a-new-day-latin-400-normal.woff2', 'hml-script-400.woff2'],
 ];
 
 // Extract unique package names from MAPPINGS and install them together.
@@ -133,6 +165,20 @@ for (const destName of ['kalam-devanagari-400.woff2', 'kalam-devanagari-700.woff
   subsetKalam(p);
   const after = (statSync(p).size / 1024).toFixed(1);
   console.log(`  ✓ ${destName.padEnd(36)} (${before} KB → ${after} KB)`);
+}
+
+// Post-copy: subset the HML kicker face the same way. @fontsource ships
+// the full Latin face (~18 KB); the kicker only ever renders the phrase
+// "help me learn", so we strip everything else down to those nine glyphs
+// (~1.5 KB). Without this step the file would blow check-fonts.mjs's upper
+// bound and waste bandwidth for a decorative eyebrow.
+console.log(`\n→ Subsetting HML Script to the kicker string ("${HML_SCRIPT_TEXT}")\n`);
+{
+  const p = join(DEST, 'hml-script-400.woff2');
+  const before = (statSync(p).size / 1024).toFixed(1);
+  subsetHmlScript(p);
+  const after = (statSync(p).size / 1024).toFixed(1);
+  console.log(`  ✓ ${'hml-script-400.woff2'.padEnd(36)} (${before} KB → ${after} KB)`);
 }
 
 console.log('\n✓ Refresh complete.');

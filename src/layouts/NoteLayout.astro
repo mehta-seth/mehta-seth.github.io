@@ -1,19 +1,23 @@
 ---
 // src/layouts/NoteLayout.astro
 //
-// Layout for a "help me learn" note (HML). Phase 1 of the HML build:
-// this establishes the PAGE SHAPE only —
+// Layout for a "help me learn" note (HML). Responsibilities as of Phase 2:
 //   - the same chrome as the essay/cities pages (wordmark top-left, fixed
 //     theme toggle top-right), reusing BaseLayout, Wordmark, ThemeToggle
 //     unchanged;
 //   - a wider, LEFT-ANCHORED content column (not centred like the essay);
-//   - the "help me learn" kicker sitting above a bold topic title;
+//   - the "help me learn" kicker, now set in the handwritten face
+//     ('HML Script', a subset of Dawning of a New Day), sitting above a
+//     bold topic title;
+//   - the topic title rendered from `titleDisplay` via KaTeX, so the σ in
+//     "σ-Algebras" is a real math glyph rather than a Unicode character the
+//     Newsreader subset can't draw;
+//   - build-time KaTeX for `$…$` (inline) and `$$…$$` (display) maths,
+//     including the narrow-screen wide-equation handling in the global
+//     block below;
 //   - the note-body typography.
 //
 // Arriving in later phases (hooks/space reserved and commented here):
-//   - Phase 2: KaTeX math (`$…$` / `$$…$$`) + the handwritten kicker font
-//     + the topic title rendered from `titleDisplay` so the σ in
-//     "σ-Algebras" is a real math glyph.
 //   - Phase 3: the collapsible table of contents (hamburger in the left
 //     gutter), the natural (non-rectangular) highlight box, and
 //     cross-reference links.
@@ -29,11 +33,20 @@ import BaseLayout from './BaseLayout.astro';
 import Wordmark from '@/components/Wordmark.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
 import type { MarkdownHeading } from 'astro';
+import katex from 'katex';
+// Self-host KaTeX's stylesheet through the build. Importing it HERE — in
+// NoteLayout, the only layout that renders maths — makes Astro bundle the
+// CSS and rewrite its font url()s to hashed /_astro/ assets, and emit the
+// <link> on note pages ONLY. The home, essay, and cities pages never load
+// it. Do not move this to a global stylesheet, and do not pull the KaTeX
+// fonts from a CDN — the whole point is a self-hosted, offline-correct,
+// pixel-identical render on every device.
+import 'katex/dist/katex.min.css';
 
 interface Props {
   /** Plain-text title — tab, OG, SEO, and the Phase-1 H1. */
   title: string;
-  /** Optional math-bearing display title for the H1 (rendered from Phase 2). */
+  /** Optional math-bearing display title for the H1, rendered via KaTeX. */
   titleDisplay?: string;
   /** One-line SEO description. Not displayed. */
   summary?: string;
@@ -45,11 +58,10 @@ interface Props {
   cover?: string;
 }
 
-// Phase 1 destructures only what it renders. `titleDisplay` (the H1 math
-// glyph, Phase 2) and `headings` (the collapsible ToC, Phase 3) are
-// declared on the Props interface and received from the route, but not
-// consumed yet — each later phase pulls the one it needs.
-const { title, summary, date, updated, cover } = Astro.props;
+// `headings` (the collapsible ToC, Phase 3) is declared on the Props
+// interface and received from the route but not consumed yet — Phase 3
+// pulls it. `titleDisplay` is now consumed (rendered into the H1 below).
+const { title, titleDisplay, summary, date, updated, cover } = Astro.props;
 
 const stamp = updated ?? date;
 const formattedDate = stamp.toLocaleDateString('en-GB', {
@@ -66,6 +78,35 @@ const headTitle = `${title} — Adit Mehta`;
 const headDescription = summary
   ? summary
   : `${title}: an intuitive, one-page explanation. A help-me-learn note by Adit Mehta.`;
+
+// Render the display title for the H1. `titleDisplay` may embed `$…$` maths
+// (e.g. "$\sigma$-Algebras"): split on the math spans, run KaTeX on each,
+// and leave the text segments as escaped Newsreader. The result is placed
+// into the H1 via set:html. When `titleDisplay` is absent, the H1 falls
+// back to the plain `title` (rendered as ordinary text, no set:html).
+// throwOnError:false mirrors the body pipeline — a bad symbol shows as red
+// text rather than failing the build; htmlAndMathml gives screen readers
+// real maths in the heading too.
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+function renderTitleDisplay(s: string): string {
+  return s
+    .split(/(\$[^$]*\$)/g)
+    .map((seg) =>
+      seg.length >= 2 && seg.startsWith('$') && seg.endsWith('$')
+        ? katex.renderToString(seg.slice(1, -1), {
+            throwOnError: false,
+            output: 'htmlAndMathml',
+          })
+        : escapeHtml(seg),
+    )
+    .join('');
+}
+const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
 ---
 
 <BaseLayout
@@ -91,14 +132,21 @@ const headDescription = summary
           title. The gutter (padding-left on .note at ≥1024px) is
           reserved for it now so nothing reflows when it arrives. */}
       <header class="note-head">
-        {/* Kicker — constant on every note. PHASE 1 PLACEHOLDER styling
-            (Newsreader italic, muted); Phase 2 swaps the font-family to
-            the chosen handwritten face and tunes size/colour. It is a
-            <p>, not a heading, so it never competes with the H1 for SEO. */}
+        {/* Kicker — constant on every note. Set in the handwritten face
+            ('HML Script', a hard subset of Dawning of a New Day), faint, so
+            it reads as a series eyebrow above the topic title. It is the one
+            display accent unique to HML (§1.2); the rest of the page stays
+            in the system faces. It is a <p>, not a heading, so it never
+            competes with the H1 for SEO. */}
         <p class="note-kicker">help me learn</p>
-        {/* Topic title = the page's H1 (keyword-bearing). Phase 2 renders
-            `titleDisplay` here via KaTeX for the σ glyph. */}
-        <h1 class="note-title">{title}</h1>
+        {/* Topic title = the page's H1 (keyword-bearing). When a
+            `titleDisplay` is set, its `$…$` maths is rendered via KaTeX and
+            injected as HTML (that is how the σ becomes a real glyph);
+            otherwise the plain `title` text is used. `title` (plain ASCII)
+            still drives the browser tab, OG card, home list, and SEO. */}
+        {titleHtml
+          ? <h1 class="note-title" set:html={titleHtml} />
+          : <h1 class="note-title">{title}</h1>}
         <p class="note-date">
           <span class="note-date__label">{dateLabel}</span>
           {' '}
@@ -176,13 +224,22 @@ const headDescription = summary
     margin-bottom: 2.5rem;
   }
   .note-kicker {
-    font-family: 'Newsreader', 'Charter', 'Georgia', serif;
-    font-style: italic;
-    font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-    color: var(--text-muted);
-    letter-spacing: 0.01em;
-    line-height: 1.2;
-    margin: 0 0 0.35rem 0;
+    /* Handwritten series eyebrow — the one sanctioned display accent unique
+       to HML (§1.2, and the "characterful" signature of §1.6). Dawning of a
+       New Day is single-weight with a thin stroke that reads faint on the
+       dark (default) theme, so it is sized up from the Phase-1 placeholder
+       and set in the warm accent for presence. Contrast was never the
+       problem — muted already clears WCAG AA (~6:1 dark, ~5.6:1 light) — so
+       the size bump does the real work; accent adds punch in dark (~8:1) and
+       is a wash in light. No font-style: italic (the face is already a
+       hand). Stays below the note title at every width. VISUAL TUNABLES:
+       the size clamp, colour, letter-spacing. */
+    font-family: 'HML Script', cursive;
+    font-size: clamp(1.75rem, 1.45rem + 1.1vw, 2.4rem);
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    margin: 0 0 0.4rem 0;
   }
   .note-title {
     font-family: 'Newsreader', 'Charter', 'Georgia', serif;
@@ -191,6 +248,16 @@ const headDescription = summary
     letter-spacing: -0.015em;
     line-height: 1.1;
     margin: 0 0 0.75rem 0;
+  }
+  /* The σ in the title is injected as KaTeX HTML via set:html, which does
+     NOT carry Astro's scope attribute — so it is reached with :global.
+     KaTeX sizes inline maths at 1.21em by default, which reads a shade too
+     large next to the Newsreader letters in the H1; 1em brings the glyph
+     back to the size of the surrounding text. VISUAL TUNABLE: if the sigma
+     sits a hair high or low against "-Algebras", nudge vertical-align here
+     (left at the natural baseline for now). */
+  .note-title :global(.katex) {
+    font-size: 1em;
   }
   .note-date {
     font-size: var(--fs-small);
@@ -229,10 +296,12 @@ const headDescription = summary
      cities, or essay pages.
 
      Two-tier width: flowing PROSE (paragraphs, headings, lists, quotes) is
-     capped at the readable measure; WIDE elements (equations, highlight
-     boxes, figures — later phases) are left uncapped so they can use the
-     full breakout column. This keeps text comfortably readable while
-     reserving the maximum width for the maths. */
+     capped at the readable measure by the rule below, and display equations
+     are capped at the same measure (see the display-maths block further
+     down), so text and maths share one comfortable column. The wider
+     breakout column (--note-wide) and the deliberate right-hand space are
+     reserved for figures, charts, and highlight boxes in later phases — not
+     for equations. */
   .note__body {
     font-size: var(--fs-body);
     line-height: var(--lh-body);
@@ -320,8 +389,50 @@ const headDescription = summary
     color: var(--text);
   }
 
-  /* Bare images — the Figure component (a later phase) adds wide/full
-     breakout variants. */
+  /* ─── Display maths (`$$…$$`) ──────────────────────────────────────
+     rehype-katex renders block maths as <span class="katex-display">, a
+     direct child of .note__body. Two deliberate choices, recorded as
+     divergences (§1.11):
+
+       1. CAPPED at the prose measure, not the wider breakout column —
+          display equations belong WITH the text; the right-hand space is
+          reserved for figures (Phase 4), not equations.
+       2. LEFT-ANCHORED, not centred (KaTeX's default). The whole note
+          column is left-anchored, so equations align to the prose's left
+          edge rather than floating centre. This also makes the overflow
+          predictable: KaTeX never wraps a line, so a too-wide equation
+          starts at the left and scrolls RIGHT inside its own box (never
+          the page), and the right-edge fade below correctly marks "there
+          is more this way." The fade shows ONLY when content overflows.
+
+     On narrow screens a mild size step-down lets most equations fit with
+     no scroll at all. */
+  .note__body .katex-display {
+    max-width: var(--note-measure);
+    margin: 1.8em 0;
+    text-align: left;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    /* Right-edge scroll-shadow, on only while overflowing: a cover strip in
+       the page background painted in LOCAL coordinates (it travels with the
+       content and hides the shadow once you've scrolled to the end) sits
+       over a translucent ink shadow in SCROLL coordinates (shown while the
+       content runs past the right edge). Keyed to --bg / --text so it reads
+       in both themes. */
+    background:
+      linear-gradient(to left, var(--bg), transparent) right center / 2.75rem 100% no-repeat local,
+      radial-gradient(farthest-side at 100% 50%, color-mix(in srgb, var(--text) 16%, transparent), transparent) right center / 0.9rem 100% no-repeat scroll;
+  }
+  @media (max-width: 600px) {
+    /* Mild step-down on phones so most display equations fit without a
+       scroll. VISUAL TUNABLE. */
+    .note__body .katex-display {
+      font-size: 0.9em;
+    }
+  }
+
+
   .note__body img {
     display: block;
     max-width: 100%;

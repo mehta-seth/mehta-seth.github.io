@@ -52,6 +52,16 @@ const EXPECTED = [
   { path: 'public/fonts/kalam-devanagari-700.woff2', min: 2000, max: 10000, label: 'Devanagari 700 (wordmark subset)' },
   // JetBrains Mono — Latin monospace
   { path: 'public/fonts/jetbrains-mono-400.woff2',   min: 15000,  max: 35000,  label: 'Monospace 400' },
+  // HML Script — the "help me learn" kicker face (Dawning of a New Day),
+  // hard-subset to the nine glyphs of that one phrase. Measured subset is
+  // ~1.5 KB; the range is set from the real artifact, not a guess. The
+  // floor catches a broken/empty subset; the ceiling (12 KB) catches the
+  // regression that matters — an un-subsetted full face — since every
+  // candidate's full WOFF2 is well over that (Dawning ~17 KB, Cedarville
+  // ~23 KB, Homemade Apple ~48 KB). The band is wide enough that swapping
+  // to either of the other two sanctioned faces (their subsets land ~2 KB
+  // and ~3.4 KB) still passes without a range edit.
+  { path: 'public/fonts/hml-script-400.woff2',       min: 800,    max: 12000,  label: 'Script (help-me-learn subset)' },
 ];
 
 // Cross-check: the version string in global.css must match the version

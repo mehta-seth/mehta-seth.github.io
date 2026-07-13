@@ -7,16 +7,18 @@ branch: "stochastic-processes"
 draft: false
 ---
 
-{/* PHASE 1 PLACEHOLDER CONTENT.
-    The body below is neutral placeholder prose. Its only job is to let
-    the note layout be judged at the intended width — the column, the
-    "help me learn" kicker above the topic title, paragraph rhythm,
-    headings, lists, and quotes. It makes NO claims about σ-algebras or
-    anything else; do not treat any sentence as factual. Real, audited
-    content replaces it via the content pipeline.
+{/* PHASE 1 PLACEHOLDER CONTENT — with the Phase-2 math path exercised.
+    The body below is neutral placeholder prose. Its only job is to let the
+    note layout be judged at the intended width — the column, the "help me
+    learn" kicker above the topic title, paragraph rhythm, headings, lists,
+    quotes, and (as of Phase 2) KaTeX maths. It makes NO claims about
+    σ-algebras or anything else; do not treat any sentence OR EQUATION here
+    as factual. Real, audited content replaces it via the content pipeline.
 
-    No `$…$` math appears here: KaTeX is wired in Phase 2, so a stray `$`
-    would render as a literal dollar sign until then. */}
+    The `$…$` / `$$…$$` samples below exist only to exercise the KaTeX build
+    path: inline maths in a sentence, a display block, and a deliberately
+    wide block that must scroll inside its own container on a narrow screen
+    rather than stretch the page. They state nothing. */}
 
 _This explainer is being written. What you're reading is the template every help-me-learn note will use — the layout, not the content._
 
@@ -33,6 +35,18 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 - A first list item, to see how a bullet sits against the body rhythm.
 - A second item, a little longer, so wrapping inside an item shows too.
 - A third item.
+
+Inline maths sits in the run of a sentence, like a mention of a $\sigma$-algebra here, so its size and baseline can be read against the body text around it. The block below is a display equation, present only to exercise the rendering. Read it as a shape, not a statement:
+
+$$
+(\Omega, \mathcal{F}, (\mathcal{F}_t)_{0 \le t \le \infty}, \mathbb{P})
+$$
+
+And a deliberately long one, to confirm that a wide equation scrolls inside its own container on a narrow screen instead of stretching the page:
+
+$$
+\underbrace{a_1 + a_2 + a_3 + \cdots + a_n}_{\text{a placeholder expression, wide on purpose, here only to test horizontal scrolling}}
+$$
 
 ## How to read it
 
