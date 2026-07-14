@@ -1,16 +1,16 @@
 ---
 // src/components/Lightbox.astro
 //
-// Click-to-zoom photo viewer for in-essay figures. Renders an empty
-// dialog-shaped wrapper at the end of the page (used only on essay
-// pages — included by EssayLayout, not BaseLayout) that the script
-// populates when the user clicks a <Figure>.
+// Click-to-zoom photo viewer for in-essay and in-note figures. Renders an
+// empty dialog-shaped wrapper at the end of the page (included by
+// EssayLayout and NoteLayout, not BaseLayout, so home/cities never carry
+// it) that the script populates when the user clicks a <Figure>.
 //
 // Design notes:
 //   - One lightbox per page. The script auto-discovers all figures
-//     inside .essay__body and wires them up — no per-figure
-//     registration. Adding a Figure to an essay's MDX requires no
-//     additional work for the lightbox to pick it up.
+//     inside .essay__body OR .note__body and wires them up — no
+//     per-figure registration. Adding a Figure to an essay's or note's
+//     MDX requires no additional work for the lightbox to pick it up.
 //   - The largest available variant is shown. The script reads the
 //     <Figure>'s emitted <picture> element, finds the AVIF <source>'s
 //     srcset, and picks the candidate with the largest width
@@ -190,8 +190,11 @@
   /* Make every <Figure> image clickable-feeling — but ONLY once the
      lightbox script has wired it up. The script adds .figure--clickable
      to each figure it registers; without JS, the class never lands and
-     the cursor stays at default, which is honest. */
-  .essay__body .figure--clickable .figure__img {
+     the cursor stays at default, which is honest. Matches figures in both
+     the essay body and the note body (.note__body), since NoteLayout also
+     renders one <Lightbox />. */
+  .essay__body .figure--clickable .figure__img,
+  .note__body .figure--clickable .figure__img {
     cursor: zoom-in;
   }
 </style>
@@ -417,9 +420,15 @@
     window.addEventListener('pagehide', () => close());
 
     // ─── Wire up every figure on the page ─────────────────────────────
-    // Auto-discovery: any .figure inside .essay__body becomes clickable.
-    // Adding a Figure to MDX requires no additional registration.
-    const figures = document.querySelectorAll<HTMLElement>('.essay__body .figure');
+    // Auto-discovery: any .figure inside .essay__body OR .note__body
+    // becomes clickable. Both selectors are listed explicitly so the
+    // essay behaviour is unchanged (an essay page has no .note__body, so
+    // the added selector matches nothing there) while HML notes, which
+    // also render one <Lightbox />, get the same treatment. Adding a
+    // Figure to MDX requires no additional registration.
+    const figures = document.querySelectorAll<HTMLElement>(
+      '.essay__body .figure, .note__body .figure',
+    );
     figures.forEach((figure) => {
       // Make the figure feel keyboard-activatable too. We add
       // tabindex=0 + role=button so it lands in the tab order and a

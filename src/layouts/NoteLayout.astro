@@ -1,12 +1,12 @@
 ---
 // src/layouts/NoteLayout.astro
 //
-// Layout for a "help me learn" note (HML). Responsibilities as of Phase 2:
+// Layout for a "help me learn" note (HML). Responsibilities as of Phase 4:
 //   - the same chrome as the essay/cities pages (wordmark top-left, fixed
 //     theme toggle top-right), reusing BaseLayout, Wordmark, ThemeToggle
 //     unchanged;
 //   - a wider, LEFT-ANCHORED content column (not centred like the essay);
-//   - the "help me learn" kicker, now set in the handwritten face
+//   - the "help me learn" kicker, set in the handwritten face
 //     ('HML Script', a subset of Dawning of a New Day), sitting above a
 //     bold topic title;
 //   - the topic title rendered from `titleDisplay` via KaTeX, so the σ in
@@ -15,13 +15,17 @@
 //   - build-time KaTeX for `$…$` (inline) and `$$…$$` (display) maths,
 //     including the narrow-screen wide-equation handling in the global
 //     block below;
-//   - the note-body typography.
+//   - the collapsible table of contents (hamburger in the left gutter,
+//     rendered by NoteToc, gated on H2 presence);
+//   - the note-body typography, including the natural (non-rectangular)
+//     highlight box, cross-reference links, and — as of Phase 4 — figures
+//     with click-to-zoom (the shared <Figure> + <Lightbox>, generalised to
+//     the .note__body namespace, with a place="side" variant that uses the
+//     reserved right-hand space).
 //
-// Arriving in later phases (hooks/space reserved and commented here):
-//   - Phase 3: the collapsible table of contents (hamburger in the left
-//     gutter), the natural (non-rectangular) highlight box, and
-//     cross-reference links.
-//   - Phase 4: figures / lightbox for notes.
+// The phased build (Phases 1–4) is complete; hooks that earlier phases
+// reserved — the kicker face, `titleDisplay`, the left gutter, the two width
+// knobs, and the right-hand space — are all now in use.
 //
 // The essay layout is deliberately NOT touched — this is a separate layout
 // with its own widths and its own body namespace (.note__body). Note also
@@ -33,6 +37,7 @@ import BaseLayout from './BaseLayout.astro';
 import Wordmark from '@/components/Wordmark.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
 import NoteToc from '@/components/NoteToc.astro';
+import Lightbox from '@/components/Lightbox.astro';
 import type { MarkdownHeading } from 'astro';
 import katex from 'katex';
 // Self-host KaTeX's stylesheet through the build. Importing it HERE — in
@@ -163,8 +168,8 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
       </header>
 
       {/* MDX body. Flowing prose is capped at a readable measure; wide
-          elements (equations, highlight boxes, figures — later phases)
-          break out toward the full column width. */}
+          elements (figures, charts, highlight boxes) break out toward the
+          wider column, and a place="side" figure uses the right-hand space. */}
       <div class="note__body">
         <slot />
       </div>
@@ -174,6 +179,13 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
       </footer>
     </article>
   </div>
+
+  {/* One click-to-zoom viewer per page (Phase 4). The shared Lightbox
+      auto-discovers every <Figure> inside .note__body — the same way it
+      does for .essay__body — so no per-figure wiring is needed. Rendered
+      here (in the layout), not in BaseLayout, so home/cities never carry
+      it. */}
+  <Lightbox />
 </BaseLayout>
 
 <style>
@@ -286,6 +298,10 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
     margin-top: 5rem;
     padding-top: 2rem;
     border-top: 1px solid var(--border);
+    /* Drop below any right-floated side figure (Phase 4) so a tall one
+       can never overlap the footer rule. A no-op when there is no float,
+       so notes without a side figure are unchanged. */
+    clear: right;
   }
   .note-backtotop {
     font-size: var(--fs-small);
@@ -312,8 +328,8 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
      are capped at the same measure (see the display-maths block further
      down), so text and maths share one comfortable column. The wider
      breakout column (--note-wide) and the deliberate right-hand space are
-     reserved for figures, charts, and highlight boxes in later phases — not
-     for equations. */
+     used by figures, charts, and highlight boxes (size="wide"/"full" and
+     place="side" on <Figure>) — not by equations. */
   .note__body {
     font-size: var(--fs-body);
     line-height: var(--lh-body);
@@ -451,6 +467,111 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
     height: auto;
     margin: 2.2em 0;
     border-radius: 2px;
+  }
+
+  /* ─── Figures (Figure.astro), generalised from the essay ───────────
+     Notes reuse the shared <Figure> + <Lightbox>. The rules mirror the
+     essay's figure block, adapted to the note's LEFT-ANCHORED, two-tier
+     layout. Divergences from the essay are deliberate (§1.11):
+
+       • figures are LEFT-ANCHORED, not centred: a column figure sits at
+         the prose's left edge, capped at the readable measure — matching
+         the note column, which is itself left-anchored;
+       • size="wide" widens to the breakout column (--note-wide),
+         extending RIGHTWARD into the reserved right-hand space with its
+         left edge still on the prose line — not the essay's symmetric
+         centre-breakout;
+       • size="full" fills the note's content box edge-to-edge (the widest
+         the note goes), NOT the raw viewport. The note is centred inside
+         an 80rem region with an asymmetric reserved gutter, so a true
+         viewport bleed can't be done cleanly from here and would fight the
+         deliberately reserved margins; "as wide as the note" is the honest
+         full for this layout;
+       • place="side" (the payoff of the §5 layout) seats the figure in the
+         reserved right-hand space beside the prose on wide screens and
+         stacks it in-flow at the measure on narrow ones — see below.
+
+     Rhythm matches the base-img rule (2.2em). The lightbox rendered by this
+     layout wires these up via the shared .essay__body/.note__body selector,
+     and .figure__img overrides the base .note__body img rule above (its two
+     classes outweigh the base rule's class+element). */
+  .note__body .figure {
+    margin: 2.2em 0;
+    max-width: var(--note-measure);
+  }
+  .note__body .figure__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 2px;
+    margin: 0;                 /* the block rhythm belongs to .figure */
+  }
+  /* Caption — muted serif italic at the small size, left-anchored, capped
+     at the prose measure so it reads consistently across figure sizes. */
+  .note__body .figure__caption {
+    font-family: 'Newsreader', 'Charter', 'Georgia', serif;
+    font-size: var(--fs-small);
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0.9em 0 0;
+    max-width: var(--note-measure);
+    text-align: left;
+  }
+  /* Emphasis inside an italic caption flips to roman (more emphatic against
+     the surrounding italic), same convention as the essay. */
+  .note__body .figure__caption em {
+    font-style: normal;
+  }
+
+  /* wide — widen to the breakout column on ≥1280px, reaching rightward into
+     the reserved space; below that it reads as a column figure. (Ties the
+     base .figure max-width on specificity, so this rule sits later to win.) */
+  @media (min-width: 1280px) {
+    .note__body .figure--wide {
+      max-width: var(--note-wide);
+    }
+  }
+
+  /* full — fill the note's content box edge-to-edge (see the header note on
+     why this is the note's "full", not a raw-viewport bleed). */
+  .note__body .figure--full {
+    max-width: none;
+  }
+  .note__body .figure--full .figure__img {
+    max-height: 85vh;
+  }
+
+  /* side — in the reserved right-hand gutter beside the prose on wide
+     screens; stacked in-flow at the measure below. The gutter only opens up
+     once the content box is wide enough (the 6rem-inset content leaves too
+     little room below ~1280px, §5), so the float is gated at the same 1280px
+     threshold as the wide breakout. A float — not a grid restructure — keeps
+     the following prose flowing to its left; the prose's own measure cap is
+     what stops the text wrapping under the figure (the 50rem column never
+     reaches the ~18rem gutter). Authoring: put a side figure just before the
+     paragraph it should sit beside, and don't combine place="side" with
+     size="wide"/"full". */
+  .note__body .figure--side {
+    margin: 2.2em 0;                 /* stacked default (narrow screens) */
+    max-width: var(--note-measure);
+  }
+  @media (min-width: 1280px) {
+    .note__body .figure--side {
+      float: right;
+      clear: right;
+      width: 18rem;
+      max-width: 18rem;
+      margin: 0.35em 0 1.4em 2.5rem; /* gutter between prose and figure */
+    }
+    .note__body .figure--side .figure__img {
+      max-height: none;              /* the 18rem width is the constraint */
+    }
+    .note__body .figure--side .figure__caption {
+      max-width: 18rem;
+    }
   }
 
   /* ─── Cross-reference links (<Ref>) ────────────────────

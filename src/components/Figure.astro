@@ -22,6 +22,10 @@
 //   Full-bleed (edge to edge of viewport):
 //   <Figure src={img} alt="..." size="full" />
 //
+//   Side (HML notes only) — sits in the note's reserved right-hand space
+//   beside the prose on wide screens, stacks below on mobile:
+//   <Figure src={img} alt="..." place="side" />
+//
 //   First figure in an essay (LCP candidate):
 //   <Figure src={img} alt="..." priority />
 //
@@ -71,6 +75,16 @@ interface Props {
    */
   size?: 'column' | 'wide' | 'full';
   /**
+   * inline = default (in the flow of the column).
+   * side   = HML notes only. Seats the figure in the note's reserved
+   *          right-hand space beside the prose on wide screens (≥1280px)
+   *          and stacks it in-flow at the prose measure on narrower ones.
+   *          `size` is ignored when place="side" (the gutter sets the
+   *          width); don't combine the two. No effect in the essay layout,
+   *          which has no such gutter.
+   */
+  place?: 'inline' | 'side';
+  /**
    * Set true on the first figure in an essay only. Forces eager
    * loading + sync decode so the LCP candidate isn't delayed. Every
    * other figure should be lazy (the default).
@@ -78,7 +92,7 @@ interface Props {
   priority?: boolean;
 }
 
-const { src, alt, size = 'column', priority = false } = Astro.props;
+const { src, alt, size = 'column', place = 'inline', priority = false } = Astro.props;
 
 // Widths array. The fifth entry (3000) matches the source max-edge so
 // the largest variant never upscales. The smaller widths cover phone
@@ -96,6 +110,15 @@ const sizesMap: Record<typeof size, string> = {
   full:   '100vw',
 };
 
+// A side figure (notes) renders small — in the ~18rem right-hand gutter on
+// wide screens, at the prose measure when stacked below — so give the
+// browser a matching hint rather than the full-column `size` one, which
+// would over-fetch. Inline figures keep the size-variant hint.
+const sizes =
+  place === 'side'
+    ? '(min-width: 1280px) 18rem, (min-width: 768px) 46rem, 100vw'
+    : sizesMap[size];
+
 const loading = priority ? 'eager' : 'lazy';
 const decoding = priority ? 'sync' : 'async';
 
@@ -105,13 +128,13 @@ const decoding = priority ? 'sync' : 'async';
 const hasCaption = Astro.slots.has('default');
 ---
 
-<figure class:list={['figure', `figure--${size}`]}>
+<figure class:list={['figure', place === 'side' ? 'figure--side' : `figure--${size}`]}>
   <Picture
     src={src}
     formats={['avif', 'webp']}
     fallbackFormat="jpg"
     widths={widths}
-    sizes={sizesMap[size]}
+    sizes={sizes}
     quality={85}
     alt={alt}
     loading={loading}

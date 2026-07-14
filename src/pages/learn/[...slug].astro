@@ -16,6 +16,7 @@ import type { CollectionEntry } from 'astro:content';
 import NoteLayout from '@/layouts/NoteLayout.astro';
 import Boxed from '@/components/Boxed.astro';
 import Ref from '@/components/Ref.astro';
+import Figure from '@/components/Figure.astro';
 
 export async function getStaticPaths() {
   // Drafts are excluded from the production build (same rule as essays).
@@ -33,9 +34,11 @@ interface Props {
 const { note } = Astro.props;
 const { Content, headings } = await render(note);
 
-// MDX-callable components for notes. Phase 3 adds <Boxed> (the hand-drawn
-// highlight box) and <Ref> (cross-reference links); <Figure> arrives in
-// Phase 4. Authors use these in note MDX without importing them.
+// MDX-callable components for notes. Phase 3 added <Boxed> (the hand-drawn
+// highlight box) and <Ref> (cross-reference links); Phase 4 adds <Figure>
+// (the shared responsive photograph/diagram component, generalised to the
+// note body, with its click-to-zoom lightbox rendered once by NoteLayout).
+// Authors use all of these in note MDX without importing them.
 ---
 
 <NoteLayout
@@ -47,5 +50,5 @@ const { Content, headings } = await render(note);
   cover={note.data.cover}
   headings={headings}
 >
-  <Content components={{ Boxed, Ref }} />
+  <Content components={{ Boxed, Ref, Figure }} />
 </NoteLayout>
