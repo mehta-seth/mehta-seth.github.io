@@ -50,7 +50,15 @@ const essays = [
 // link). When a second note lands, drop it in here.
 const notes = [
   {
-    title: 'Sigma-Algebras',
+    // The σ (U+03C3) is a real Unicode character, so screen readers
+    // announce it and the label stays selectable and searchable. It
+    // renders in the 'HML Math' face (see the .linklist__item a stack
+    // below + the @font-face in global.css) — the same math-italic glyph
+    // the note's own H1 uses — because Newsreader has no Greek. The note's
+    // frontmatter `title` stays ASCII "Sigma-Algebras" for the browser tab
+    // and OG card; this curated home list is separate and controls only
+    // the link label here.
+    title: 'σ-Algebras',
     href: '/learn/sigma-algebras/',
   },
 ];
@@ -270,6 +278,13 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
     color: var(--text);
     border-bottom: 1px solid transparent;
     transition: color 150ms ease, border-color 150ms ease;
+    /* 'HML Math' sits ahead of the inherited serif stack so a Greek
+       codepoint in a title (e.g. the σ in "σ-Algebras") renders in the
+       math-italic face; its unicode-range (Greek block) means all Latin
+       still resolves to Newsreader below. Inherited by both the Essays
+       and help-me-learn lists — a no-op for Latin-only titles, which
+       never touch 'HML Math'. */
+    font-family: 'HML Math', 'Newsreader', 'Charter', 'Georgia', serif;
   }
   .linklist__item a:hover,
   .linklist__item a:focus-visible {

@@ -1,7 +1,8 @@
 // scripts/refresh-fonts.mjs
 //
 // Reproducibly re-pulls every self-hosted WOFF2 in public/fonts/ from
-// the canonical @fontsource/* packages. Use when:
+// the canonical @fontsource/* packages (plus one Greek subset carved
+// from the bundled `katex` dependency — see HML Math below). Use when:
 //   - Adding a new weight or subset (edit the MAPPINGS table below).
 //   - Recovering from a corrupted or mislabeled font file.
 //   - Updating to a newer upstream version of Newsreader / Kalam.
@@ -21,7 +22,7 @@
 //   once, so the rename can't drift.
 
 import { execSync } from 'node:child_process';
-import { cpSync, mkdirSync, rmSync, statSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, rmSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -68,6 +69,20 @@ const KALAM_UNICODES = [
 // WOFF2 is ~18 KB; the subset lands at ~1.5 KB.
 const HML_SCRIPT_TEXT = 'help me learn';
 
+// ── HML Math (Greek) subset ─────────────────────────────────────────
+// Some home-page note titles carry a Greek letter (e.g. the σ in
+// "σ-Algebras"). Newsreader has no Greek glyphs at all, so those letters
+// are carved from KaTeX's math-italic face — the very font KaTeX already
+// uses to set the σ in a note's own H1 — and shipped as
+// public/fonts/hml-math-400.woff2 under the CSS family 'HML Math'. The
+// source is the project's own `katex` dependency (NOT @fontsource), so
+// this one is subsetted straight from node_modules rather than through
+// the MAPPINGS install below. The subset is the whole Greek block the
+// face carries (41 codepoints, ~8 KB); widen/narrow via HML_MATH_UNICODES.
+// Keep in sync with check-fonts.mjs and global.css's @font-face.
+const HML_MATH_UNICODES = 'U+0370-03FF';
+const KATEX_MATH_SRC = 'node_modules/katex/dist/fonts/KaTeX_Math-Italic.ttf';
+
 function ensurePyftsubset() {
   try {
     execSync('pyftsubset --help', { stdio: 'ignore' });
@@ -103,6 +118,17 @@ function subsetHmlScript(filePath) {
   );
   cpSync(tmp, filePath);
   rmSync(tmp);
+}
+
+// HML Math differs from the two subsets above: its source is not a file
+// already in public/fonts/ (copied from @fontsource) but the
+// KaTeX_Math-Italic face inside the `katex` package, so it reads from
+// `srcPath` and writes straight to `destPath` in a single pass.
+function subsetHmlMath(srcPath, destPath) {
+  execSync(
+    `pyftsubset "${srcPath}" --unicodes="${HML_MATH_UNICODES}" --layout-features='*' --flavor=woff2 --output-file="${destPath}"`,
+    { stdio: 'inherit' },
+  );
 }
 
 // The mapping that matters. Left side: path inside @fontsource/* npm
@@ -179,6 +205,19 @@ console.log(`\n→ Subsetting HML Script to the kicker string ("${HML_SCRIPT_TEX
   subsetHmlScript(p);
   const after = (statSync(p).size / 1024).toFixed(1);
   console.log(`  ✓ ${'hml-script-400.woff2'.padEnd(36)} (${before} KB → ${after} KB)`);
+}
+
+// HML Math — carve the Greek subset straight from the bundled katex face.
+console.log(`\n→ Subsetting HML Math (Greek block ${HML_MATH_UNICODES}) from ${KATEX_MATH_SRC}\n`);
+{
+  if (!existsSync(KATEX_MATH_SRC)) {
+    console.error(`  ✗ ${KATEX_MATH_SRC} not found — is the \`katex\` package installed?`);
+    process.exit(1);
+  }
+  const dest = join(DEST, 'hml-math-400.woff2');
+  subsetHmlMath(KATEX_MATH_SRC, dest);
+  const kb = (statSync(dest).size / 1024).toFixed(1);
+  console.log(`  ✓ ${'hml-math-400.woff2'.padEnd(36)} (${kb} KB)`);
 }
 
 console.log('\n✓ Refresh complete.');

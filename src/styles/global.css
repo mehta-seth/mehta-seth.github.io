@@ -201,6 +201,29 @@
   src: url('/fonts/hml-script-400.woff2?v=3') format('woff2');
 }
 
+/* HML Math — a Greek-block subset of KaTeX's math-italic face (the same
+   font KaTeX uses to render the σ in a note's H1). Newsreader ships no
+   Greek at all, so a Unicode Greek letter in body/link text would fall
+   through to Georgia; this lets the σ in a home-page note title (e.g.
+   "σ-Algebras") render in the exact glyph the note's own title uses, and
+   sit on the baseline via the font's native metrics — no hand-tuned
+   vertical-align (which matters because it can't be eyeballed in a
+   headless build). unicode-range is the whole Greek block: the browser
+   fetches this file only for a Greek codepoint, and any Greek glyph NOT
+   in the 41-glyph subset falls through visibly — the signal to widen the
+   subset, exactly as with Kalam. font-style is normal because the italic
+   is baked into the glyph outlines (as in KaTeX's own @font-face). Not
+   preloaded, swap — like HML Script. New file at ?v=3: nothing shipped
+   under this name before, so no cache-buster bump is needed. */
+@font-face {
+  font-family: 'HML Math';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/hml-math-400.woff2?v=3') format('woff2');
+  unicode-range: U+0370-03FF;
+}
+
 /* ─── 2. Design tokens (§3.3) ──────────────────────────────────────── */
 
 :root {

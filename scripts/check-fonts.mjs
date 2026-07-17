@@ -62,6 +62,14 @@ const EXPECTED = [
   // to either of the other two sanctioned faces (their subsets land ~2 KB
   // and ~3.4 KB) still passes without a range edit.
   { path: 'public/fonts/hml-script-400.woff2',       min: 800,    max: 12000,  label: 'Script (help-me-learn subset)' },
+  // HML Math — a Greek-block subset of KaTeX's math-italic face, used to
+  // render Greek letters (e.g. the σ in a home-page note title) in the
+  // same glyph the note H1 uses, since Newsreader carries no Greek. The
+  // measured subset (41 Greek codepoints) is ~7.8 KB; the ceiling (14 KB)
+  // catches the regression that matters — shipping the un-subsetted full
+  // face, whose WOFF2 is ~16 KB. Source is the `katex` dependency, not
+  // @fontsource (see refresh-fonts.mjs).
+  { path: 'public/fonts/hml-math-400.woff2',         min: 3000,   max: 14000,  label: 'Math Greek (Greek-block subset)' },
 ];
 
 // Cross-check: the version string in global.css must match the version
