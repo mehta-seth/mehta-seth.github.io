@@ -1,53 +1,57 @@
 ---
 // src/components/Verses.astro
 //
-// Verse-and-meaning rows for a hymn or poem in an HML note. Each line of the
-// original sits on the left with its English on the right, on the SAME row
-// and the same baseline, so a reader can go line by line. A toggle above the
-// verses switches ONLY the left column between romanized Sanskrit (IAST, the
-// default) and Devanāgarī; the English never moves.
+// A hymn or poem in an HML note, set as facing text: each verse on the left,
+// its English on the right, the English starting at the centre of the page,
+// the way bilingual editions of Indian classics face the original with its
+// translation. A toggle above switches ONLY the left column between
+// romanized Sanskrit (the default) and Devanāgarī; the English never moves.
 //
-// How the toggle works — zero JavaScript, like the rest of the site's chrome
-// where it can be: two native radio buttons (keyboard, screen-reader and
-// form-restore behaviour come free) and one :has() rule that flips which
-// script is visible. Both scripts are always in the DOM. On desktop they are
-// stacked in the same grid cell and the inactive one is visibility:hidden, so
-// every cell is already as tall as the taller script and switching moves
-// nothing on the page; the English stays exactly where it was. On a phone,
-// where each verse sits above its meaning and a long romanized line wraps,
-// sharing a cell would leave a blank line in the Devanāgarī, so there the
-// inactive script is display:none instead (the meaning below shifts a
-// little on a tap, which the stacked layout makes harmless). Either way the
-// hidden script is out of the accessibility tree. Browsers without :has()
-// (pre-2023) simply don't see the toggle and read the romanized text.
+// Layout
+//   >= 1280px  Two columns. The English starts exactly on the page's centre
+//              line and its column is as wide as the verse side, so the outer
+//              margins match. The note shell is a centred border-box with a
+//              6rem left / 2rem right inset, so measured from the content
+//              box's left edge the centre is always at 50% - 2rem; the tracks
+//              are calc()s of that (no vw, so a scrollbar can't skew it).
+//              Each verse is one row: the original as a block on the left,
+//              the English as a block on the right, first lines on one
+//              baseline. Every English line starts on a new line (a wrap gets
+//              a hanging indent), so line n of the English answers line n of
+//              the verse even when it runs longer.
+//   <  1280px  Stacked: the verse, then its English. Below 1280 the half-page
+//              column is narrower than the longest verse line.
 //
-// Layout: two columns at >=1024px (the note's desktop breakpoint), rows
-// aligned on the first baseline. The left column is as wide as the longest
-// line of verse (in either script) and no wider, shared by every verse via
-// subgrid, so the English gets the rest of the width and all six verses
-// line up on one column edge. Below 1024px it stacks: the whole verse, then
-// its meaning (CSS `order`; the DOM stays line, meaning, line, meaning, which
-// is also the screen-reader order). Wrapped lines get a hanging indent so a
-// continuation never reads as a new line of verse.
+// The toggle needs no JavaScript: two native radio buttons (keyboard,
+// screen-reader and form-restore behaviour come free) and one :has() rule.
+// Both scripts are always in the DOM. In the two-column layout they share one
+// grid cell and the inactive one is visibility:hidden, so every cell is
+// already as tall as the taller script and switching moves nothing on the
+// page. Stacked, a long romanized line can wrap where its Devanāgarī doesn't,
+// and a shared cell would leave a blank line, so there the inactive script is
+// display:none (the English below shifts a little on a tap, which the stacked
+// layout makes harmless). Either way the hidden script is out of the
+// accessibility tree. Browsers without :has() (pre-2023) don't see the toggle
+// and read the romanized text.
+//
+// Credit: pass `credit` (e.g. a translation credit) and it is set as the last
+// line, in the footer's small muted type, sitting just above the footer rule.
 //
 // Styles are scoped (unlike <Boxed>/<Ref>, whose rules live in NoteLayout's
-// global block because they wrap MDX-rendered content): every element here
-// is this component's own markup, so scoping works and keeps these rules
-// from touching anything else. Delivery-wise the CSS (~2 KB) is bundled with
-// the /learn/ route, which injects the component, so it loads on note pages
-// only, never on the home, essay or cities pages.
+// global block because they wrap MDX-rendered content): every element here is
+// this component's own markup. The CSS (~2 KB) is bundled with the /learn/
+// route, which injects the component, so it loads on note pages only.
 //
-// Fonts: the romanized line is Newsreader (its IAST letters come from the
-// newsreader-*-iast files, see global.css); Devanāgarī is 'HML Devanagari'
-// (Tiro Devanagari Sanskrit, subset by scripts/refresh-fonts.mjs to the
-// Devanāgarī actually used in src/).
+// Fonts: the romanized lines and the English are Newsreader; Devanāgarī is
+// 'HML Devanagari' (Tiro Devanagari Sanskrit, subset by
+// scripts/refresh-fonts.mjs to the Devanāgarī actually used in src/).
 //
 // Usage in MDX (the component is injected by the /learn/ route):
-//   import { nirvanaShatakam } from '../../data/nirvana-shatakam';
-//   <Verses id="nirvana-shatakam" verses={nirvanaShatakam} />
+//   import { nirvanaShatakam, TRANSLATION_CREDIT } from '../../data/nirvana-shatakam';
+//   <Verses id="nirvana-shatakam" verses={nirvanaShatakam} credit={TRANSLATION_CREDIT} />
 
 interface Line {
-  /** Romanized Sanskrit (IAST). */
+  /** Romanized Sanskrit. */
   roman: string;
   /** The same line in Devanāgarī. */
   deva: string;
@@ -60,9 +64,11 @@ interface Props {
   id: string;
   /** The verses, each an ordered list of its lines. */
   verses: Line[][];
+  /** Optional closing credit line (empty or absent: nothing is shown). */
+  credit?: string;
 }
 
-const { id, verses } = Astro.props;
+const { id, verses, credit } = Astro.props;
 const group = `verses-${id}`;
 ---
 
@@ -93,45 +99,46 @@ const group = `verses-${id}`;
   <ol class="verses__list">
     {verses.map((verse) => (
       <li class="verse">
-        {verse.map((line, i) => (
-          <>
-            <div class="verse__text">
+        <div class="verse__original">
+          {verse.map((line) => (
+            <div class="verse__line">
               <span class="verse__roman" lang="sa-Latn">{line.roman}</span>
               <span class="verse__deva" lang="sa">{line.deva}</span>
             </div>
-            <div class:list={['verse__meaning', { 'verse__meaning--first': i === 0 }]}>
-              {line.meaning}
-            </div>
-          </>
-        ))}
+          ))}
+        </div>
+        <div class="verse__english">
+          {verse.map((line) => (
+            <div class="verse__gloss">{line.meaning}</div>
+          ))}
+        </div>
       </li>
     ))}
   </ol>
+
+  {credit && <p class="verses__credit">{credit}</p>}
 </div>
 
 <style>
   /* VISUAL TUNABLES — all in one place, on .verses:
-       --verses-col-gap     gutter between a line and its meaning (desktop)
-       --verses-verse-gap   air between one verse and the next
-       --verses-lh          line height of verse lines and their meanings
+       --verses-col-gap        gutter between the verse and the centre line
+       --verses-verse-gap      air between one verse and the next
+       --verses-lh             line height of verse lines and the English
        --verses-meaning-scale  English size relative to the verse: one step
-                            down, so the verse leads and the refrain's
-                            English fits one line at full desktop width
-       --verses-deva-scale  Devanāgarī size relative to the romanized line.
-                            Set by eye in a real render: at the same nominal
-                            size Tiro reads smaller and lighter than the
-                            romanized line (its matras and conjuncts need
-                            room), so it sits a step UP. The column width is
-                            set by the romanized lines, so this costs no
-                            layout, and the line box stays the same height
-                            (see .verse__deva). */
+                               down, so the verse leads
+       --verses-deva-scale     Devanāgarī size relative to the romanized
+                               line. Set by eye in a real render: at the same
+                               nominal size Tiro reads smaller and lighter
+                               than the romanized line, so it sits a step UP.
+                               The line box stays the same height (see
+                               .verse__deva), so this costs no layout. */
   .verses {
     --verses-col-gap: 3rem;
-    --verses-verse-gap: 2.5rem;
+    --verses-verse-gap: 2.75rem;
     --verses-lh: 1.6;
     --verses-meaning-scale: 0.92;
     --verses-deva-scale: 1.04;
-    max-width: var(--note-wide, 66rem);
+    max-width: var(--note-measure, 50rem);
     margin: 0.25rem 0 0;
   }
 
@@ -200,8 +207,8 @@ const group = `verses-${id}`;
   }
 
   /* ─── Verses ──────────────────────────────────────────────────────
-     .note__body styles ol/li for prose lists; these scoped rules (higher
-     specificity) reset that for this list. */
+     .note__body styles ol/li/p for prose; these scoped rules (higher
+     specificity) reset that here. */
   .verses__list {
     list-style: none;
     margin: 0;
@@ -217,76 +224,59 @@ const group = `verses-${id}`;
     margin-top: var(--verses-verse-gap);
   }
 
-  .verse__text,
-  .verse__meaning {
+  .verse__line,
+  .verse__gloss {
     padding-left: 1.25em;
     text-indent: -1.25em; /* hanging indent for a wrapped line */
   }
-  .verse__text {
+  .verse__line {
     display: grid;
     align-items: baseline; /* both scripts on one baseline */
     color: var(--text);
   }
   .verse__roman,
   .verse__deva {
-    grid-area: 1 / 1; /* both scripts in one cell, so toggling moves nothing */
+    grid-area: 1 / 1; /* both scripts in one cell */
   }
   .verse__deva {
-    display: none; /* phone: hidden script takes no space (see header) */
+    display: none; /* stacked: the hidden script takes no space */
     font-family: 'HML Devanagari', 'Newsreader', serif;
     font-size: calc(var(--verses-deva-scale) * 1em);
     /* Same line-box height as the romanized line at any scale. */
     line-height: calc(var(--verses-lh) / var(--verses-deva-scale));
   }
-  .verse__meaning {
+  .verse__english {
+    margin-top: 0.85rem; /* stacked: a little air between verse and English */
     color: var(--text-muted);
     font-size: calc(var(--verses-meaning-scale) * 1em);
-    order: 1; /* stacked: the whole verse first, then its meaning */
-  }
-  .verse__meaning--first {
-    margin-top: 0.85rem;
   }
 
-  @media (min-width: 1024px) {
-    /* The list owns the two columns: the verse column is sized to its
-       longest line (capped at half), the English takes the rest. Each verse
-       spans both and borrows them via subgrid, so every verse shares one
-       column edge. Without subgrid support (pre-2023) each verse falls back
-       to two equal halves. */
-    .verses__list {
-      display: grid;
-      grid-template-columns: fit-content(50%) minmax(0, 1fr);
-      column-gap: var(--verses-col-gap);
+  @media (min-width: 1280px) {
+    .verses {
+      max-width: none; /* span the content box, so 50% is the page centre */
     }
     .verse {
-      grid-column: 1 / -1;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns:
+        calc(50% - 2rem - var(--verses-col-gap))
+        calc(50% - 2rem);
       column-gap: var(--verses-col-gap);
       align-items: baseline;
     }
-    @supports (grid-template-columns: subgrid) {
-      .verse {
-        grid-template-columns: subgrid;
-      }
-    }
-    .verse__meaning {
-      order: 0;
-    }
-    .verse__meaning--first {
+    .verse__english {
       margin-top: 0;
     }
   }
 
   /* ─── The switch ─────────────────────────────────────────────────
-     Phone: swap with display. Desktop: both scripts keep their box and
-     only visibility swaps, so nothing on the page moves. */
+     Stacked: swap with display. Two columns: both scripts keep their box
+     and only visibility swaps, so nothing on the page moves. */
   .verses:has(.verses__radio[value='deva']:checked) .verse__roman {
     display: none;
   }
   .verses:has(.verses__radio[value='deva']:checked) .verse__deva {
     display: block;
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 1280px) {
     .verse__deva {
       display: block;
       visibility: hidden;
@@ -303,5 +293,17 @@ const group = `verses-${id}`;
     .verses__toggle {
       display: none;
     }
+  }
+
+  /* ─── Credit ─────────────────────────────────────────────────────
+     The footer's own small muted type (like "Back to top"). The note
+     footer sits 5rem below the body; the negative bottom margin collapses
+     with that, so the credit sits 2rem above the rule, mirroring the 2rem
+     between the rule and "Back to top". */
+  .verses__credit {
+    margin: 4rem 0 -3rem;
+    font-size: var(--fs-small);
+    line-height: 1.5;
+    color: var(--text-muted);
   }
 </style>
