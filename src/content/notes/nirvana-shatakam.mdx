@@ -1,20 +1,10 @@
 ---
 title: "Nirvana Shatakam"
-summary: "The Nirvana Shatakam, six verses attributed to Adi Shankara, in romanized Sanskrit and Devanagari, with an English translation facing each verse."
+summary: "The Nirvana Shatakam, attributed to Adi Shankara, in romanized Sanskrit and Devanagari with an English translation."
 date: 2026-10-05
 draft: false
 ---
 
 import { nirvanaShatakam, TRANSLATION_CREDIT } from '../../data/nirvana-shatakam';
-
-{/* The first non-technical help-me-learn note: a hymn rather than an
-    explainer. The page is deliberately just the verses. No headings (so no
-    table of contents), no figures, no maths.
-
-    The title and the romanized text are written as the hymn is said
-    aloud, without diacritics. The text itself (romanized, Devanāgarī,
-    English) and the translation credit live in src/data/nirvana-shatakam.ts;
-    edit words there. <Verses> is injected by the /learn/ route, so it isn't
-    imported here. */}
 
 <Verses id="nirvana-shatakam" verses={nirvanaShatakam} credit={TRANSLATION_CREDIT} />

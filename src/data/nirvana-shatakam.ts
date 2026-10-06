@@ -1,26 +1,10 @@
 // src/data/nirvana-shatakam.ts
 //
-// The text of the Nirvana Shatakam for /learn/nirvana-shatakam/, rendered by
-// <Verses> (src/components/Verses.astro). Three parallel blocks, each six
-// verses of four lines in reading order: ROMAN (shown by default), DEVA
-// (shown when the reader flips the toggle) and ENGLISH (the facing
-// translation). The build checks that the three have the same shape and
-// stops with the verse number if they don't.
-//
-// Romanization: written as the hymn is said aloud, with no diacritics.
-//   ch for च, sh for श and ष, gy for ज्ञ, ri for the vowel in मृ (mrityur).
-//   A long vowel is doubled at the start of a word, where it carries the
-//   stress (naaham, paapam, roopah, teertham), and written single elsewhere
-//   (chittani, chidananda, nirakara).
-//   A visarga ending a line is sounded with its echo vowel (vaayuhu,
-//   koshaha); mid-line it is h (roopah).
-//   The avagraha is closed up (shivoham), and sandhi is kept as it is
-//   pronounced (buddhyahankara, chaartho, vibhutvach cha).
-//
-// Devanāgarī: the hymn as commonly printed, with the standard forms
-// सप्तधातुर्न and पायू (v2), जन्म and शिष्यः (v5), and शिवोऽहं before the final
-// शिवोऽहम्. A Devanāgarī character new to src/ needs
-// `node scripts/refresh-fonts.mjs` so the HML Devanagari subset covers it.
+// Text of the Nirvana Shatakam for /learn/nirvana-shatakam/, rendered by
+// <Verses>: six verses of four lines in romanized Sanskrit, Devanagari and
+// English, paired line by line by facing(). A Devanagari character new to
+// src/ needs `node scripts/refresh-fonts.mjs` so the HML Devanagari font
+// covers it.
 
 export interface VerseLine {
   /** Romanized Sanskrit. */
@@ -89,7 +73,7 @@ const DEVA: string[][] = [
   ],
   [
     'न मे द्वेषरागौ न मे लोभमोहौ',
-    'मदो नैव मे नैव मात्सर्यभावः ।',
+    'न मे वै मदो नैव मात्सर्यभावः ।',
     'न धर्मो न चार्थो न कामो न मोक्षः',
     'चिदानन्दरूपः शिवोऽहं शिवोऽहम् ॥३॥',
   ],
@@ -114,58 +98,46 @@ const DEVA: string[][] = [
 ];
 
 // ─── English ────────────────────────────────────────────────────────
-// TO USE THE ISHA FOUNDATION TRANSLATION:
-//   1. Replace the lines in ENGLISH below with Isha's, four per verse, in
-//      order (each of their verses splits into four clauses that follow the
-//      four Sanskrit lines). The refrain is set once, in ENGLISH_REFRAIN; if
-//      one verse words it differently, put that verse's own string in place
-//      of ENGLISH_REFRAIN there. Strings are in backticks, so apostrophes
-//      and quotation marks paste safely.
-//   2. Set TRANSLATION_CREDIT, using the wording Isha's permission asks for
-//      if it names one. It appears as the last line of the page, just above
-//      the footer rule. While it is empty, no credit is shown.
-// Until then, ENGLISH holds an original placeholder translation.
 
-export const TRANSLATION_CREDIT = '';
-// e.g. 'English translation: Isha Foundation. Used with permission.'
+export const TRANSLATION_CREDIT = 'English translation adapted from Isha Foundation';
 
-const ENGLISH_REFRAIN = `My form is consciousness and bliss. I am Shiva, I am Shiva.`;
+const ENGLISH_REFRAIN = `I am the form of consciousness and eternal bliss, I am Shiva.`;
 
 const ENGLISH: string[][] = [
   [
-    `I am not mind, intellect, ego, or memory;`,
-    `not hearing or taste, not smell or sight;`,
-    `not sky, not earth, not fire, not wind.`,
+    `I am not any aspect of the mind like the intellect, the ego or the memory,`,
+    `I am not the organs of hearing, tasting, smelling or seeing,`,
+    `I am not the space, nor the earth, nor fire, nor air,`,
     ENGLISH_REFRAIN,
   ],
   [
-    `I am not prana, the life-force, nor its five winds;`,
-    `not the seven tissues of the body, nor the five sheaths;`,
-    `not speech, hands or feet, nor any other organ of action.`,
+    `I am not prana, the life-force, nor its five vital airs,`,
+    `I am not the seven essential building blocks of the body, nor the five sheaths of the body,`,
+    `I am not the mouth, hands or feet, nor any part of the body,`,
     ENGLISH_REFRAIN,
   ],
   [
-    `I harbour no hatred, no craving, no greed, no delusion;`,
-    `pride has no place in me, nor envy.`,
-    `Duty, wealth, desire, liberation: none of these is who I am.`,
+    `There is no hatred nor passion in me, no greed nor delusion,`,
+    `There is no pride, nor jealousy in me,`,
+    `I am not identified with my duty, wealth, lust or liberation,`,
     ENGLISH_REFRAIN,
   ],
   [
-    `No merit, no sin, no joy, no sorrow;`,
-    `no mantra to chant, no pilgrimage to make, no Veda to study, no rite to perform.`,
-    `I am neither the experiencing, the experienced, nor the experiencer.`,
+    `I am not virtue nor vice, not pleasure or pain,`,
+    `I need no mantras, no pilgrimage, no scriptures or rituals,`,
+    `I am not the experience, not the object of experience, not even the one who experiences,`,
     ENGLISH_REFRAIN,
   ],
   [
-    `I know no death and no fear; no caste sets me apart.`,
-    `No father is mine, nor mother, and I was never born.`,
-    `I have no kin and no friend, no guru and no disciple.`,
+    `I am not bound by death and its fear, not by caste or creed,`,
+    `I have no father, nor mother, or even birth,`,
+    `I am not a relative, nor a friend, nor a teacher nor a student,`,
     ENGLISH_REFRAIN,
   ],
   [
-    `I am undivided, a form without shape.`,
-    `I am everywhere, filling all things and all the senses.`,
-    `Nothing binds me and nothing frees me; I cannot be measured.`,
+    `I am devoid of duality, my form is formlessness,`,
+    `I am omnipresent, I exist everywhere, pervading all senses,`,
+    `I am neither attached, neither free nor limited,`,
     ENGLISH_REFRAIN,
   ],
 ];
