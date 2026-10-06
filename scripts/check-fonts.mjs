@@ -70,6 +70,22 @@ const EXPECTED = [
   // face, whose WOFF2 is ~16 KB. Source is the `katex` dependency, not
   // @fontsource (see refresh-fonts.mjs).
   { path: 'public/fonts/hml-math-400.woff2',         min: 3000,   max: 14000,  label: 'Math Greek (Greek-block subset)' },
+  // Newsreader IAST — the 22 dotted letters romanized Sanskrit needs
+  // (ṛ ṝ ḷ ḹ ṃ ḥ ṅ ṭ ḍ ṇ ṣ + capitals), built by refresh-fonts.mjs from
+  // Newsreader's own glyphs, one file per style. Measured ~2.3–2.5 KB. The
+  // ceiling (8 KB) catches the regression that matters — a full Latin-Ext
+  // copy (~14 KB) landing under one of these names.
+  { path: 'public/fonts/newsreader-400-iast.woff2',        min: 1500, max: 8000, label: 'IAST 400' },
+  { path: 'public/fonts/newsreader-400-italic-iast.woff2', min: 1500, max: 8000, label: 'IAST 400 italic' },
+  { path: 'public/fonts/newsreader-600-iast.woff2',        min: 1500, max: 8000, label: 'IAST 600' },
+  // HML Devanagari — Tiro Devanagari Sanskrit, subset to the Devanāgarī used
+  // in src/ with every OpenType feature kept, so its conjuncts come along
+  // (~112 KB). Over the usual 40 KB per-font budget by the owner's decision
+  // (Oct 2026); it loads only on pages that set Devanāgarī verse. The
+  // ceiling (150 KB) still catches an un-subsetted copy (~180 KB); if new
+  // verses ever push a real subset past it, re-measure and raise it
+  // deliberately.
+  { path: 'public/fonts/hml-devanagari-400.woff2',   min: 60000,  max: 150000, label: 'Devanagari (verse subset)' },
 ];
 
 // Cross-check: the version string in global.css must match the version

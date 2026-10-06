@@ -102,6 +102,49 @@
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
+/* ── Newsreader · IAST letters (romanized Sanskrit) ──
+   Newsreader's Latin-Extended subset has ā ī ū ś ñ but none of the dotted
+   letters IAST needs: ṛ ṝ ḷ ḹ ṃ ḥ ṅ ṭ ḍ ṇ ṣ (and capitals). Without these
+   files a word like "ahaṅkāra" would switch to Georgia mid-word for the ṅ.
+
+   The three files below add exactly those 22 letters, built from Newsreader's
+   OWN glyphs: the base letter plus the font's own dot-below / dot-above /
+   macron mark, placed at the font's own anchors (the same way its existing
+   ạ, ż and ā are made). scripts/refresh-fonts.mjs regenerates them from the
+   Latin and Latin-Ext files above and refuses to write them if the anchors
+   don't reproduce the font's own composites.
+
+   unicode-range lists exactly the 22 codepoints. These rules come AFTER the
+   Latin-Ext ones on purpose: where @font-face ranges overlap, the browser
+   consults the last-defined rule first, so these letters come from here
+   while everything else in the Latin-Ext range is untouched. ~2.4 KB each,
+   fetched only on a page that uses one of the letters. New files at ?v=3:
+   nothing was ever served under these names, so no cache-buster bump. */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/newsreader-400-iast.woff2?v=3') format('woff2');
+  unicode-range: U+1E0C-1E0D, U+1E24-1E25, U+1E36-1E39, U+1E42-1E47, U+1E5A-1E5D, U+1E62-1E63, U+1E6C-1E6D;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/newsreader-400-italic-iast.woff2?v=3') format('woff2');
+  unicode-range: U+1E0C-1E0D, U+1E24-1E25, U+1E36-1E39, U+1E42-1E47, U+1E5A-1E5D, U+1E62-1E63, U+1E6C-1E6D;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/newsreader-600-iast.woff2?v=3') format('woff2');
+  unicode-range: U+1E0C-1E0D, U+1E24-1E25, U+1E36-1E39, U+1E42-1E47, U+1E5A-1E5D, U+1E62-1E63, U+1E6C-1E6D;
+}
+
 /* ── Kalam · Devanagari (wordmark subset) ──
    Kalam is used ONLY for the Devanagari half of the wordmark
    "अदित मेहता" — 5 consonants, 3 vowel signs, 1 space. The upstream
@@ -222,6 +265,27 @@
   font-display: swap;
   src: url('/fonts/hml-math-400.woff2?v=3') format('woff2');
   unicode-range: U+0370-03FF;
+}
+
+/* HML Devanagari — Sanskrit in Devanāgarī on HML pages (the verse text of
+   <Verses>, and its toggle label). Tiro Devanagari Sanskrit: a face drawn for
+   classical Sanskrit, with the traditional stacked conjuncts (ङ्क, द्ध्य, ह्व).
+   Subset by scripts/refresh-fonts.mjs to every Devanāgarī codepoint used
+   anywhere in src/, keeping all OpenType features so conjuncts still form.
+   A Devanāgarī face is large even subset (~112 KB): its conjunct glyphs come
+   along with the letters they combine. The owner waived the 40 KB per-font
+   budget for this face (Oct 2026). It is named only by <Verses>, and its
+   unicode-range is Devanāgarī, so no other page ever fetches it. The range
+   is the whole block, exactly as with Kalam: a character missing from the
+   subset falls through visibly (the signal to re-run the refresh) rather
+   than being masked. Not preloaded, swap. New file at ?v=3, no bump. */
+@font-face {
+  font-family: 'HML Devanagari';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/hml-devanagari-400.woff2?v=3') format('woff2');
+  unicode-range: U+0900-097F, U+A8E0-A8FF, U+1CD0-1CFF, U+200C-200D, U+25CC;
 }
 
 /* ─── 2. Design tokens (§3.3) ──────────────────────────────────────── */
