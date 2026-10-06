@@ -1,78 +1,826 @@
 ---
 title: "Sigma-Algebras"
 titleDisplay: "$\\sigma$-Algebras"
-summary: "An intuitive, one-page explanation of σ-algebras — what they are, why they exist, and the plain idea underneath the formal definition."
-date: 2026-07-12
+summary: "What a σ-algebra is and why probability needs one: events and information, the measurability obstacle, Borel sets, random variables, and σ-algebras in stochastic processes and finance."
+date: 2026-10-06
 branch: "stochastic-processes"
 draft: false
 ---
 
-import placeholderFigure from '../../assets/notes/placeholder-diagram.png';
+A σ-algebra answers two questions that turn out to be the same question. First, which collections of outcomes can be given a probability without the arithmetic contradicting itself? Second, what does it mean, mathematically, to have information?
 
-{/* PHASE 1 PLACEHOLDER CONTENT — with the Phase-2 math path exercised.
-    The body below is neutral placeholder prose. Its only job is to let the
-    note layout be judged at the intended width — the column, the "help me
-    learn" kicker above the topic title, paragraph rhythm, headings, lists,
-    quotes, and (as of Phase 2) KaTeX maths. It makes NO claims about
-    σ-algebras or anything else; do not treat any sentence OR EQUATION here
-    as factual. Real, audited content replaces it via the content pipeline.
+We'll build it in this order: the basic ingredients, the obstacle that forces the definition, the core tools (generated σ-algebras, Borel sets, random variables, uniqueness of measures), the payoff in stochastic processes and finance (filtrations, stopping times, conditional expectation, martingales), and finally the subtleties and current research.
 
-    The `$…$` / `$$…$$` samples below exist only to exercise the KaTeX build
-    path: inline maths in a sentence, a display block, and a deliberately
-    wide block that must scroll inside its own container on a narrow screen
-    rather than stretch the page. Phase 3 also wraps that wide block in a
-    <Boxed> and adds two <Ref> cross-references (one registered, one not)
-    purely to exercise those components. Phase 4 adds two <Figure>s — one
-    in-column, one place="side" — using a neutral placeholder image, only to
-    exercise the figure styles, the click-to-zoom lightbox, and the
-    right-hand-space layout. None of it states anything. */}
+## Part 1: The basic ingredients
 
-_This explainer is being written. What you're reading is the template every help-me-learn note will use — the layout, not the content._
+### 1.1 The sample space: every way the world could go
 
-Every note here sets out to explain one difficult idea in the most intuitive way it can: a plain-language account, a real analogy where one helps, a figure where a picture says more than a paragraph, and never at the cost of getting the mathematics right. The aim is simple. Someone meeting a topic for the first time should find the explanation they wish they had been given.
+Analogy first. Imagine a library with one book for every complete history an experiment could have. Nature takes one book off the shelf. You never read it cover to cover; at best you are shown certain pages. Probability is reasoning about which book was taken.
 
-The paragraphs below are placeholder text, here only so the typography can be seen at the width these notes use. None of it means anything yet.
+- The library is the sample space $\Omega$. Each book is an outcome $\omega \in \Omega$.
+- An outcome is a complete description, not a partial one. For a stock observed over a year, $\omega$ is the entire price path, including the future.
+- In this framework, randomness is not the world "jiggling". It is our ignorance of which $\omega$ was selected.
 
-## What a note will hold
+Examples:
 
-<Figure src={placeholderFigure} alt="Placeholder figure." place="side">On a wide screen this sits in the reserved right-hand space beside the prose; on a phone it stacks in the column. *Placeholder.*</Figure>
+- Two coin tosses: $\Omega = \{HH, HT, TH, TT\}$.
+- A dart thrown at a board: $\Omega$ is the unit disc in $\mathbb{R}^2$.
+- A continuous-time price model on $[0,T]$: $\Omega = C([0,T])$, the set of continuous functions. One $\omega$ is one whole path.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Where the analogy breaks: a library is finite. Interesting sample spaces are uncountable, and uncountability is exactly where the trouble in 1.6 comes from.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur — a short stretch of prose, so the spacing between a paragraph and the list beneath it can be read in context.
+### 1.2 Events: yes/no questions about ω
 
-- A first list item, to see how a bullet sits against the body rhythm.
-- A second item, a little longer, so wrapping inside an item shows too.
-- A third item.
+Analogy: $\Omega$ is a database table with one row per possible world, and an event is the result of a WHERE query.
 
-Inline maths sits in the run of a sentence, like a mention of a $\sigma$-algebra here, so its size and baseline can be read against the body text around it. The block below is a display equation, present only to exercise the rendering. Read it as a shape, not a statement:
+Formally, an event is a subset $A \subseteq \Omega$: the set of outcomes for which some statement is true. Questions and subsets correspond exactly. Every yes/no question about $\omega$ defines its "yes-set", and every subset defines the question "is $\omega$ in here?". The bridge between sets and numbers is the indicator function:
 
 $$
-(\Omega, \mathcal{F}, (\mathcal{F}_t)_{0 \le t \le \infty}, \mathbb{P})
+\mathbf{1}_A(\omega) = \begin{cases} 1, & \omega \in A \\ 0, & \omega \notin A \end{cases}
 $$
 
-And a deliberately long one, placed inside a highlight box, to confirm both that the box draws its hand-made outline and that a wide equation scrolls inside its own container on a narrow screen instead of stretching the page:
+- Symbols: $A$ is the event, $\omega$ a candidate outcome, and $\mathbf{1}_A : \Omega \to \{0,1\}$.
+- Read it as: "the indicator of $A$ returns 1 on outcomes inside $A$ and 0 outside."
+- Intuition: $\mathbf{1}_A$ is the answer sheet for question $A$. It is the simplest random variable, and every random variable is a limit of linear combinations of indicators.
+
+Finance examples: "the call expires in the money" is $\{\omega : S_T(\omega) > K\}$. "The counterparty defaults before maturity" is $\{\omega : \tau(\omega) \le T\}$, where $\tau$ is the default time.
+
+### 1.3 The logic of questions is the algebra of sets
+
+- NOT $A$ corresponds to the complement $A^c = \Omega \setminus A$.
+- $A$ OR $B$ corresponds to the union $A \cup B$.
+- $A$ AND $B$ corresponds to the intersection $A \cap B$.
+
+$$
+\begin{aligned}
+\Big(\bigcup_{n} A_n\Big)^{c} &= \bigcap_{n} A_n^{c} \\
+\Big(\bigcap_{n} A_n\Big)^{c} &= \bigcup_{n} A_n^{c}
+\end{aligned}
+$$
+
+- Symbols: $A_1, A_2, \dots$ is a list of events, possibly infinite. $\bigcup_n$ means "at least one of them" and $\bigcap_n$ means "all of them".
+- Read the first identity as: "it is not the case that at least one $A_n$ happened" is the same as "every $A_n$ failed."
+- Intuition: taking complements swaps "there exists" with "for all". The practical consequence is economy. A collection closed under NOT and OR is automatically closed under AND, which is why the definition in Part 2 lists only complements and unions.
+
+Analogy: logic gates. With NOT and OR gates you can wire up AND, so a chip designer needs only two building blocks. Where it breaks: circuits use finitely many gates, while probability needs infinitely many operations (1.5).
+
+### 1.4 Information is a collection of answerable questions
+
+This is the conceptual heart, so we go slowly. Toss a coin twice, and suppose you are shown only the first toss. Which events can you decide with certainty, whatever happens?
+
+- "First toss is heads" $= \{HH, HT\}$: decidable.
+- "First toss is tails" $= \{TH, TT\}$: decidable.
+- "Something happened" $= \Omega$ and "nothing happened" $= \varnothing$: trivially decidable.
+- "Second toss is heads" $= \{HH, TH\}$ and "both tosses agree" $= \{HH, TT\}$: not decidable.
+
+So your information is the collection $\mathcal{G} = \{\varnothing, \{HH,HT\}, \{TH,TT\}, \Omega\}$. It is closed under NOT, OR and AND. That closure is not an arbitrary axiom; it is forced by what "knowing" means. If you can answer "did $A$ happen?" and "did $B$ happen?", you can answer "did $A$ or $B$ happen?".
+
+The sets $\{HH, HT\}$ and $\{TH, TT\}$ are the atoms: the finest distinctions available to you. Every decidable event is a union of atoms.
+
+Analogy: a camera with a fixed resolution. Atoms are pixels. You can describe any shape made of whole pixels, but nothing finer. A detective is in the same position: she can combine the answers her clues give, but cannot answer a question her clues don't touch.
+
+Where it breaks: in uncountable spaces the pixel picture fails. The Borel σ-algebra on $\mathbb{R}$ (Part 4) has every singleton $\{x\}$ as an atom, which suggests "infinite resolution", yet it is vastly smaller than the collection of all subsets. Infinite σ-algebras are not determined by their atoms.
+
+### 1.5 Probability needs limits, so the closure must be countable
+
+For finite $\Omega$, finitely many NOT/OR/AND operations are enough. Probability theory, however, is about limits: laws of large numbers, "the walk eventually returns to zero", "infinitely many defaults". These events need infinitely many operations.
+
+$$
+\begin{aligned}
+\{\text{infinitely many heads}\} &= \bigcap_{N=1}^{\infty} \, \bigcup_{n=N}^{\infty} H_n \\
+H_n &= \{\omega : \text{toss } n \text{ is heads}\}
+\end{aligned}
+$$
+
+- Symbols: $\bigcup_{n=N}^{\infty} H_n$ means "there is a head at some time at or after $N$". $\bigcap_{N=1}^{\infty}$ means "this holds for every $N$".
+- Read it as: "for every starting time $N$, a head comes later."
+- Intuition: "no matter how long you wait, another head is coming" is exactly "infinitely many heads". Each $H_n$ is elementary, but the event needs a countable intersection of countable unions.
+
+The same move turns convergence into a set:
+
+$$
+\{X_n \to X\} = \bigcap_{k=1}^{\infty} \, \bigcup_{N=1}^{\infty} \, \bigcap_{n=N}^{\infty} \Big\{ \omega : |X_n(\omega) - X(\omega)| < \tfrac{1}{k} \Big\}
+$$
+
+- Symbols: $k$ sets the tolerance $1/k$, $N$ is a waiting time, and $n \ge N$ runs over all later times.
+- Read it as: "for every tolerance $1/k$ there is a time $N$ after which every $X_n$ is within $1/k$ of $X$." This is the $\varepsilon$–$N$ definition of a limit written in set language.
+- Intuition: "for all" becomes $\bigcap$ and "there exists" becomes $\bigcup$. We replaced "for every $\varepsilon > 0$" (uncountably many) by "for every $k \in \mathbb{N}$" with $\varepsilon = 1/k$ (countably many) and lost nothing. Countable quantifiers are enough for the limit statements probability needs, which is why countable closure is the right demand.
+
+Analogy: a collection closed only under finite operations is like the rationals. It is closed under finite arithmetic, but sequences in it can converge to something outside it, as rationals converge to $\sqrt{2}$. A σ-algebra is complete under countable set operations the way $\mathbb{R}$ is complete under limits. Where it breaks: $\mathbb{R}$ is obtained by adding limit points, while the σ-algebra generated by simple sets comes from a much stranger, transfinite process (4.1).
+
+### 1.6 The obstacle: not every set can be measured
+
+With countable $\Omega$ there is no problem: take all subsets as events. With $\Omega = [0,1]$ and the uniform probability (length), this is impossible.
+
+Analogy first. Suppose a 1 kg cake could be cut into countably many pieces, each an exact shifted copy of the others. If one piece weighs $w$, the cake weighs $w + w + w + \cdots$. That is $0$ if $w = 0$ and $\infty$ if $w > 0$, never 1 kg. The only way out is to say such a piece has no weight at all: it cannot be weighed.
+
+<Boxed>
+
+**Theorem (Vitali, 1905).** No function $\lambda$ defined on all subsets of $\mathbb{R}$ can be countably additive, translation-invariant ($\lambda(A + q) = \lambda(A)$), and give every interval its length.
+
+</Boxed>
+
+Proof sketch. Say $x \sim y$ if $x - y \in \mathbb{Q}$. This splits $[0,1]$ into equivalence classes. Using the Axiom of Choice, pick exactly one representative from each class and collect them into a set $V \subseteq [0,1]$. Then
+
+$$
+[0,1] \;\subseteq\; \bigsqcup_{q \in \mathbb{Q} \cap [-1,1]} (V + q) \;\subseteq\; [-1,2]
+$$
+
+$$
+1 \;\le\; \sum_{q \in \mathbb{Q} \cap [-1,1]} \lambda(V) \;\le\; 3
+$$
+
+- Symbols: $V + q$ is $V$ shifted by $q$, $\bigsqcup$ is a union of pairwise disjoint sets, and $\lambda$ is the supposed length.
+- Why the shifts are disjoint: if $v + q = v' + q'$ with $v, v' \in V$, then $v - v' \in \mathbb{Q}$, so $v \sim v'$. That forces $v = v'$ (one representative per class) and hence $q = q'$.
+- Why they cover $[0,1]$: any $x \in [0,1]$ is equivalent to its representative $v$, and $q = x - v$ lies in $\mathbb{Q} \cap [-1,1]$, so $x \in V + q$.
+- Read the second line as: "a countable sum of identical copies of $\lambda(V)$ lies between 1 and 3." The bounds come from monotonicity, countable additivity turns the union into a sum, and translation invariance makes every term equal. But a countable sum of copies of one number is $0$ or $\infty$. Contradiction.
+
+Lessons and caveats:
+
+- We must restrict attention to a collection of well-behaved subsets, and that collection must be closed under the operations of 1.3–1.5. That collection is a σ-algebra.
+- The proof needs the Axiom of Choice, and unavoidably so. Solovay (1970) showed it is consistent with ZF plus dependent choice that every subset of $\mathbb{R}$ is Lebesgue measurable (assuming an inaccessible cardinal is consistent). So no non-measurable set can be exhibited without some use of choice. The theory is built carefully because such sets cannot be ruled out, not because you will meet them.
+- Weakening to finite additivity does not remove the problem in general. Banach (1923) showed that finitely additive, isometry-invariant extensions of length and area to all subsets exist in dimensions 1 and 2. Hausdorff (1914) showed they cannot exist in dimension 3, the forerunner of the Banach–Tarski paradox.
+
+## Part 2: The definition, decoded
+
+A collection $\mathcal{F} \subseteq 2^{\Omega}$ is a σ-algebra on $\Omega$ if:
 
 <Boxed>
 
 $$
-\underbrace{a_1 + a_2 + a_3 + \cdots + a_n}_{\text{a placeholder expression, wide on purpose, here only to test horizontal scrolling}}
+\begin{aligned}
+&\text{(S1)} \quad \Omega \in \mathcal{F} \\
+&\text{(S2)} \quad A \in \mathcal{F} \;\Longrightarrow\; A^{c} \in \mathcal{F} \\
+&\text{(S3)} \quad A_1, A_2, A_3, \ldots \in \mathcal{F} \;\Longrightarrow\; \bigcup_{n=1}^{\infty} A_n \in \mathcal{F}
+\end{aligned}
 $$
 
 </Boxed>
 
-## How to read it
+Glossary:
 
-> A short block quotation, set to check the quote treatment at this column width and colour.
+- $2^{\Omega}$ is the power set, the set of all subsets of $\Omega$. The notation comes from the fact that choosing a subset means making an in/out choice for each element.
+- $\mathcal{F} \subseteq 2^{\Omega}$ says $\mathcal{F}$ is a collection of subsets: a set of sets. Keep the types straight: $\omega \in \Omega$, $A \subseteq \Omega$, $A \in \mathcal{F}$, $\mathcal{F} \subseteq 2^{\Omega}$. Elements of $\mathcal{F}$ are events, never outcomes.
+- $A_1, A_2, \dots$ is any countable sequence of events (repeats allowed).
 
-<Figure src={placeholderFigure} alt="Placeholder figure.">A column figure runs at the reading measure, caption beneath; click it to open the zoom viewer. *Placeholder image.*</Figure>
+How to read it: "$\mathcal{F}$ contains the sure event, is closed under complements, and is closed under countable unions."
 
-Ordinary prose resumes here, so the space above and below block elements can be judged in place. When the real content lands, this is where the intuition, the analogy, and the careful statement of the definition will go.
+Intuition, axiom by axiom:
+
+- (S1): the trivial question "did anything happen?" always has an answer.
+- (S2): answering "did $A$ happen?" is the same information as answering "did $A$ fail?".
+- (S3): if each of countably many questions has an answer, so does "did at least one of them happen?". This is the axiom that makes limits possible.
+
+Consequences, each with a one-line proof:
+
+$$
+\begin{aligned}
+\varnothing &= \Omega^{c} \in \mathcal{F} \\
+\bigcap_{n} A_n &= \Big( \bigcup_{n} A_n^{c} \Big)^{c} \in \mathcal{F} \\
+A \setminus B &= A \cap B^{c} \in \mathcal{F}
+\end{aligned}
+$$
+
+Finite unions follow by padding with empty sets, $A \cup B = A \cup B \cup \varnothing \cup \varnothing \cup \cdots$. The two long-run events of any sequence are in $\mathcal{F}$ too:
+
+$$
+\limsup_{n\to\infty} A_n = \bigcap_{N=1}^{\infty} \bigcup_{n \ge N} A_n, \qquad \liminf_{n\to\infty} A_n = \bigcup_{N=1}^{\infty} \bigcap_{n \ge N} A_n
+$$
+
+- Read: $\limsup_n A_n$ is "$A_n$ happens infinitely often", and $\liminf_n A_n$ is "$A_n$ happens for all but finitely many $n$". Since eventually-always implies infinitely-often, $\liminf A_n \subseteq \limsup A_n$. These are the objects of the Borel–Cantelli lemmas.
+
+Vocabulary: an algebra (or field) of sets requires closure only under finite unions. A σ-algebra (Billingsley calls it a σ-field) requires countable unions. The σ comes from old German-flavoured notation: σ for Summe (union, here countable) and δ for Durchschnitt (intersection), as in $F_\sigma$ and $G_\delta$ sets.
+
+## Part 3: Examples and non-examples
+
+**Examples.**
+
+- The trivial σ-algebra $\{\varnothing, \Omega\}$: the observer who knows nothing. Only constant functions are measurable with respect to it.
+- The power set $2^{\Omega}$: the observer who knows everything. It works fine when $\Omega$ is countable.
+- $\sigma(A) = \{\varnothing, A, A^c, \Omega\}$: the observer who learns only whether $A$ occurred, like a credit desk that knows only "default or no default".
+
+**Partitions.** If $B_1, \dots, B_k$ are non-empty, pairwise disjoint, and together cover $\Omega$:
+
+$$
+\sigma(B_1, \dots, B_k) = \Big\{ \bigcup_{i \in I} B_i \;:\; I \subseteq \{1, \dots, k\} \Big\}, \qquad \big| \sigma(B_1, \dots, B_k) \big| = 2^{k}
+$$
+
+- Symbols: $I$ ranges over all subsets of the block labels, and the empty union is $\varnothing$.
+- Read: "the events are exactly the unions of blocks, and there are $2^k$ of them."
+- Intuition: an event is an in/out choice for each block. Two choices per block, $k$ blocks.
+
+A structural fact: every finite σ-algebra arises this way. For each $\omega$, intersect all events containing $\omega$; these atoms form a partition that generates the σ-algebra. So finite σ-algebras have 2, 4, 8, 16, … elements, never 3 or 5. Stranger still, no σ-algebra is countably infinite: an infinite σ-algebra always has at least continuum many elements (Problem 2).
+
+**Not closed under complements.** On $\Omega = \{1,2,3\}$, the collection $\mathcal{C} = \{\varnothing, \{1\}, \{2\}, \Omega\}$ fails (S2), since $\{1\}^c = \{2,3\} \notin \mathcal{C}$. It also fails unions, since $\{1,2\} \notin \mathcal{C}$. Closing it up gives all eight subsets.
+
+**Finite closure is not countable closure.** The finite–cofinite sets on $\mathbb{N}$,
+
+$$
+\mathcal{A} = \{ A \subseteq \mathbb{N} : A \text{ is finite or } A^{c} \text{ is finite} \},
+$$
+
+form an algebra but not a σ-algebra. Each $\{2n\}$ is finite, but their union, the even numbers, is infinite with infinite complement. Finite closure never implies countable closure.
+
+**No uniform probability on $\mathbb{N}$.** If $\mathbb{P}(\{n\}) = c$ for every $n$, then
+
+$$
+1 = \mathbb{P}(\mathbb{N}) = \sum_{n=1}^{\infty} \mathbb{P}(\{n\}) = \sum_{n=1}^{\infty} c \in \{0, \infty\}
+$$
+
+"Pick an integer uniformly at random" has no meaning under countable additivity. De Finetti, who rejected countable additivity as an axiom, accepted a finitely additive version.
+
+**A σ-algebra too small to use.** The countable–cocountable sets on $\mathbb{R}$, $\{A : A \text{ or } A^c \text{ is countable}\}$, do form a σ-algebra. A countable union of countable sets is countable, and if any piece is cocountable, so is the union. But it does not contain $[0,1]$, so it is useless for analysis. It returns as a villain in 8.3.
+
+**Unions of σ-algebras.** On $\{1,2,3\}$, $\sigma(\{1\}) \cup \sigma(\{2\})$ contains $\{1\}$ and $\{2\}$ but not $\{1,2\}$. Pooling information requires closing up, not just collecting (7.1).
+
+## Part 4: Generating σ-algebras, and the Borel sets
+
+### 4.1 The smallest σ-algebra containing what you care about
+
+$$
+\sigma(\mathcal{C}) = \bigcap \big\{ \mathcal{G} \;:\; \mathcal{G} \text{ is a } \sigma\text{-algebra on } \Omega \text{ and } \mathcal{C} \subseteq \mathcal{G} \big\}
+$$
+
+- Symbols: $\mathcal{C}$ is any family of subsets you want to be events (the generators). The intersection runs over every σ-algebra containing $\mathcal{C}$, and there is at least one, $2^{\Omega}$.
+- Read: "σ of $\mathcal{C}$ is the intersection of all σ-algebras containing $\mathcal{C}$."
+- Why it is a σ-algebra: each axiom holds inside every member of the intersection, so it holds in the intersection. For example, if $A$ lies in every such $\mathcal{G}$, so does $A^c$.
+- Why it is the smallest: by construction, it sits inside every σ-algebra containing $\mathcal{C}$.
+
+Analogy: the linear span. $\text{span}(S)$ is the smallest subspace containing the vectors $S$, equal to the intersection of all subspaces containing $S$. $\sigma(\mathcal{C})$ is the "span" of $\mathcal{C}$ under complements and countable unions.
+
+Where it breaks: a span has a bottom-up description (all finite linear combinations), but $\sigma(\mathcal{C})$ does not. Start from intervals and apply countable unions and complements, then do it again, and again. Countably many rounds are not enough; the process only stabilises after $\omega_1$ rounds, where $\omega_1$ is the first uncountable ordinal. The top-down definition avoids that transfinite machinery entirely.
+
+The most-used proof technique in measure theory follows directly. It is often called the good sets principle. To show every set in $\sigma(\mathcal{C})$ has some property $P$:
+
+- show the collection of sets with property $P$ is a σ-algebra, and
+- show it contains $\mathcal{C}$.
+
+Minimality then forces $\sigma(\mathcal{C})$ to sit inside the good sets. It is induction for σ-algebras: check the founders, check that the property is inherited. When the good sets are not closed under intersections, the right tool is the π–λ theorem in Part 6.
+
+### 4.2 The Borel σ-algebra
+
+$$
+\begin{aligned}
+\mathcal{B}(\mathbb{R}) &= \sigma\big(\{ U \subseteq \mathbb{R} : U \text{ open} \}\big) \\
+&= \sigma\big(\{ (-\infty, x] : x \in \mathbb{R} \}\big) \\
+&= \sigma\big(\{ (a, b) : a < b,\ a, b \in \mathbb{Q} \}\big)
+\end{aligned}
+$$
+
+- Symbols: open sets are sets containing a small interval around each of their points. $(-\infty, x]$ are half-lines. $(a, b)$ with $a, b \in \mathbb{Q}$ are intervals with rational endpoints.
+- Read: "the Borel σ-algebra is generated by the open sets; equivalently by the half-lines; equivalently by intervals with rational endpoints."
+- Intuition: once you can ask "is $X \le x$?" for every $x$, countable logic lets you ask every reasonable question about $X$. The third generating family is countable, which limits the size of $\mathcal{B}$ and makes many arguments work.
+
+Why the half-lines generate everything takes two inclusions. First, $(-\infty, x]$ is closed, so its complement is open, so half-lines are Borel; hence $\sigma(\text{half-lines}) \subseteq \mathcal{B}$. Conversely, intervals are built from half-lines:
+
+$$
+\begin{aligned}
+(a, b] &= (-\infty, b] \setminus (-\infty, a] \\
+(a, b) &= \bigcup_{n=1}^{\infty} \big(a,\, b - \tfrac{1}{n}\big] \\
+\{x\} &= \bigcap_{n=1}^{\infty} \big(x - \tfrac{1}{n},\, x\big]
+\end{aligned}
+$$
+
+- Read top to bottom: subtract one half-line from another; pull the right endpoint in slightly and take the countable union; squeeze a shrinking family of intervals onto a point.
+
+Every open subset of $\mathbb{R}$ is a countable union of open intervals with rational endpoints. So all open sets lie in $\sigma(\text{half-lines})$, and $\mathcal{B} \subseteq \sigma(\text{half-lines})$.
+
+The half-lines matter because $\{X \le x\}$ is the event inside the CDF, $F_X(x) = \mathbb{P}(X \le x)$. In Part 6 this becomes the reason a CDF determines a distribution.
+
+What is inside $\mathcal{B}(\mathbb{R})$: all open and closed sets, intervals, singletons, $\mathbb{Q}$ (a countable union of singletons), the irrationals, the Cantor set, countable intersections of open sets ($G_\delta$), countable unions of closed sets ($F_\sigma$), and so on. Everything you will meet in applied work.
+
+What is not inside: most subsets, in a precise sense.
+
+$$
+|\mathcal{B}(\mathbb{R})| = \mathfrak{c} \;<\; 2^{\mathfrak{c}} = |2^{\mathbb{R}}|
+$$
+
+- Symbols: $\mathfrak{c}$ is the cardinality of $\mathbb{R}$, and $2^{\mathfrak{c}}$ is the cardinality of the set of all subsets of $\mathbb{R}$. Cantor's theorem gives the strict inequality.
+- Read: "there are only continuum many Borel sets, but strictly more subsets of $\mathbb{R}$ than that."
+- A further twist: completing $\mathcal{B}$ with respect to Lebesgue measure (adding every subset of a measure-zero set) gives the Lebesgue σ-algebra. The Cantor set has measure zero but continuum many points, so all $2^{\mathfrak{c}}$ of its subsets become Lebesgue measurable. Hence some Lebesgue-measurable sets are not Borel.
+
+Beyond the real line: $\mathcal{B}(\mathbb{R}^d)$ is generated by open sets, or equivalently by rectangles. On the path space $C([0,T])$ with the sup-norm, the Borel σ-algebra equals the σ-algebra generated by the evaluation maps $\omega \mapsto \omega(t)$. In words, events about the whole path are exactly the events built from "where was the path at time $t$?" questions. Wiener measure (Brownian motion) lives on this space.
+
+## Part 5: Measurable functions and random variables
+
+Analogy first. A random variable is a measuring instrument pointed at the hidden $\omega$. Measurability says that every reading the instrument could report corresponds to an allowed event. If your σ-algebra is your information, an $\mathcal{F}$-measurable $X$ is a quantity you could compute from that information.
+
+$$
+X^{-1}(B) = \{ \omega \in \Omega : X(\omega) \in B \} \in \mathcal{F} \quad \text{for every } B \in \mathcal{B}(\mathbb{R})
+$$
+
+- Symbols: $X : \Omega \to \mathbb{R}$, $B$ is a Borel set of possible values, and $X^{-1}(B)$ is the preimage: the outcomes $X$ sends into $B$, i.e. the event "$X \in B$".
+- Read: "$X$ is $\mathcal{F}$-measurable if, for every Borel set $B$, the event that $X$ lands in $B$ belongs to $\mathcal{F}$."
+- Intuition: probability lives on $\Omega$, so to compute $\mathbb{P}(X \in B)$ we need $\{X \in B\}$ to be in the domain of $\mathbb{P}$. A random variable is just a measurable function.
+
+Why preimages and not images? Preimages respect all the logic:
+
+$$
+X^{-1}\Big(\bigcup_{n} B_n\Big) = \bigcup_{n} X^{-1}(B_n), \qquad X^{-1}(B^{c}) = \big( X^{-1}(B) \big)^{c}
+$$
+
+- Read: "$X$ lands in some $B_n$" is the same event as "for some $n$, $X$ lands in $B_n$". And "$X$ misses $B$" is the complement of "$X$ hits $B$".
+- Images do not behave this way. For a constant function $f$, $f(A \cap B)$ can be empty when $A$ and $B$ are disjoint, while $f(A) \cap f(B)$ is not. Images of nice sets can even be badly behaved (8.4).
+
+The good sets principle then gives the standard working criterion:
+
+$$
+X \text{ is } \mathcal{F}\text{-measurable} \iff \{X \le x\} \in \mathcal{F} \ \text{ for all } x \in \mathbb{R}
+$$
+
+Proof: by the preimage identities, $\{B \subseteq \mathbb{R} : X^{-1}(B) \in \mathcal{F}\}$ is a σ-algebra. By assumption it contains every half-line, so it contains $\sigma(\text{half-lines}) = \mathcal{B}(\mathbb{R})$.
+
+In the finite world, measurability is visual. If $\mathcal{G}$ is generated by a partition, $X$ is $\mathcal{G}$-measurable exactly when $X$ is constant on each atom. If $X$ took two values $x \neq y$ inside one atom, then $\{X = x\}$ would contain part of that atom but not all of it, so it could not be a union of atoms.
+
+For example, roll a die and tell the observer only which pair the roll fell in: $\{1,2\}$, $\{3,4\}$ or $\{5,6\}$. Let $X$ be the number of the pair and $Y$ the indicator of an odd roll:
+
+$$
+\begin{array}{c|cccccc}
+\omega & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+\text{atom} & \{1,2\} & \{1,2\} & \{3,4\} & \{3,4\} & \{5,6\} & \{5,6\} \\
+X(\omega) & 1 & 1 & 2 & 2 & 3 & 3 \\
+Y(\omega) & 1 & 0 & 1 & 0 & 1 & 0
+\end{array}
+$$
+
+- $X$ never requires the observer to tell apart two outcomes in the same atom, so every question about $X$ can be answered.
+- $Y$ does require this. $\{Y = 1\} = \{1, 3, 5\}$ takes one outcome from each atom, so it is not a union of whole atoms and is not in $\mathcal{G}$.
+- An observer who knows only which pair the roll fell in cannot know its parity.
+
+Here $\mathcal{G}$ consists of the $2^3 = 8$ unions of atoms:
+
+$$
+\begin{aligned}
+\mathcal{G} = \big\{ &\varnothing,\ \{1,2\},\ \{3,4\},\ \{5,6\}, \\
+&\{1,2,3,4\},\ \{1,2,5,6\},\ \{3,4,5,6\},\ \Omega \big\}
+\end{aligned}
+$$
+
+### 5.1 The information carried by a random variable
+
+$$
+\sigma(X) = \{ X^{-1}(B) : B \in \mathcal{B}(\mathbb{R}) \}
+$$
+
+- Read: "σ of $X$ is the collection of all events of the form '$X$ lands in $B$'." By the preimage identities it is already a σ-algebra, and it is the smallest one that makes $X$ measurable.
+- Intuition: $\sigma(X)$ is exactly what you learn by being told the value of $X$.
+
+The Doob–Dynkin (factorisation) lemma makes "knowable from $X$" precise:
+
+$$
+Y \text{ is } \sigma(X)\text{-measurable} \iff Y = g(X) \ \text{ for some Borel } g : \mathbb{R} \to \mathbb{R}
+$$
+
+- Read: "$Y$ can be computed from the information in $X$ if and only if $Y$ is literally a function of $X$."
+- Intuition: $\sigma(X)$ is the resolution of the camera $X$, and $g(X)$ is editing the photo afterwards. No editing recovers detail the camera never captured.
+- Finance example: for a return $r$, $\sigma(r^2) \subseteq \sigma(r)$, usually strictly. Knowing the squared return (a volatility proxy) tells you the size of the move, not its direction. By contrast $\sigma(r^3) = \sigma(r)$, because cubing is a bijection whose inverse (cube root) is Borel.
+
+### 5.2 Countable closure pays off: limits of random variables are random variables
+
+$$
+\begin{aligned}
+\Big\{ \sup_{n} X_n \le x \Big\} &= \bigcap_{n=1}^{\infty} \{ X_n \le x \} \\
+\{ X + Y < x \} &= \bigcup_{q \in \mathbb{Q}} \Big( \{ X < q \} \cap \{ Y < x - q \} \Big)
+\end{aligned}
+$$
+
+- First identity: "the supremum is at most $x$" means "every term is at most $x$". That is a countable intersection, hence an event. The same works for inf, limsup and liminf, so pointwise limits of random variables are random variables.
+- Second identity: $X + Y < x$ exactly when some rational $q$ fits in between, $X < q < x - Y$. The rationals are countable and dense, so "there exists a real number" becomes a countable union. This rational-squeeze trick appears everywhere.
+
+Where the trick stops working, and why continuous paths matter: a supremum over uncountably many random variables need not be measurable. For example, take $X_t = \mathbf{1}_{\{t\}}$ for $t$ in a non-measurable set $A$; then $\sup_{t \in A} X_t = \mathbf{1}_A$. For a stock with continuous paths, however,
+
+$$
+\sup_{t \in [0,T]} S_t = \sup_{t \in [0,T] \cap \mathbb{Q}} S_t
+$$
+
+- Read: "for continuous paths, the maximum over all times equals the maximum over rational times."
+- Intuition: a continuous path cannot spike between rational times without being visible at nearby rational times. So the running maximum, which prices lookback and barrier options and defines maximum drawdown, is a genuine random variable. Without continuity it might not be.
+
+## Part 6: Probability spaces, and how measures are built and pinned down
+
+### 6.1 Kolmogorov's triple
+
+$$
+\begin{aligned}
+&(\Omega, \mathcal{F}, \mathbb{P}), \qquad \mathbb{P} : \mathcal{F} \to [0,1], \qquad \mathbb{P}(\Omega) = 1 \\
+&\mathbb{P}\Big( \bigsqcup_{n=1}^{\infty} A_n \Big) = \sum_{n=1}^{\infty} \mathbb{P}(A_n)
+\end{aligned}
+$$
+
+- Symbols: $(\Omega, \mathcal{F}, \mathbb{P})$ is a probability space (Kolmogorov, 1933). $\mathbb{P}$ is defined on $\mathcal{F}$ only; the σ-algebra is its domain. $\bigsqcup$ means the $A_n$ are pairwise disjoint.
+- Read: "$\mathbb{P}$ gives each event a number in $[0,1]$, gives the sure event probability one, and is countably additive."
+- Intuition: $\Omega$ is the stage, $\mathcal{F}$ is which questions may be asked, and $\mathbb{P}$ is the odds quoted on those questions. Axiom (S3) exists so that the left side of countable additivity is even defined.
+
+A consequence you will use constantly is continuity of probability:
+
+$$
+A_1 \subseteq A_2 \subseteq \cdots \ \text{ and } \ A = \bigcup_{n} A_n \implies \mathbb{P}(A_n) \uparrow \mathbb{P}(A)
+$$
+
+- Read: "if events increase to $A$, their probabilities increase to $\mathbb{P}(A)$."
+- Proof: write $A = A_1 \sqcup (A_2 \setminus A_1) \sqcup (A_3 \setminus A_2) \sqcup \cdots$. Countable additivity makes $\mathbb{P}(A)$ the limit of the partial sums, and the $n$-th partial sum is $\mathbb{P}(A_n)$.
+- Example: $\mathbb{P}(\text{default by year } n) \to \mathbb{P}(\text{default ever})$ as $n \to \infty$. This is the permission to pass limits through $\mathbb{P}$ that every limit theorem relies on.
+
+### 6.2 Building a measure: the Carathéodory extension
+
+The problem: you know what probability intervals should get, $\mathbb{P}((a,b]) = F(b) - F(a)$, but $\mathcal{B}(\mathbb{R})$ is full of sets nobody can describe. How is $\mathbb{P}$ defined on them?
+
+Analogy first: estimating the area of an irregular lake by covering it with rectangular tarps. The outer measure is the smallest total tarp area over all countable coverings:
+
+$$
+\mu^{\ast}(E) = \inf \Big\{ \sum_{n=1}^{\infty} \mu_0(A_n) \;:\; A_n \in \mathcal{A},\ E \subseteq \bigcup_{n} A_n \Big\}
+$$
+
+- Symbols: $\mathcal{A}$ is an algebra of simple sets (finite unions of intervals), $\mu_0$ is their obvious size, and the infimum is over all countable covers of $E$ by simple sets.
+- Read: "the outer measure of $E$ is the cheapest total size of a countable cover of $E$ by simple sets."
+
+$\mu^{\ast}$ is defined on every set, but it is countably additive only on the sets that "cut cleanly":
+
+$$
+\mu^{\ast}(T) = \mu^{\ast}(T \cap E) + \mu^{\ast}(T \cap E^{c}) \quad \text{for every } T \subseteq \Omega
+$$
+
+- Read: "$E$ is measurable if, for every test set $T$, the parts of $T$ inside and outside $E$ have sizes that add exactly to the size of $T$."
+- Intuition: cutting along a measurable set never creates extra area. A Vitali set is so tangled up with everything that cutting along it does.
+
+Carathéodory's theorem: if $\mu_0$ is countably additive on $\mathcal{A}$, these clean-cutting sets form a σ-algebra containing $\mathcal{A}$, and $\mu^{\ast}$ restricted to it is a measure extending $\mu_0$. If $\mu_0$ is σ-finite, the extension to $\sigma(\mathcal{A})$ is unique. This is how Lebesgue measure, and every distribution built from a CDF, is constructed.
+
+### 6.3 Pinning a measure down: π-systems, λ-systems, Dynkin's theorem
+
+Suppose two probability measures $\mathbb{P}$ and $\mathbb{Q}$ agree on a generating family. Must they agree everywhere? Look at the set where they agree:
+
+$$
+\mathcal{L} = \{ A \in \mathcal{F} : \mathbb{P}(A) = \mathbb{Q}(A) \}
+$$
+
+- It contains $\Omega$.
+- It is closed under complements, since $\mathbb{P}(A^c) = 1 - \mathbb{P}(A) = 1 - \mathbb{Q}(A) = \mathbb{Q}(A^c)$.
+- It is closed under countable disjoint unions, by countable additivity on both sides.
+- It is not, in general, closed under intersections. Take two coin tosses, with $\mathbb{P}$ fair and independent and $\mathbb{Q}$ fair but perfectly correlated (HH or TT, each with probability 1/2). Both give "first toss heads" and "second toss heads" probability 1/2, yet $\mathbb{P}(HH) = 1/4 \neq 1/2 = \mathbb{Q}(HH)$. Agreeing on the marginals does not mean agreeing on the joint distribution.
+
+So the agreement set has only half of a σ-algebra's properties. The two halves have names:
+
+- A π-system $\mathcal{P}$ is closed under finite intersections.
+- A λ-system (Dynkin system) $\mathcal{L}$ contains $\Omega$, is closed under complements, and is closed under countable unions of pairwise disjoint sets.
 
 <Boxed>
 
-A box can also hold a line of prose worth pausing on.
+$$
+\mathcal{P} \text{ a } \pi\text{-system},\ \ \mathcal{L} \text{ a } \lambda\text{-system},\ \ \mathcal{P} \subseteq \mathcal{L} \implies \sigma(\mathcal{P}) \subseteq \mathcal{L}
+$$
 
 </Boxed>
 
-Cross-references come in two states. A link to a published note becomes a real link; here a <Ref to="sigma-algebra">$\sigma$-algebra</Ref> points back to this very page, standing in for a related topic. A link to a note that has not been written yet, like a <Ref to="martingale">martingale</Ref>, stays plain text until that note exists.
+- Read: "if a λ-system contains a π-system, it contains the σ-algebra that π-system generates."
+- Intuition: a σ-algebra needs two abilities, intersecting and adding up disjoint pieces. The π-system supplies the first and the λ-system the second; together they rebuild everything.
+
+Proof sketch (short and worth knowing). First, a family that is both a π-system and a λ-system is a σ-algebra, because any countable union can be split into disjoint pieces:
+
+$$
+\bigcup_{n=1}^{\infty} A_n = \bigsqcup_{n=1}^{\infty} \Big( A_n \cap A_1^{c} \cap \cdots \cap A_{n-1}^{c} \Big)
+$$
+
+- The $n$-th piece is "in $A_n$ but in none of the earlier ones", i.e. the step at which $\omega$ first enters the union. Each piece uses finitely many intersections and complements, and the pieces are disjoint.
+
+Second, let $\ell(\mathcal{P})$ be the smallest λ-system containing $\mathcal{P}$. Show it is closed under intersections in two steps:
+
+- For fixed $A \in \mathcal{P}$, the family $\{B : A \cap B \in \ell(\mathcal{P})\}$ is a λ-system containing $\mathcal{P}$, so it contains $\ell(\mathcal{P})$.
+- For fixed $B \in \ell(\mathcal{P})$, the family $\{A : A \cap B \in \ell(\mathcal{P})\}$ is a λ-system that, by the first step, contains $\mathcal{P}$. So it contains $\ell(\mathcal{P})$.
+
+Hence $\ell(\mathcal{P})$ is a σ-algebra, and $\sigma(\mathcal{P}) \subseteq \ell(\mathcal{P}) \subseteq \mathcal{L}$.
+
+Payoffs:
+
+- A CDF determines a distribution. Half-lines form a π-system, since $(-\infty, x] \cap (-\infty, y] = (-\infty, \min(x,y)]$, and they generate $\mathcal{B}(\mathbb{R})$. Two distributions with the same CDF agree on this π-system, hence on all Borel sets.
+- Independence can be checked on generators. If $\mathbb{P}(X \le x, Y \le y) = \mathbb{P}(X \le x)\,\mathbb{P}(Y \le y)$ for all $x, y$, then $X$ and $Y$ are independent.
+- In the coin example, the events "first toss heads" and "second toss heads" failed to pin the measure down because they are not closed under intersection. Add their intersection, $\{HH\}$, and uniqueness is restored.
+
+## Part 7: σ-algebras as information, the payoff for stochastic processes and finance
+
+### 7.1 Sub-σ-algebras: partial information
+
+A sub-σ-algebra $\mathcal{G} \subseteq \mathcal{F}$ models an observer who knows, for each $G \in \mathcal{G}$, whether $G$ occurred.
+
+- $\mathcal{G} \subseteq \mathcal{H}$ means $\mathcal{H}$ knows at least as much ($\mathcal{H}$ is "finer").
+- Pooled information is $\mathcal{G} \vee \mathcal{H} = \sigma(\mathcal{G} \cup \mathcal{H})$. You must close up, as the union example in Part 3 showed.
+- What both know is $\mathcal{G} \cap \mathcal{H}$. For finite σ-algebras this corresponds to the finest partition that both partitions refine.
+
+Aumann's "Agreeing to disagree" (1976) used this intersection to define common knowledge, and the no-trade theorem of Milgrom and Stokey (1982) builds on it. Much of the economics of information is the study of sub-σ-algebras. Asymmetric information in market microstructure is literally a statement about σ-algebras: in Kyle's (1985) model, the informed trader knows the asset's value, while the market maker's σ-algebra is generated only by the order flow.
+
+### 7.2 Filtrations: information over time
+
+Analogy first: an image loading progressively from low to high resolution, or a detective's case file that only ever gets thicker.
+
+$$
+\mathcal{F}_0 \subseteq \mathcal{F}_1 \subseteq \mathcal{F}_2 \subseteq \cdots \subseteq \mathcal{F}
+$$
+
+- Symbols: $\mathcal{F}_t$ is what is known at time $t$. The inclusions say knowledge is never lost. In continuous time, $\mathcal{F}_s \subseteq \mathcal{F}_t$ for $s \le t$.
+- The natural filtration of a process, $\mathcal{F}_t^{X} = \sigma(X_s : s \le t)$, is everything you can learn by watching $X$ up to time $t$.
+- Where it breaks: a loading image sharpens evenly, but a filtration can refine some regions of $\Omega$ and not others (you might learn more after a crash than after a quiet day). And what you actually learn depends on which $\omega$ occurred.
+
+Three definitions follow, each with a direct trading meaning.
+
+**Adapted:** $X_t$ is $\mathcal{F}_t$-measurable for every $t$. You know today's price today.
+
+**Predictable:** $H_t$ is $\mathcal{F}_{t-1}$-measurable. Positions for the period $(t-1, t]$ are chosen before $S_t$ is revealed, so the gains process is
+
+$$
+G_t = \sum_{s=1}^{t} H_s \,(S_s - S_{s-1}), \qquad H_s \text{ is } \mathcal{F}_{s-1}\text{-measurable}
+$$
+
+- Symbols: $H_s$ is the holding over period $s$, and $S_s - S_{s-1}$ is the price change.
+- Read: "cumulative profit is the sum of holdings times price changes, with each holding fixed in advance."
+- This is the discrete stochastic integral. Predictability is what stops it from being a crystal ball.
+- Look-ahead bias in a backtest is a measurability violation: using an $\mathcal{F}_{t+1}$-measurable signal to set a time-$t$ position. Data leakage in forecasting is the same error.
+
+**Stopping time:** a random time $\tau$ with
+
+$$
+\{ \tau \le t \} \in \mathcal{F}_t \quad \text{for every } t
+$$
+
+- Read: "whether you have stopped by time $t$ can be decided with information up to $t$."
+- A stop-loss trigger ("first close below 90") is a stopping time. "Sell at the year's high" is not, because whether today is the high depends on the future. American option exercise rules are stopping times.
+
+The information available at a stopping time:
+
+$$
+\mathcal{F}_\tau = \{ A \in \mathcal{F} : A \cap \{ \tau \le t \} \in \mathcal{F}_t \ \text{ for every } t \}
+$$
+
+- Read: "$A$ is known at time $\tau$ if, in the scenario 'we have stopped by $t$', whether $A$ happened can be decided at $t$."
+- Intuition: the case file at the moment the alarm rang. This σ-algebra underlies optional stopping and the strong Markov property.
+
+### 7.3 Conditional expectation: the best forecast given your information
+
+The partition case first:
+
+$$
+\begin{aligned}
+\mathbb{E}[X \mid \mathcal{G}](\omega) &= \frac{\mathbb{E}[X \mathbf{1}_{B_i}]}{\mathbb{P}(B_i)} \quad \text{for } \omega \in B_i \\
+\mathcal{G} &= \sigma(B_1, \dots, B_k), \quad \mathbb{P}(B_i) > 0
+\end{aligned}
+$$
+
+- Symbols: $B_i$ is the atom containing $\omega$, and $\mathbb{E}[X\mathbf{1}_{B_i}]/\mathbb{P}(B_i)$ is the average of $X$ over that atom.
+- Read: "on each atom, replace $X$ by its average over that atom."
+- Intuition: the result is itself a random variable, since which average you get depends on the atom $\omega$ landed in. It is $\mathcal{G}$-measurable (constant on atoms). It is $X$ blurred to the observer's resolution.
+
+A worked example: the three-toss binomial model. A stock starts at 100 and moves up or down 20% each period, and the claim is a call struck at 100, paid at $t = 3$. With zero interest, $p = 1/2$ is the risk-neutral probability, so the forecast at $t = 0$ is the option's price. An atom at time $t$ is the set of paths that share their first $t$ tosses; for example, $HH{\ast}$ is every path that starts $HH$. Here is the forecast $\mathbb{E}\big[(S_3 - 100)^{+} \mid \mathcal{F}_t\big]$ of the payoff on each atom:
+
+$$
+\begin{array}{c|c|l}
+t & \text{atoms} & \text{forecast on each atom} \\ \hline
+0 & 1 & \Omega:\ 14.8 \\
+1 & 2 & H{\ast}{\ast}:\ 25.8, \quad T{\ast}{\ast}:\ 3.8 \\
+2 & 4 & HH{\ast}:\ 44, \quad HT{\ast},\ TH{\ast}:\ 7.6, \quad TT{\ast}:\ 0 \\
+3 & 8 & HHH:\ 72.8, \quad \text{two heads}:\ 15.2, \quad \text{otherwise}:\ 0
+\end{array}
+$$
+
+What the table shows:
+
+- The partition refines from 1 to 2, 4 and 8 atoms, so $\mathcal{F}_t$ grows from 2 to 4, 16 and 256 events.
+- Every forecast is the probability-weighted average of the two forecasts that can follow it: $14.8 = \tfrac{1}{2}(25.8 + 3.8)$, $25.8 = \tfrac{1}{2}(44 + 7.6)$ and $3.8 = \tfrac{1}{2}(7.6 + 0)$. Each forecast path is a martingale (7.4).
+- For the indicator of "toss 3 is heads" instead, the forecast is $p$ on every atom until $t = 3$, because no information about the third toss arrives before then.
+- Changing $p$ changes the forecasts, but not the partitions. σ-algebras encode what is known; $\mathbb{P}$ encodes beliefs.
+
+The general definition is Kolmogorov's (1933):
+
+<Boxed>
+
+$$
+\begin{aligned}
+Z = \mathbb{E}[X \mid \mathcal{G}] \iff\ &\text{(i) } Z \text{ is } \mathcal{G}\text{-measurable, and} \\
+&\text{(ii) } \mathbb{E}[Z \mathbf{1}_G] = \mathbb{E}[X \mathbf{1}_G] \ \text{ for every } G \in \mathcal{G}
+\end{aligned}
+$$
+
+</Boxed>
+
+- Symbols: (i) says $Z$ uses only $\mathcal{G}$-information. (ii) says that on every $\mathcal{G}$-event, $Z$ and $X$ have the same average.
+- Read: "the conditional expectation is the $\mathcal{G}$-measurable random variable that matches $X$'s averages on every $\mathcal{G}$-event."
+- Existence comes from the Radon–Nikodym theorem. Uniqueness holds almost surely: two versions can differ on a set of probability zero. In the partition case, applying (ii) to each atom gives back the averaging formula.
+
+For square-integrable $X$, the geometry is cleaner:
+
+$$
+\begin{aligned}
+\mathbb{E}[X \mid \mathcal{G}] &= \arg\min_{Z \in L^{2}(\Omega, \mathcal{G}, \mathbb{P})} \mathbb{E}\big[ (X - Z)^{2} \big] \\
+\mathbb{E}\big[ \big(X - \mathbb{E}[X \mid \mathcal{G}]\big)\, Z \big] &= 0 \quad \text{for all } Z \in L^{2}(\Omega, \mathcal{G}, \mathbb{P})
+\end{aligned}
+$$
+
+- Symbols: $L^{2}(\Omega, \mathcal{G}, \mathbb{P})$ is the set of all finite-variance random variables computable from $\mathcal{G}$. It is a closed subspace of $L^{2}(\Omega, \mathcal{F}, \mathbb{P})$.
+- Read: "conditional expectation is the $\mathcal{G}$-knowable random variable with the smallest mean squared error, and its error is uncorrelated with everything $\mathcal{G}$-knowable."
+- Intuition: it is an orthogonal projection, like the shadow of $X$ cast onto the floor of knowable quantities.
+- Combined with Doob–Dynkin, $\mathbb{E}[Y \mid \sigma(X)] = g(X)$ for some $g$: this is the regression function. OLS projects onto a finite-dimensional column space; conditional expectation projects onto every square-integrable function of the observed information. It is nonparametric regression viewed as a projection.
+
+Two rules do most of the work. The first is the tower property:
+
+$$
+\mathcal{H} \subseteq \mathcal{G} \implies \mathbb{E}\big[ \mathbb{E}[X \mid \mathcal{G}] \,\big|\, \mathcal{H} \big] = \mathbb{E}[X \mid \mathcal{H}]
+$$
+
+- Read: "when information is nested, the coarse forecast of the fine forecast is the coarse forecast."
+- Projecting onto a big subspace and then onto a smaller subspace inside it is the same as projecting onto the smaller one directly.
+- In macroeconomics and asset pricing this is the law of iterated expectations, $\mathbb{E}_t[\mathbb{E}_{t+1}[x]] = \mathbb{E}_t[x]$. The nesting is essential; Problem 6 shows what fails without it.
+
+The second is taking out what is known: if $Z$ is $\mathcal{G}$-measurable (and the products are integrable), $\mathbb{E}[ZX \mid \mathcal{G}] = Z\,\mathbb{E}[X \mid \mathcal{G}]$. Known quantities behave as constants.
+
+### 7.4 Martingales, and why the filtration is part of the definition
+
+$$
+\mathbb{E}[M_t \mid \mathcal{F}_s] = M_s \quad \text{for all } s \le t
+$$
+
+- Symbols: $M$ is adapted and integrable, and $s \le t$.
+- Read: "given everything known at $s$, the best forecast of $M$ at any later time is its current value."
+- Intuition: no predictable drift; a fair game. Every forecast process $t \mapsto \mathbb{E}[X \mid \mathcal{F}_t]$ is a martingale by the tower property, which is exactly what the forecast paths in 7.3 show.
+
+In pricing, the fundamental theorem of asset pricing says that no-arbitrage is (essentially) equivalent to the existence of an equivalent measure $\mathbb{Q}$ under which discounted prices are martingales. This gives
+
+$$
+V_t = B_t \, \mathbb{E}^{\mathbb{Q}}\Big[ \frac{H}{B_T} \,\Big|\, \mathcal{F}_t \Big]
+$$
+
+- Symbols: $V_t$ is the time-$t$ value of a claim paying $H$ at $T$; $B_t$ is the bank account (numéraire); $\mathbb{Q}$ is the risk-neutral measure. Conditioning on $\mathcal{F}_t$ means using exactly what the market knows at $t$, no more.
+
+"Martingale" is a property of a process and a filtration together. Brownian motion $W$ is a martingale in its own filtration. Consider an insider who knows $W_1$ from the start, so her filtration is $\mathcal{G}_t = \mathcal{F}_t \vee \sigma(W_1)$. For her,
+
+$$
+W_t = \widetilde{W}_t + \int_0^t \frac{W_1 - W_s}{1 - s} \, ds, \qquad t < 1
+$$
+
+- Symbols: $\widetilde{W}$ is a Brownian motion with respect to $\mathcal{G}$, and the integral is a drift pulling the path toward the known endpoint, getting stronger as time runs out (the Brownian bridge).
+- Read: "to the insider, the same path is noise plus a predictable pull toward $W_1$."
+- Intuition: same path, different σ-algebra, different conclusion about whether there is drift. Problem 8 shows the discrete version.
+
+### 7.5 Independence and the 0–1 law
+
+$$
+\mathcal{G} \perp\!\!\!\perp \mathcal{H} \iff \mathbb{P}(G \cap H) = \mathbb{P}(G)\,\mathbb{P}(H) \ \text{ for all } G \in \mathcal{G},\ H \in \mathcal{H}
+$$
+
+- Read: "answers to $\mathcal{G}$-questions say nothing about the odds of $\mathcal{H}$-questions."
+- Random variables are independent when their σ-algebras are, and by π–λ it is enough to check generating π-systems.
+
+The tail σ-algebra of a sequence:
+
+$$
+\mathcal{T} = \bigcap_{n=1}^{\infty} \sigma(X_n, X_{n+1}, X_{n+2}, \dots)
+$$
+
+- Symbols: $\sigma(X_n, X_{n+1}, \dots)$ is the information in the sequence from time $n$ on. Intersecting over all $n$ keeps only what survives if you forget any finite initial stretch.
+- Read: "tail events are those whose occurrence cannot be changed by altering finitely many of the $X$'s."
+- Examples: $\{\sum X_n \text{ converges}\}$ and $\{\limsup_n (X_1 + \cdots + X_n)/n \le c\}$.
+
+Kolmogorov's 0–1 law: if the $X_n$ are independent, every $A \in \mathcal{T}$ has $\mathbb{P}(A) \in \{0,1\}$.
+
+- Proof idea: $A$ is independent of $\sigma(X_1, \dots, X_n)$ for each $n$, so by π–λ it is independent of $\sigma(X_1, X_2, \dots)$. That σ-algebra contains $A$ itself, so $\mathbb{P}(A) = \mathbb{P}(A \cap A) = \mathbb{P}(A)^2$.
+- Analogy: the long-run fate of an infinite sequence of independent coins cannot depend on any particular coin. So it is independent of everything, including itself, and an event independent of itself is certain or impossible.
+- Consequence: a random series of independent terms converges almost surely or almost never. There is no "probably".
+
+## Part 8: Master's-level subtleties and research frontiers
+
+### 8.1 Null sets, completeness, and the usual conditions
+
+A probability space is complete if every subset of a probability-zero set is an event. In continuous time, filtrations are usually assumed to satisfy the "usual conditions":
+
+$$
+\mathcal{F}_t = \bigcap_{s > t} \mathcal{F}_s \quad \text{(right-continuity)}, \qquad \mathcal{N} \subseteq \mathcal{F}_0 \quad \text{(completeness)}
+$$
+
+- Symbols: $\mathcal{N}$ is the collection of $\mathbb{P}$-null sets. Right-continuity says that what you will know an instant after $t$ is already known at $t$.
+- Why it matters: for a continuous price path, "the first time $S \ge 100$" (hitting a closed set) is a stopping time for the natural filtration. "The first time $S > 100$" (an open set) generally is not, because whether it has happened by $t$ can depend on an infinitesimal glimpse past $t$. Right-continuity gives you that glimpse for free.
+- Completeness makes processes that are equal almost surely interchangeable, and it is needed for the theorem that hitting times of Borel sets are stopping times.
+
+### 8.2 Countably many snapshots cannot see continuity
+
+The Kolmogorov extension theorem builds a process from consistent finite-dimensional distributions on $\mathbb{R}^{[0,T]}$, using the product σ-algebra generated by the coordinates $\omega \mapsto \omega(t)$.
+
+The catch: every event in the product σ-algebra depends on only countably many coordinates. "The path is continuous" constrains uncountably many times at once, so it is not an event there at all. Kolmogorov's construction alone cannot tell you Brownian motion has continuous paths. You need the Kolmogorov–Chentsov theorem to produce a continuous version, and then you move to $C([0,T])$ with its Borel σ-algebra.
+
+Analogy: a photographer limited to countably many snapshots can never certify that nothing jumped between frames. Where it breaks: on $C([0,T])$, countably many snapshots do suffice, because continuity is built into the space rather than tested (5.2).
+
+### 8.3 Billingsley's paradox: information is meaningful only up to null sets
+
+Take $[0,1]$ with Lebesgue measure and the countable–cocountable σ-algebra $\mathcal{G}$ from Part 3.
+
+- Every $G \in \mathcal{G}$ has probability 0 or 1, so $\mathcal{G}$ is independent of every random variable and $\mathbb{E}[X \mid \mathcal{G}] = \mathbb{E}[X]$ almost surely. That looks like "no information".
+- Yet $\mathcal{G}$ contains every singleton $\{\omega\}$, so knowing which sets in $\mathcal{G}$ occurred pins down $\omega$ exactly. That looks like "perfect information".
+
+The resolution: conditional expectation only sees σ-algebras up to null sets. A σ-algebra all of whose events have probability 0 or 1 carries no usable information, even if it can distinguish points. Billingsley uses this example in his treatment of conditional probability as a warning that the information interpretation is a heuristic. It is exact for finite partitions and only approximately right beyond them.
+
+### 8.4 When Borel is not enough: analytic sets, optimisation, robust finance
+
+Lebesgue (1905) claimed that projecting a Borel subset of $\mathbb{R}^2$ onto an axis gives a Borel set. Suslin (1917) found the error: projections are analytic sets. These need not be Borel, but they are universally measurable (measurable for the completion of every Borel probability measure).
+
+This is not just history. In dynamic programming, a value function $V(x) = \sup_a f(x,a)$ over an uncountable set of actions satisfies "$\{V > c\}$ is the projection of $\{(x,a) : f(x,a) > c\}$". So $V$ can fail to be Borel even when $f$ is.
+
+- Bertsekas and Shreve (1978) rebuilt discrete-time stochastic control on universally measurable policies for this reason.
+- Bouchard and Nutz (2015) used analytic sets to prove a fundamental theorem of asset pricing under model uncertainty, with a family of possible probability models rather than one.
+
+Once you optimise over uncountably many strategies or models, the Borel σ-algebra is no longer closed under the operations you need.
+
+### 8.5 Enlargement of filtrations: insiders and default
+
+Initial enlargement, $\mathcal{G}_t = \mathcal{F}_t \vee \sigma(L)$ for a random variable $L$ known from the start, models insiders.
+
+- The Brownian bridge decomposition in 7.4 is the canonical example.
+- The question of when semimartingales stay semimartingales leads to Jacod's density hypothesis.
+- Pikovsky and Karatzas (1996) and Amendinger, Imkeller and Schweizer (1998) computed the extra utility an insider gains.
+
+Progressive enlargement, $\mathcal{G}_t = \mathcal{F}_t \vee \sigma(\tau \wedge t)$, models a default time $\tau$ that cannot be predicted from market data but becomes known when it happens.
+
+- This is the framework of reduced-form credit risk (for example Elliott, Jeanblanc and Yor, 2000), and hence of counterparty-risk adjustments such as CVA.
+- A central question is immersion (the (H)-hypothesis): do $\mathcal{F}$-martingales remain $\mathcal{G}$-martingales?
+
+A readable entry point is Aksamit and Jeanblanc, *Enlargement of Filtration with Finance in View* (2017).
+
+### 8.6 Law is not information: adapted Wasserstein distances (current research)
+
+Two models can have almost identical path distributions and very different information flows:
+
+- Model A: $X_1 = 0$; $X_2 = \pm 1$, each with probability 1/2.
+- Model $B_\varepsilon$: $X_1 = \pm\varepsilon$, each with probability 1/2; $X_2 = \operatorname{sign}(X_1)$.
+
+As $\varepsilon \to 0$ the distributions converge (the Wasserstein distance between them is at most $\varepsilon$). Now choose a position $a$ at time 1, so $a$ must be $\mathcal{F}_1$-measurable, and earn $a X_2$:
+
+$$
+\sup_{a\ \mathcal{F}_1\text{-measurable},\ |a| \le 1} \mathbb{E}[a X_2] = \begin{cases} 0 & \text{in model A} \\ 1 & \text{in model } B_\varepsilon \end{cases}
+$$
+
+- Read: "the best expected profit with a position of size at most 1 is 0 in model A and 1 in model $B_\varepsilon$, however small $\varepsilon$ is."
+- Intuition: in $B_\varepsilon$, a vanishingly small signal at time 1 reveals the future perfectly. The usual (weak) notion of convergence ignores who knows what and when, so values of optimal stopping, hedging and utility maximisation jump discontinuously.
+
+The fix is to compare processes only through couplings that respect the filtrations, called causal or adapted couplings.
+
+- The resulting adapted Wasserstein (or nested) distance (Pflug and Pichler, 2012) stays bounded away from zero between A and $B_\varepsilon$.
+- Backhoff-Veraguas, Bartl, Beiglböck and Eder showed in "All adapted topologies are equal" (2020) that several independently proposed fixes coincide in discrete time: Aldous's extended weak topology, Hellwig's information topology, and the nested distance.
+- In "Adapted Wasserstein distances and stability in mathematical finance" (2020), the same authors showed that the key financial problems are continuous (often Lipschitz) in this distance.
+
+The idea has reached machine learning. COT-GAN (Xu, Wenliang, Munn and Acciaio, NeurIPS 2020) trains generators of synthetic time series with a causal optimal transport loss, so generated paths respect information flow and not just marginal shapes.
+
+### 8.7 Statistics: sufficiency is a statement about a σ-algebra
+
+A statistic $T$ is sufficient for $\theta$ when the conditional distribution of the data given $\sigma(T)$ does not depend on $\theta$.
+
+- Sufficiency belongs to $\sigma(T)$, not to the formula for $T$. Any one-to-one recoding of $T$ is equally sufficient, and the minimal sufficient statistic corresponds to the coarsest sufficient σ-algebra.
+- Rao–Blackwell is a projection. $\mathbb{E}[\delta \mid \sigma(T)]$ is a legitimate estimator (sufficiency makes it free of $\theta$), and conditional Jensen shows its mean squared error is no larger than $\delta$'s.
+- For i.i.d. Bernoulli data, $\sigma(\sum X_i)$ is sufficient: the order in which the successes arrived carries no information about $p$.
+
+## Part 9: Practice problems
+
+Each problem asks you to apply the ideas in a new way rather than repeat an example from above. Hints are given first.
+
+1. Two overlapping events. For arbitrary $A, B \subseteq \Omega$, describe the atoms of $\sigma(A, B)$ and its maximum size. When is it smaller? Hint: the generators are not a partition, but the regions of a Venn diagram are.
+2. No countably infinite σ-algebras. Prove that an infinite σ-algebra has at least $2^{\aleph_0}$ elements. Hint: extract an infinite sequence of pairwise disjoint non-empty events, then look at unions indexed by subsets of $\mathbb{N}$.
+3. Combining information. Let $X$ be uniform on $[-1,1]$.
+   - Order $\sigma(X)$, $\sigma(X^2)$, $\sigma(X^3)$, $\sigma(\operatorname{sign}X)$ by inclusion.
+   - Decide whether $\sigma(X^2) \vee \sigma(\operatorname{sign}X) = \sigma(X)$.
+   - Compute $\mathbb{E}[X \mid \sigma(X^2)]$.
+
+   Hint: Doob–Dynkin for the first two parts, symmetry for the last.
+4. Convergence is an event. For $\mathcal{F}$-measurable $X_n$, show $\{\omega : \lim_n X_n(\omega) \text{ exists in } \mathbb{R}\} \in \mathcal{F}$. Hint: use the Cauchy criterion, then the quantifier-to-set translation from 1.5 with tolerances $1/k$.
+5. Stopping times on a trading desk (daily data). Which of these are stopping times?
+   - (a) The first day the price falls 10% below its running peak.
+   - (b) The day of the year's maximum.
+   - (c) $\sigma + 1$ and (d) $\sigma - 1$, for a stopping time $\sigma$.
+   - (e) $\min(\sigma, \tau)$ and $\max(\sigma, \tau)$.
+
+   Hint: for each, ask whether at the close of day $t$ you can decide "has it happened yet?".
+6. When the tower property fails. Roll a fair die, let $X$ be the face value, and let $\mathcal{G} = \sigma(\{1,2\},\{3,4\},\{5,6\})$ and $\mathcal{H} = \sigma(\{1,2,3\},\{4,5,6\})$.
+   - Compute $\mathbb{E}[\mathbb{E}[X \mid \mathcal{G}] \mid \mathcal{H}]$ and $\mathbb{E}[\mathbb{E}[X \mid \mathcal{H}] \mid \mathcal{G}]$.
+   - Compare each with $\mathbb{E}[X \mid \mathcal{H}]$ and $\mathbb{E}[X \mid \mathcal{G}]$, and explain the result geometrically.
+
+   Hint: neither σ-algebra contains the other; think about projections onto subspaces that are not nested.
+7. Why π–λ needs intersections. On $\Omega = \{1,2,3,4\}$, find two different probability measures that agree on $\mathcal{C} = \{\{1,2\},\{2,3\}\}$, even though $\sigma(\mathcal{C}) = 2^{\Omega}$. Then name one set to add to $\mathcal{C}$ that forces uniqueness, and justify it with the theorem. Hint: what is $\{1,2\} \cap \{2,3\}$?
+8. The insider in the binomial model. Take the call example of 7.3 with $p = 1/2$. An insider learns toss 3 at time 0, so $\mathcal{G}_t = \mathcal{F}_t \vee \sigma(\text{toss } 3)$.
+   - (a) Compute $\mathbb{E}[\text{payoff} \mid \mathcal{G}_0]$.
+   - (b) Is the public price process $V_t = \mathbb{E}[\text{payoff} \mid \mathcal{F}_t]$ a martingale with respect to $(\mathcal{G}_t)$?
+
+   Hint: check the step from $t = 2$ to $t = 3$ on the path that starts HH.
+
+## Part 10: The mental model on one page
+
+- $\Omega$ is every possible world, $\mathcal{F}$ is the questions that get answers and odds, and $\mathbb{P}$ is the odds.
+- A σ-algebra is closed under NOT and countable OR, hence countable AND.
+  - Countable, because limits need it.
+  - Not arbitrary unions, because every set is a union of singletons, so every set would have to be measurable, and Vitali shows that is impossible.
+- Finite σ-algebras are partitions in disguise, with $2^k$ events. Infinite ones are not determined by their atoms.
+- $\sigma(\mathcal{C})$ is the "span" of $\mathcal{C}$. Prove things about it with the good sets principle, or with π–λ when the good sets are not closed under intersection.
+- $\mathcal{B}(\mathbb{R})$ is generated by half-lines, which is why CDFs determine distributions.
+- Measurability:
+  - "Measurable" means every question about $X$ is an allowed event.
+  - $\sigma(X)$ is what $X$ reveals.
+  - "$\sigma(X)$-measurable" means "a function of $X$".
+- Filtrations are information over time. Adapted means known now, predictable means decided beforehand, and a stopping time is a decision made without peeking ahead.
+- $\mathbb{E}[X \mid \mathcal{G}]$ is the projection of $X$ onto what $\mathcal{G}$ can know. Forecasts of forecasts collapse when information is nested, and martingales are processes whose forecast equals their present value.
+- The information interpretation is exact for partitions, holds up to null sets in general, and can break (Billingsley). Law and information are different things (adapted Wasserstein).
+
+Further reading that matches this arc:
+
+- Billingsley, *Probability and Measure*: §2 (σ-fields), §34 (conditional expectation) and §35 (martingales and $\mathcal{F}_\tau$).
+- Williams, *Probability with Martingales*: chapters 1–3 and 9–10. It is the best book for the information viewpoint and for the π-system uniqueness lemma.
