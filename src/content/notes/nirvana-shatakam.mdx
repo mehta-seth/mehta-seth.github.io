@@ -1,21 +1,20 @@
 ---
 title: "Nirvana Shatakam"
-titleDisplay: "Nirvāṇa Ṣaṭkam"
-summary: "The Nirvāṇa Ṣaṭkam, six verses attributed to Ādi Śaṅkara, in romanized Sanskrit and Devanāgarī, with an English translation beside each line."
+summary: "The Nirvana Shatakam, six verses attributed to Adi Shankara, in romanized Sanskrit and Devanagari, with an English translation facing each verse."
 date: 2026-10-05
 draft: false
 ---
 
-import { nirvanaShatakam } from '../../data/nirvana-shatakam';
+import { nirvanaShatakam, TRANSLATION_CREDIT } from '../../data/nirvana-shatakam';
 
 {/* The first non-technical help-me-learn note: a hymn rather than an
     explainer. The page is deliberately just the verses. No headings (so no
     table of contents), no figures, no maths.
 
-    `title` stays ASCII ("Nirvana Shatakam") for the browser tab, OG card and
-    search; the H1 shows `titleDisplay` in IAST, the same split the σ note
-    uses. The text itself (romanized, Devanāgarī, English, line by line)
-    lives in src/data/nirvana-shatakam.ts; edit words there. <Verses> is
-    injected by the /learn/ route, so it isn't imported here. */}
+    The title and the romanized text are written as the hymn is said
+    aloud, without diacritics. The text itself (romanized, Devanāgarī,
+    English) and the translation credit live in src/data/nirvana-shatakam.ts;
+    edit words there. <Verses> is injected by the /learn/ route, so it isn't
+    imported here. */}
 
-<Verses id="nirvana-shatakam" verses={nirvanaShatakam} />
+<Verses id="nirvana-shatakam" verses={nirvanaShatakam} credit={TRANSLATION_CREDIT} />
