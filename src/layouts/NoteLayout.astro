@@ -228,6 +228,11 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
   .note {
     --note-measure: 50rem;
     --note-wide: 66rem;
+    /* Greek letters in note prose (σ-algebra, π-system, λ) come from HML Math,
+       the math-italic Greek KaTeX uses, instead of falling through to Georgia;
+       its unicode-range is the Greek block only, so everything else is still
+       Newsreader. The body's own stack otherwise. */
+    font-family: 'HML Math', 'Newsreader', 'Kalam', 'Charter', 'Georgia', serif;
   }
 
   @media (min-width: 1024px) {
