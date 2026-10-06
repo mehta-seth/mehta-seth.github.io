@@ -1,0 +1,307 @@
+---
+// src/components/Verses.astro
+//
+// Verse-and-meaning rows for a hymn or poem in an HML note. Each line of the
+// original sits on the left with its English on the right, on the SAME row
+// and the same baseline, so a reader can go line by line. A toggle above the
+// verses switches ONLY the left column between romanized Sanskrit (IAST, the
+// default) and Devanāgarī; the English never moves.
+//
+// How the toggle works — zero JavaScript, like the rest of the site's chrome
+// where it can be: two native radio buttons (keyboard, screen-reader and
+// form-restore behaviour come free) and one :has() rule that flips which
+// script is visible. Both scripts are always in the DOM. On desktop they are
+// stacked in the same grid cell and the inactive one is visibility:hidden, so
+// every cell is already as tall as the taller script and switching moves
+// nothing on the page; the English stays exactly where it was. On a phone,
+// where each verse sits above its meaning and a long romanized line wraps,
+// sharing a cell would leave a blank line in the Devanāgarī, so there the
+// inactive script is display:none instead (the meaning below shifts a
+// little on a tap, which the stacked layout makes harmless). Either way the
+// hidden script is out of the accessibility tree. Browsers without :has()
+// (pre-2023) simply don't see the toggle and read the romanized text.
+//
+// Layout: two columns at >=1024px (the note's desktop breakpoint), rows
+// aligned on the first baseline. The left column is as wide as the longest
+// line of verse (in either script) and no wider, shared by every verse via
+// subgrid, so the English gets the rest of the width and all six verses
+// line up on one column edge. Below 1024px it stacks: the whole verse, then
+// its meaning (CSS `order`; the DOM stays line, meaning, line, meaning, which
+// is also the screen-reader order). Wrapped lines get a hanging indent so a
+// continuation never reads as a new line of verse.
+//
+// Styles are scoped (unlike <Boxed>/<Ref>, whose rules live in NoteLayout's
+// global block because they wrap MDX-rendered content): every element here
+// is this component's own markup, so scoping works and keeps these rules
+// from touching anything else. Delivery-wise the CSS (~2 KB) is bundled with
+// the /learn/ route, which injects the component, so it loads on note pages
+// only, never on the home, essay or cities pages.
+//
+// Fonts: the romanized line is Newsreader (its IAST letters come from the
+// newsreader-*-iast files, see global.css); Devanāgarī is 'HML Devanagari'
+// (Tiro Devanagari Sanskrit, subset by scripts/refresh-fonts.mjs to the
+// Devanāgarī actually used in src/).
+//
+// Usage in MDX (the component is injected by the /learn/ route):
+//   import { nirvanaShatakam } from '../../data/nirvana-shatakam';
+//   <Verses id="nirvana-shatakam" verses={nirvanaShatakam} />
+
+interface Line {
+  /** Romanized Sanskrit (IAST). */
+  roman: string;
+  /** The same line in Devanāgarī. */
+  deva: string;
+  /** English rendering of the line. */
+  meaning: string;
+}
+
+interface Props {
+  /** Short key, unique on the page; namespaces the toggle's radio group. */
+  id: string;
+  /** The verses, each an ordered list of its lines. */
+  verses: Line[][];
+}
+
+const { id, verses } = Astro.props;
+const group = `verses-${id}`;
+---
+
+<div class="verses">
+  <fieldset class="verses__toggle">
+    <legend class="verses__legend">Show the Sanskrit in</legend>
+    <div class="verses__options">
+      <input
+        class="verses__radio"
+        type="radio"
+        name={group}
+        id={`${group}-roman`}
+        value="roman"
+        checked
+      />
+      <label class="verses__option" for={`${group}-roman`}>Romanized</label>
+      <input
+        class="verses__radio"
+        type="radio"
+        name={group}
+        id={`${group}-deva`}
+        value="deva"
+      />
+      <label class="verses__option verses__option--deva" for={`${group}-deva`} lang="sa">देवनागरी</label>
+    </div>
+  </fieldset>
+
+  <ol class="verses__list">
+    {verses.map((verse) => (
+      <li class="verse">
+        {verse.map((line, i) => (
+          <>
+            <div class="verse__text">
+              <span class="verse__roman" lang="sa-Latn">{line.roman}</span>
+              <span class="verse__deva" lang="sa">{line.deva}</span>
+            </div>
+            <div class:list={['verse__meaning', { 'verse__meaning--first': i === 0 }]}>
+              {line.meaning}
+            </div>
+          </>
+        ))}
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  /* VISUAL TUNABLES — all in one place, on .verses:
+       --verses-col-gap     gutter between a line and its meaning (desktop)
+       --verses-verse-gap   air between one verse and the next
+       --verses-lh          line height of verse lines and their meanings
+       --verses-meaning-scale  English size relative to the verse: one step
+                            down, so the verse leads and the refrain's
+                            English fits one line at full desktop width
+       --verses-deva-scale  Devanāgarī size relative to the romanized line.
+                            Set by eye in a real render: at the same nominal
+                            size Tiro reads smaller and lighter than the
+                            romanized line (its matras and conjuncts need
+                            room), so it sits a step UP. The column width is
+                            set by the romanized lines, so this costs no
+                            layout, and the line box stays the same height
+                            (see .verse__deva). */
+  .verses {
+    --verses-col-gap: 3rem;
+    --verses-verse-gap: 2.5rem;
+    --verses-lh: 1.6;
+    --verses-meaning-scale: 0.92;
+    --verses-deva-scale: 1.04;
+    max-width: var(--note-wide, 66rem);
+    margin: 0.25rem 0 0;
+  }
+
+  /* ─── Toggle ──────────────────────────────────────────────────────
+     A quiet two-option pill in the site's own tokens: hairline border,
+     muted options, the chosen one lifted onto --bg-elevated in the accent.
+     The radios are visually hidden but stay focusable; the focus ring is
+     drawn on the label next to the focused radio. */
+  .verses__toggle {
+    border: 0;
+    margin: 0 0 2.5rem;
+    padding: 0;
+    min-width: 0;
+  }
+  .verses__legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+  .verses__options {
+    position: relative;
+    display: inline-flex;
+    gap: 0.15rem;
+    padding: 0.2rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  .verses__radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .verses__option {
+    padding: 0.3rem 0.95rem;
+    border-radius: 999px;
+    font-size: var(--fs-small);
+    line-height: 1.4;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 150ms ease, background-color 150ms ease;
+  }
+  .verses__option:hover {
+    color: var(--text);
+  }
+  .verses__option--deva {
+    font-family: 'HML Devanagari', 'Newsreader', serif;
+  }
+  .verses__radio:checked + .verses__option {
+    color: var(--accent);
+    background-color: var(--bg-elevated);
+    box-shadow: 0 0 0 1px var(--border);
+    cursor: default;
+  }
+  .verses__radio:focus-visible + .verses__option {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ─── Verses ──────────────────────────────────────────────────────
+     .note__body styles ol/li for prose lists; these scoped rules (higher
+     specificity) reset that for this list. */
+  .verses__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .verse {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    line-height: var(--verses-lh);
+  }
+  .verse + .verse {
+    margin-top: var(--verses-verse-gap);
+  }
+
+  .verse__text,
+  .verse__meaning {
+    padding-left: 1.25em;
+    text-indent: -1.25em; /* hanging indent for a wrapped line */
+  }
+  .verse__text {
+    display: grid;
+    align-items: baseline; /* both scripts on one baseline */
+    color: var(--text);
+  }
+  .verse__roman,
+  .verse__deva {
+    grid-area: 1 / 1; /* both scripts in one cell, so toggling moves nothing */
+  }
+  .verse__deva {
+    display: none; /* phone: hidden script takes no space (see header) */
+    font-family: 'HML Devanagari', 'Newsreader', serif;
+    font-size: calc(var(--verses-deva-scale) * 1em);
+    /* Same line-box height as the romanized line at any scale. */
+    line-height: calc(var(--verses-lh) / var(--verses-deva-scale));
+  }
+  .verse__meaning {
+    color: var(--text-muted);
+    font-size: calc(var(--verses-meaning-scale) * 1em);
+    order: 1; /* stacked: the whole verse first, then its meaning */
+  }
+  .verse__meaning--first {
+    margin-top: 0.85rem;
+  }
+
+  @media (min-width: 1024px) {
+    /* The list owns the two columns: the verse column is sized to its
+       longest line (capped at half), the English takes the rest. Each verse
+       spans both and borrows them via subgrid, so every verse shares one
+       column edge. Without subgrid support (pre-2023) each verse falls back
+       to two equal halves. */
+    .verses__list {
+      display: grid;
+      grid-template-columns: fit-content(50%) minmax(0, 1fr);
+      column-gap: var(--verses-col-gap);
+    }
+    .verse {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--verses-col-gap);
+      align-items: baseline;
+    }
+    @supports (grid-template-columns: subgrid) {
+      .verse {
+        grid-template-columns: subgrid;
+      }
+    }
+    .verse__meaning {
+      order: 0;
+    }
+    .verse__meaning--first {
+      margin-top: 0;
+    }
+  }
+
+  /* ─── The switch ─────────────────────────────────────────────────
+     Phone: swap with display. Desktop: both scripts keep their box and
+     only visibility swaps, so nothing on the page moves. */
+  .verses:has(.verses__radio[value='deva']:checked) .verse__roman {
+    display: none;
+  }
+  .verses:has(.verses__radio[value='deva']:checked) .verse__deva {
+    display: block;
+  }
+  @media (min-width: 1024px) {
+    .verse__deva {
+      display: block;
+      visibility: hidden;
+    }
+    .verses:has(.verses__radio[value='deva']:checked) .verse__roman {
+      display: block;
+      visibility: hidden;
+    }
+    .verses:has(.verses__radio[value='deva']:checked) .verse__deva {
+      visibility: visible;
+    }
+  }
+  @supports not selector(:has(*)) {
+    .verses__toggle {
+      display: none;
+    }
+  }
+</style>
