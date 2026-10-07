@@ -25,5 +25,6 @@ export interface HmlLink {
 
 export const hmlLinks: Record<string, HmlLink> = {
   'sigma-algebra': { url: '/learn/sigma-algebras/', label: 'σ-algebra' },
+  'classic-cocktails': { url: '/learn/classic-cocktails/', label: 'Classic Cocktails' },
   // Add a term here the moment its note is published. One line per term.
 };
