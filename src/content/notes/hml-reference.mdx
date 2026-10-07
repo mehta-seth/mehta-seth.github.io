@@ -37,8 +37,10 @@ import placeholderFigure from '../../assets/notes/placeholder-diagram.png';
     lists, a blockquote, inline and display maths, a deliberately wide
     equation that must scroll inside its own box on a narrow screen, the
     hand-drawn <Boxed> (around both maths and prose), both <Ref> states
-    (registered → real link; pending → plain text), and two <Figure>s
-    (one in-column, one place="side") with the click-to-zoom lightbox. */}
+    (registered → real link; pending → plain text), two <Figure>s
+    (one in-column, one place="side") with the click-to-zoom lightbox, a
+    <Decode> under a display equation, and a <Drawer> of each kind
+    (background, deeper, answer). */}
 
 _This is the help-me-learn reference note: the layout and every component in one place, so a new note can be built by copying from here. The words and equations are placeholders and mean nothing yet._
 
@@ -89,3 +91,43 @@ A box can also hold a line of prose worth pausing on.
 </Boxed>
 
 Cross-references come in two states. A link to a published note becomes a real link; here a <Ref to="sigma-algebra">$\sigma$-algebra</Ref> resolves through the registry to an existing note, standing in for a related topic. A link to a note that has not been written yet, like a <Ref to="martingale">martingale</Ref>, stays plain text until that note exists.
+
+## Decodes and drawers
+
+A display equation can carry a three-line decode straight after it. Keep the blank lines between the three slots, or MDX folds them into one paragraph:
+
+$$
+a + b = c
+$$
+
+<Decode>
+
+<Fragment slot="symbols">$a$, $b$ and $c$ are placeholder symbols.</Fragment>
+
+<Fragment slot="read">“A placeholder reading of the line.”</Fragment>
+
+<Fragment slot="intuition">A placeholder intuition, one or two sentences long.</Fragment>
+
+</Decode>
+
+A paragraph can be followed by a drawer, closed by default. Its title is a plain-text prop, so it holds no maths, and curly quotes are typed directly.
+
+<Drawer kind="background" title="A background drawer">
+
+Placeholder: something the note takes for granted, explained only as far as the note needs, with inline maths such as $x^2$ if it helps.
+
+</Drawer>
+
+<Drawer kind="deeper" title="A deeper drawer">
+
+Placeholder: an optional proof, a piece of history, or an open problem.
+
+</Drawer>
+
+1. A placeholder question, with its answer hidden underneath.
+
+   <Drawer kind="answer">
+
+   A placeholder answer.
+
+   </Drawer>

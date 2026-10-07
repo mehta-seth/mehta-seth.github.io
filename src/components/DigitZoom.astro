@@ -1,0 +1,353 @@
+---
+// src/components/DigitZoom.astro
+//
+// The reading-the-digits figure for the σ-algebras note. A number U in [0, 1)
+// is read one decimal digit at a time. Each row is the interval you know U is
+// in after k digits, cut into the ten intervals the next digit could pick;
+// the digit actually read is lit, and a funnel zooms it out to fill the next
+// row. An accent line marks the best guess (the midpoint of the current
+// interval), and a small panel gives the interval, the guess with its largest
+// possible error, and how many questions can now be answered, 2^(10^k).
+//
+// ZERO JavaScript: "digits read" is a radio group (0 to the number of digits
+// supplied) and every level is pre-rendered at build time and revealed with
+// :has() rules, the same approach as <CardWatchers> and <Verses>. The number
+// is fixed rather than random, so the figure is identical on every visit and
+// every build; the default digits are those of π/10, 0.314159…, matching the
+// note's running example.
+//
+// Usage in MDX (injected by the /learn/ route); the slot is the caption:
+//   <DigitZoom>Read $U$ one digit at a time. …</DigitZoom>
+
+import katex from 'katex';
+
+interface Props {
+  /** The first decimal digits of U (at most 6, so the CSS covers them). */
+  digits?: string;
+  /** How many digits are shown as read when the page loads. */
+  start?: number;
+  /** Prefix for the radio group; unique on the page. */
+  id?: string;
+}
+const { start = 2, id = 'digit-zoom' } = Astro.props;
+// The level CSS below is written out for 0..6 digits, so cap the input there.
+const digits = (Astro.props.digits ?? '314159').slice(0, 6);
+
+const LOG10_2 = Math.log10(2);
+const levels = Array.from({ length: digits.length + 1 }, (_, k) => k);
+
+const prefix = (k: number) => digits.slice(0, k);
+const leftEnd = (k: number) => (k === 0 ? '0' : `0.${prefix(k)}`);
+function rightEnd(k: number): string {
+  if (k === 0) return '1';
+  // Add one unit in the k-th place to the prefix, carrying as needed.
+  const d = prefix(k).split('').map(Number);
+  let i = d.length - 1;
+  while (i >= 0 && d[i] === 9) {
+    d[i] = 0;
+    i--;
+  }
+  if (i < 0) return `1.${d.join('')}`;
+  d[i] += 1;
+  return `0.${d.join('')}`;
+}
+const interval = (k: number) => `[${leftEnd(k)}, ${rightEnd(k)})`;
+const guess = (k: number) => (k === 0 ? '0.5' : `0.${prefix(k)}5`);
+const error = (k: number) => (k === 0 ? '0.5' : `0.${'0'.repeat(k)}5`);
+
+// Thousands separators the way KaTeX wants them: 1{,}000.
+const group = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '{,}');
+function countTex(k: number): string {
+  if (k === 0) return '2^{1} = 2';
+  if (k === 1) return '2^{10} = 1{,}024';
+  const exponent = 10 ** k * LOG10_2;
+  let e = Math.floor(exponent);
+  let m = (10 ** (exponent - e)).toFixed(2);
+  if (m === '10.00') {
+    m = '1.00';
+    e += 1;
+  }
+  return `2^{${group(10 ** k)}} \\approx ${m} \\times 10^{${group(e)}}`;
+}
+const tex = (s: string) => katex.renderToString(s, { throwOnError: false, output: 'htmlAndMathml' });
+
+const rows = levels.map((k) => {
+  const next = k < digits.length ? Number(digits[k]) : null;
+  return {
+    k,
+    label: k === 0 ? 'Before any digits' : `After ${k} ${k === 1 ? 'digit' : 'digits'}`,
+    interval: interval(k),
+    next,
+    funnel: next === null ? null : { a: next * 10, b: next * 10 + 10 },
+  };
+});
+---
+
+<figure class="zoom">
+  <fieldset class="zoom__group">
+    <legend class="zoom__legend">Digits read</legend>
+    <div class="zoom__options">
+      {levels.map((k) => (
+        <>
+          <input
+            class="zoom__radio"
+            type="radio"
+            name={`${id}-level`}
+            id={`${id}-n${k}`}
+            value={`n${k}`}
+            checked={k === start}
+          />
+          <label class="zoom__option" for={`${id}-n${k}`}>{k}</label>
+        </>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="zoom__panel" aria-live="polite">
+    {levels.map((k) => (
+      <dl class={`zoom__stat zoom__stat--${k}`}>
+        <div>
+          <dt>What you know</dt>
+          <dd><i>U</i> is in {interval(k)}</dd>
+        </div>
+        <div>
+          <dt>Best guess</dt>
+          <dd>{guess(k)}, within {error(k)}</dd>
+        </div>
+        <div>
+          <dt>Answerable questions</dt>
+          <dd set:html={tex(countTex(k))} />
+        </div>
+      </dl>
+    ))}
+  </div>
+
+  <div class="zoom__rows" aria-hidden="true">
+    {rows.map((row) => (
+      <div class="zoom__row">
+        <p class="zoom__label">{row.label}: <i>U</i> is in {row.interval}</p>
+        <div class="zoom__cells">
+          {Array.from({ length: 10 }, (_, d) => (
+            <span class:list={['zoom__cell', { 'zoom__cell--read': row.next === d }]}>{d}</span>
+          ))}
+          <span class="zoom__mid"></span>
+        </div>
+        {row.funnel && (
+          <svg class="zoom__funnel" viewBox="0 0 100 22" preserveAspectRatio="none" focusable="false">
+            <polygon class="zoom__funnel-fill" points={`${row.funnel.a},0 ${row.funnel.b},0 100,22 0,22`} />
+            <line class="zoom__funnel-edge" x1={row.funnel.a} y1="0" x2="0" y2="22" />
+            <line class="zoom__funnel-edge" x1={row.funnel.b} y1="0" x2="100" y2="22" />
+          </svg>
+        )}
+      </div>
+    ))}
+  </div>
+
+  <figcaption class="zoom__caption"><slot /></figcaption>
+</figure>
+
+<style>
+  /* VISUAL TUNABLES, on .zoom:
+       --zm-read    fill of the digit that has been read
+       --zm-funnel  fill of the zoom funnel between rows
+       --zm-edge    colour of the funnel's two edges
+     and, further down, the 30rem width at which the panel stacks. */
+  .zoom {
+    --zm-read: color-mix(in srgb, var(--accent) 26%, var(--bg-elevated));
+    --zm-funnel: color-mix(in srgb, var(--accent) 15%, transparent);
+    --zm-edge: color-mix(in srgb, var(--accent) 50%, transparent);
+    container: zoom / inline-size;
+    max-width: var(--note-measure, 50rem);
+    margin: 2.4em 0;
+    font-size: var(--fs-small);
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ─── Control: the <Verses> pill toggle, one pill per level ─────────*/
+  .zoom__group {
+    border: 0;
+    margin: 0 0 1.2rem;
+    padding: 0;
+    min-width: 0;
+  }
+  .zoom__legend {
+    padding: 0;
+    margin-bottom: 0.4rem;
+    font-style: italic;
+    color: var(--text-muted);
+  }
+  .zoom__options {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    padding: 0.2rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  .zoom__radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .zoom__option {
+    min-width: 2.2rem;
+    padding: 0.22rem 0.7rem;
+    border-radius: 999px;
+    text-align: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 150ms ease, background-color 150ms ease;
+  }
+  .zoom__option:hover {
+    color: var(--text);
+  }
+  .zoom__radio:checked + .zoom__option {
+    color: var(--accent);
+    background-color: var(--bg-elevated);
+    box-shadow: 0 0 0 1px var(--border);
+    cursor: default;
+  }
+  .zoom__radio:focus-visible + .zoom__option {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ─── Panel ─────────────────────────────────────────────────────────*/
+  .zoom__panel {
+    margin-bottom: 1.3rem;
+  }
+  .zoom__stat {
+    display: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+  }
+  .zoom__stat > div {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--bg-elevated);
+  }
+  .zoom__stat dt {
+    font-style: italic;
+    color: var(--text-muted);
+  }
+  .zoom__stat dd {
+    margin: 0.1rem 0 0;
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+  @container zoom (max-width: 30rem) {
+    .zoom__stat {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ─── Rows ──────────────────────────────────────────────────────────*/
+  .zoom__row {
+    display: none;
+  }
+  .zoom__label {
+    margin: 0 0 0.3rem;
+    color: var(--text-muted);
+  }
+  .zoom__cells {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--bg-elevated);
+  }
+  .zoom__cell {
+    padding: 0.38rem 0;
+    text-align: center;
+    color: var(--text-muted);
+    border-right: 1px solid var(--border);
+    transition: background-color 150ms ease;
+  }
+  .zoom__cell:nth-child(10) {
+    border-right: 0;
+  }
+  .zoom__mid {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(50% - 1px);
+    width: 2px;
+    background-color: var(--accent);
+  }
+  .zoom__funnel {
+    display: none;
+    width: 100%;
+    height: 22px;
+  }
+  .zoom__funnel-fill {
+    fill: var(--zm-funnel);
+  }
+  .zoom__funnel-edge {
+    stroke: var(--zm-edge);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .zoom__caption {
+    margin-top: 1rem;
+    font-style: italic;
+    color: var(--text-muted);
+  }
+
+  /* ─── State: how many digits have been read ─────────────────────────
+     rows 0..n show; the panel for level n shows; in rows before n the read
+     digit is lit and the funnel drawn; row n carries the midpoint line. */
+  .zoom:has([value='n0']:checked) .zoom__row:nth-child(-n + 1),
+  .zoom:has([value='n1']:checked) .zoom__row:nth-child(-n + 2),
+  .zoom:has([value='n2']:checked) .zoom__row:nth-child(-n + 3),
+  .zoom:has([value='n3']:checked) .zoom__row:nth-child(-n + 4),
+  .zoom:has([value='n4']:checked) .zoom__row:nth-child(-n + 5),
+  .zoom:has([value='n5']:checked) .zoom__row:nth-child(-n + 6),
+  .zoom:has([value='n6']:checked) .zoom__row:nth-child(-n + 7) {
+    display: block;
+  }
+  .zoom:has([value='n0']:checked) .zoom__stat--0,
+  .zoom:has([value='n1']:checked) .zoom__stat--1,
+  .zoom:has([value='n2']:checked) .zoom__stat--2,
+  .zoom:has([value='n3']:checked) .zoom__stat--3,
+  .zoom:has([value='n4']:checked) .zoom__stat--4,
+  .zoom:has([value='n5']:checked) .zoom__stat--5,
+  .zoom:has([value='n6']:checked) .zoom__stat--6 {
+    display: grid;
+  }
+  .zoom:has([value='n1']:checked) .zoom__row:nth-child(-n + 1) .zoom__cell--read,
+  .zoom:has([value='n2']:checked) .zoom__row:nth-child(-n + 2) .zoom__cell--read,
+  .zoom:has([value='n3']:checked) .zoom__row:nth-child(-n + 3) .zoom__cell--read,
+  .zoom:has([value='n4']:checked) .zoom__row:nth-child(-n + 4) .zoom__cell--read,
+  .zoom:has([value='n5']:checked) .zoom__row:nth-child(-n + 5) .zoom__cell--read,
+  .zoom:has([value='n6']:checked) .zoom__row:nth-child(-n + 6) .zoom__cell--read {
+    background-color: var(--zm-read);
+    color: var(--text);
+    font-weight: 600;
+  }
+  .zoom:has([value='n1']:checked) .zoom__row:nth-child(-n + 1) .zoom__funnel,
+  .zoom:has([value='n2']:checked) .zoom__row:nth-child(-n + 2) .zoom__funnel,
+  .zoom:has([value='n3']:checked) .zoom__row:nth-child(-n + 3) .zoom__funnel,
+  .zoom:has([value='n4']:checked) .zoom__row:nth-child(-n + 4) .zoom__funnel,
+  .zoom:has([value='n5']:checked) .zoom__row:nth-child(-n + 5) .zoom__funnel,
+  .zoom:has([value='n6']:checked) .zoom__row:nth-child(-n + 6) .zoom__funnel {
+    display: block;
+  }
+  .zoom:has([value='n0']:checked) .zoom__row:nth-child(1) .zoom__mid,
+  .zoom:has([value='n1']:checked) .zoom__row:nth-child(2) .zoom__mid,
+  .zoom:has([value='n2']:checked) .zoom__row:nth-child(3) .zoom__mid,
+  .zoom:has([value='n3']:checked) .zoom__row:nth-child(4) .zoom__mid,
+  .zoom:has([value='n4']:checked) .zoom__row:nth-child(5) .zoom__mid,
+  .zoom:has([value='n5']:checked) .zoom__row:nth-child(6) .zoom__mid,
+  .zoom:has([value='n6']:checked) .zoom__row:nth-child(7) .zoom__mid {
+    display: block;
+  }
+</style>

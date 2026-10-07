@@ -1,0 +1,158 @@
+---
+// src/components/Drawer.astro
+//
+// A closed-by-default drawer for HML notes. It is a native <details>, so it
+// opens and closes with ZERO JavaScript, and keyboard and screen-reader
+// support come free: the summary is focusable, Enter/Space toggles it, and
+// the open/closed state is announced.
+//
+// Three kinds share one look and are told apart by the small italic label on
+// the summary line and by the colour of the rule beside the opened text:
+//   background  something the note takes for granted, explained only as far
+//               as the note needs (muted rule)
+//   deeper      optional reading: a proof, some history, an open problem
+//               (accent rule, accent label)
+//   answer      the hidden answer to a "check yourself" question
+// The main text must never depend on what a drawer holds.
+//
+// Usage in MDX (injected by the /learn/ route, no import). Leave blank lines
+// inside the tags so MDX parses the body as Markdown, maths included:
+//
+//   <Drawer kind="background" title="Sets in one minute">
+//
+//   A set is a collection of things ...
+//
+//   </Drawer>
+//
+// `title` is a plain-text prop: props are not Markdown, so keep maths out of
+// it, and type curly quotes directly (“countable”), since smartypants never
+// reaches props. An answer drawer usually needs no title.
+
+interface Props {
+  /** Which drawer this is; sets the label and the rule colour. */
+  kind?: 'background' | 'deeper' | 'answer';
+  /** Plain-text title on the summary line, after the label. */
+  title?: string;
+}
+
+const { kind = 'background', title } = Astro.props;
+
+const LABELS = {
+  background: 'Background',
+  deeper: 'Deeper',
+  answer: 'Answer',
+} as const;
+const label = LABELS[kind];
+---
+
+<details class:list={['drawer', `drawer--${kind}`]}>
+  <summary class="drawer__summary">
+    <span class="drawer__chevron" aria-hidden="true"></span>
+    <span class="drawer__label">{label}</span>
+    {title && <span class="drawer__title">{title}</span>}
+  </summary>
+  <div class="drawer__body">
+    <slot />
+  </div>
+</details>
+
+<style>
+  /* VISUAL TUNABLES, on .drawer:
+       --drawer-rule    colour of the rule beside the opened text
+       --drawer-pull    how far the drawer tucks up under its paragraph
+       --drawer-scale   body text size relative to the note body
+     The negative top margin (the pull) makes a drawer read as attached to
+     the paragraph above it rather than as a new block. */
+  .drawer {
+    --drawer-rule: var(--border);
+    --drawer-pull: 0.5em;
+    --drawer-scale: 0.94;
+    max-width: var(--note-measure, 50rem);
+    margin: calc(-1 * var(--drawer-pull)) 0 1.7em;
+  }
+  .drawer--deeper {
+    --drawer-rule: color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+
+  .drawer__summary {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55em;
+    padding: 0.15em 0.1em;
+    list-style: none;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    border-radius: 2px;
+    transition: color 150ms ease;
+  }
+  .drawer__summary::-webkit-details-marker {
+    display: none;
+  }
+  .drawer__summary:hover {
+    color: var(--text);
+  }
+  .drawer__summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* A small solid triangle that turns to point down when the drawer opens.
+     The site-wide reduced-motion rule makes the turn instant. */
+  .drawer__chevron {
+    flex: none;
+    width: 0;
+    height: 0;
+    border-left: 0.42em solid currentColor;
+    border-top: 0.27em solid transparent;
+    border-bottom: 0.27em solid transparent;
+    transform: translateY(-0.06em);
+    transition: transform 150ms ease;
+  }
+  .drawer[open] > .drawer__summary .drawer__chevron {
+    transform: translateY(-0.06em) rotate(90deg);
+  }
+
+  .drawer__label {
+    font-style: italic;
+  }
+  .drawer--deeper .drawer__label {
+    color: var(--accent);
+  }
+  .drawer__title {
+    color: var(--text);
+  }
+
+  .drawer__body {
+    margin: 0.75em 0 0.3em 0.2em;
+    padding: 0.1em 0 0.1em 1.15em;
+    border-left: 2px solid var(--drawer-rule);
+    font-size: calc(var(--drawer-scale) * 1em);
+  }
+  .drawer[open] > .drawer__body {
+    animation: drawer-in 180ms ease-out;
+  }
+  @keyframes drawer-in {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* The body is MDX-rendered, so its children are reached with :global. */
+  .drawer__body :global(p) {
+    margin: 0 0 1em;
+  }
+  .drawer__body :global(ul),
+  .drawer__body :global(ol) {
+    margin: 0 0 1em;
+  }
+  .drawer__body :global(.katex-display) {
+    margin: 1.1em 0;
+  }
+  .drawer__body > :global(:first-child) {
+    margin-top: 0;
+  }
+  .drawer__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

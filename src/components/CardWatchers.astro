@@ -1,0 +1,496 @@
+---
+// src/components/CardWatchers.astro
+//
+// The face-down-card figure for the σ-algebras note. A full deck is laid out
+// as a 4 × 13 grid; the reader picks WHO is looking (colour-, suit-, rank-
+// watcher, or the dealer) and WHICH question is asked. The figure then shows
+// that watcher's atoms (the groups of cards she cannot tell apart), lights
+// the cards that answer yes, and circles in ink every atom the question
+// splits. A question is answerable exactly when it splits no atom; the line
+// under the deck says so, with the watcher's count of answerable questions.
+//
+// ZERO JavaScript, like <Verses>: the two choices are radio groups, and every
+// state is pre-rendered at build time and revealed with :has() rules. Cards
+// carry one class per question they answer yes to (y-<q>), atoms one class
+// per question that splits them (x-<q>), and the verdicts are pre-written
+// sentences, so the CSS only has to match a checked radio to a class.
+//
+// The ink circling an atom IS the note's hand-drawn box: each atom's ink
+// layer takes a .boxed--vN class, so it inherits the border-image strokes
+// (and their light/dark swap) from NoteLayout's <Boxed> block; this file only
+// sets the 9-slice geometry. N is the atom's index mod 6, so every atom
+// always draws the same way.
+//
+// Below 34rem of figure width (a container query, so it follows the column,
+// not the viewport) the deck turns on its side, 13 rows of 4, so every card
+// stays readable on a phone. Suit symbols are drawn as SVG paths, not text:
+// Newsreader has no card suits, and some phones turn ♥ ♦ into emoji.
+//
+// Usage in MDX (injected by the /learn/ route); the slot is the caption:
+//   <CardWatchers>Choose a watcher and a question. …</CardWatchers>
+
+import katex from 'katex';
+
+interface Props {
+  /** Prefix for radio names and sprite ids; unique on the page. */
+  id?: string;
+}
+const { id = 'card-watchers' } = Astro.props;
+
+// ─── The deck ────────────────────────────────────────────────────────
+const SUITS = [
+  { key: 'hearts', red: true },
+  { key: 'diamonds', red: true },
+  { key: 'spades', red: false },
+  { key: 'clubs', red: false },
+] as const;
+const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+const RANK_ONE = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king'];
+const RANK_MANY = ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sevens', 'eights', 'nines', 'tens', 'jacks', 'queens', 'kings'];
+
+// Suit outlines in a 20 × 20 box, filled with currentColor.
+const SUIT_PATHS: Record<(typeof SUITS)[number]['key'], string> = {
+  hearts:
+    'M10 17.6C9.3 17 2.2 12.1 2.2 7.1 2.2 4.4 4.2 2.4 6.7 2.4c1.5 0 2.7.7 3.3 1.9.6-1.2 1.8-1.9 3.3-1.9 2.5 0 4.5 2 4.5 4.7 0 5-7.1 9.9-7.8 10.5Z',
+  diamonds: 'M10 1.8 16.6 10 10 18.2 3.4 10Z',
+  spades:
+    'M10 1.6C9.4 2.3 2.6 7.4 2.6 11.6c0 2.3 1.7 3.9 3.8 3.9 1.2 0 2.2-.5 2.9-1.3-.2 1.8-.9 3.1-2.1 4.2h5.6c-1.2-1.1-1.9-2.4-2.1-4.2.7.8 1.7 1.3 2.9 1.3 2.1 0 3.8-1.6 3.8-3.9 0-4.2-6.8-9.3-7.4-10Z',
+  clubs:
+    'M10 1.9a3.6 3.6 0 1 0 0 7.2a3.6 3.6 0 1 0 0-7.2ZM6.3 6.8a3.6 3.6 0 1 0 0 7.2a3.6 3.6 0 1 0 0-7.2ZM13.7 6.8a3.6 3.6 0 1 0 0 7.2a3.6 3.6 0 1 0 0-7.2ZM9.15 10h1.7c.1 3.4.8 5.7 2.7 7.9H6.45c1.9-2.2 2.6-4.5 2.7-7.9Z',
+};
+
+// ─── The questions ───────────────────────────────────────────────────
+// `yes(s, r)`: does the card with suit index s and rank index r answer yes?
+interface Question {
+  key: string;
+  label: string;
+  yes: (s: number, r: number) => boolean;
+}
+const QUESTIONS: Question[] = [
+  { key: 'red', label: 'Is it red?', yes: (s) => s < 2 },
+  { key: 'heart', label: 'Is it a heart?', yes: (s) => s === 0 },
+  { key: 'ace', label: 'Is it an ace?', yes: (_s, r) => r === 0 },
+  { key: 'face', label: 'Is it a face card?', yes: (_s, r) => r >= 10 },
+  { key: 'redace', label: 'Is it a red ace?', yes: (s, r) => s < 2 && r === 0 },
+  { key: 'qs', label: 'Is it the queen of spades?', yes: (s, r) => s === 2 && r === 11 },
+  { key: 'any', label: 'Is it one of the 52 cards?', yes: () => true },
+];
+const DEFAULT_QUESTION = 'heart';
+
+// ─── The watchers and their atoms ────────────────────────────────────
+// An atom is a rectangle of the grid: suits s0..s1, ranks r0..r1.
+interface Atom {
+  s0: number;
+  s1: number;
+  r0: number;
+  r1: number;
+  name: string;
+}
+interface Watcher {
+  key: string;
+  label: string;
+  name: string;
+  atoms: Atom[];
+  countTex: string;
+}
+
+const range = (n: number) => Array.from({ length: n }, (_, i) => i);
+const WATCHERS: Watcher[] = [
+  {
+    key: 'colour',
+    label: 'Colour-watcher',
+    name: 'The colour-watcher',
+    atoms: [
+      { s0: 0, s1: 1, r0: 0, r1: 12, name: 'the red cards' },
+      { s0: 2, s1: 3, r0: 0, r1: 12, name: 'the black cards' },
+    ],
+    countTex: '2^{2} = 4',
+  },
+  {
+    key: 'suit',
+    label: 'Suit-watcher',
+    name: 'The suit-watcher',
+    atoms: range(4).map((s) => ({ s0: s, s1: s, r0: 0, r1: 12, name: `the ${SUITS[s].key}` })),
+    countTex: '2^{4} = 16',
+  },
+  {
+    key: 'rank',
+    label: 'Rank-watcher',
+    name: 'The rank-watcher',
+    atoms: range(13).map((r) => ({ s0: 0, s1: 3, r0: r, r1: r, name: `the ${RANK_MANY[r]}` })),
+    countTex: '2^{13} = 8{,}192',
+  },
+  {
+    key: 'dealer',
+    label: 'Dealer',
+    name: 'The dealer',
+    atoms: range(52).map((i) => {
+      const s = Math.floor(i / 13);
+      const r = i % 13;
+      return { s0: s, s1: s, r0: r, r1: r, name: `the ${RANK_ONE[r]} of ${SUITS[s].key}` };
+    }),
+    countTex: '2^{52} \\approx 4.5 \\times 10^{15}',
+  },
+];
+const DEFAULT_WATCHER = 'colour';
+
+// Does question q split atom a (some of its cards say yes, some no)?
+function splits(a: Atom, q: Question): boolean {
+  let yes = 0;
+  let total = 0;
+  for (let s = a.s0; s <= a.s1; s++) {
+    for (let r = a.r0; r <= a.r1; r++) {
+      total++;
+      if (q.yes(s, r)) yes++;
+    }
+  }
+  return yes > 0 && yes < total;
+}
+
+function verdict(w: Watcher, q: Question): string {
+  const split = w.atoms.filter((a) => splits(a, q));
+  const said = `“${q.label}”`;
+  if (split.length === 0) return `${said} is answerable: every atom is entirely yes or entirely no.`;
+  if (split.length === w.atoms.length) return `${said} is not answerable: it splits every atom.`;
+  if (split.length === 1) return `${said} is not answerable: it splits one atom, ${split[0].name}.`;
+  return `${said} is not answerable: it splits ${split.length} atoms, ${split[0].name} among them.`;
+}
+
+const tex = (s: string) => katex.renderToString(s, { throwOnError: false, output: 'htmlAndMathml' });
+
+const cards = SUITS.flatMap((suit, s) =>
+  RANKS.map((rank, r) => ({
+    rank,
+    suit: suit.key,
+    red: suit.red,
+    style: `--s:${s + 1};--r:${r + 1}`,
+    yesClasses: QUESTIONS.filter((q) => q.yes(s, r)).map((q) => `y-${q.key}`),
+  })),
+);
+
+let inkIndex = 0;
+const atoms = WATCHERS.flatMap((w) =>
+  w.atoms.map((a) => ({
+    watcher: w.key,
+    style: `--s0:${a.s0 + 1};--s1:${a.s1 + 2};--r0:${a.r0 + 1};--r1:${a.r1 + 2}`,
+    splitClasses: QUESTIONS.filter((q) => splits(a, q)).map((q) => `x-${q.key}`),
+    variant: (inkIndex++ % 6) + 1,
+  })),
+);
+---
+
+<figure class="watchers">
+  <svg class="watchers__sprite" aria-hidden="true" focusable="false">
+    {SUITS.map((suit) => (
+      <symbol id={`${id}-${suit.key}`} viewBox="0 0 20 20">
+        <path d={SUIT_PATHS[suit.key]} fill="currentColor" />
+      </symbol>
+    ))}
+  </svg>
+
+  <div class="watchers__controls">
+    <fieldset class="watchers__group">
+      <legend class="watchers__legend">Who is looking</legend>
+      <div class="watchers__options">
+        {WATCHERS.map((w) => (
+          <>
+            <input
+              class="watchers__radio"
+              type="radio"
+              name={`${id}-watcher`}
+              id={`${id}-w-${w.key}`}
+              value={`w-${w.key}`}
+              checked={w.key === DEFAULT_WATCHER}
+            />
+            <label class="watchers__option" for={`${id}-w-${w.key}`}>{w.label}</label>
+          </>
+        ))}
+      </div>
+    </fieldset>
+    <fieldset class="watchers__group">
+      <legend class="watchers__legend">The question</legend>
+      <div class="watchers__options">
+        {QUESTIONS.map((q) => (
+          <>
+            <input
+              class="watchers__radio"
+              type="radio"
+              name={`${id}-question`}
+              id={`${id}-q-${q.key}`}
+              value={`q-${q.key}`}
+              checked={q.key === DEFAULT_QUESTION}
+            />
+            <label class="watchers__option" for={`${id}-q-${q.key}`}>{q.label}</label>
+          </>
+        ))}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="watchers__deck" aria-hidden="true">
+    {cards.map((c) => (
+      <div class:list={['watchers__card', { 'watchers__card--red': c.red }, ...c.yesClasses]} style={c.style}>
+        <span class="watchers__rank">{c.rank}</span>
+        <svg class="watchers__suit" viewBox="0 0 20 20" focusable="false"><use href={`#${id}-${c.suit}`} /></svg>
+      </div>
+    ))}
+    {atoms.map((a) => (
+      <span class:list={['watchers__atom', `watchers__atom--${a.watcher}`, ...a.splitClasses]} style={a.style}>
+        <span class={`watchers__ink boxed--v${a.variant}`}></span>
+      </span>
+    ))}
+  </div>
+
+  <p class="watchers__readout" aria-live="polite">
+    {WATCHERS.map((w) => (
+      <span class={`watchers__says watchers__says--${w.key}`}>
+        {w.name} has {w.atoms.length} atoms and can answer <Fragment set:html={tex(w.countTex)} /> questions.{' '}
+        {QUESTIONS.map((q) => (
+          <span class={`watchers__verdict watchers__verdict--${q.key}`}>{verdict(w, q)}</span>
+        ))}
+      </span>
+    ))}
+  </p>
+
+  <figcaption class="watchers__caption"><slot /></figcaption>
+</figure>
+
+<style>
+  /* VISUAL TUNABLES, on .watchers:
+       --cw-gap        space between cards (atoms are drawn in this gutter)
+       --cw-yes        fill of a card that answers yes
+       --cw-red        ink of hearts and diamonds
+       --cw-atom       hairline round an atom the question leaves whole
+       --cw-ink-width  thickness of the hand-drawn ring round a split atom
+     and, further down, the 34rem width at which the deck turns on its side. */
+  .watchers {
+    --cw-gap: 0.55rem;
+    --cw-yes: color-mix(in srgb, var(--accent) 24%, var(--bg-elevated));
+    --cw-red: #a3361f;
+    --cw-atom: color-mix(in srgb, var(--text-muted) 55%, transparent);
+    --cw-ink-width: 13px;
+    container: watchers / inline-size;
+    max-width: var(--note-measure, 50rem);
+    margin: 2.4em 0;
+    font-size: var(--fs-small);
+    line-height: 1.5;
+  }
+  :global(:root.dark) .watchers {
+    --cw-red: #e3826c;
+  }
+
+  .watchers__sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  /* ─── Controls: two radio groups drawn as pills (the <Verses> toggle,
+     loosened so seven questions can wrap) ─────────────────────────── */
+  .watchers__controls {
+    display: grid;
+    gap: 0.9rem;
+    margin-bottom: 1.4rem;
+  }
+  .watchers__group {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .watchers__legend {
+    padding: 0;
+    margin-bottom: 0.4rem;
+    font-style: italic;
+    color: var(--text-muted);
+  }
+  .watchers__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .watchers__radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .watchers__option {
+    padding: 0.22rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+  }
+  .watchers__option:hover {
+    color: var(--text);
+  }
+  .watchers__radio:checked + .watchers__option {
+    color: var(--accent);
+    background-color: var(--bg-elevated);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    cursor: default;
+  }
+  .watchers__radio:focus-visible + .watchers__option {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ─── The deck ──────────────────────────────────────────────────────
+     Cards and atoms share one grid. A card sits at row = suit, column =
+     rank; an atom spans its rectangle of cards and reaches a little into
+     the gutter round them, above the cards, so its ring is drawn between
+     them. */
+  .watchers__deck {
+    display: grid;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    gap: var(--cw-gap);
+    padding: 0.35rem;
+  }
+  .watchers__card {
+    grid-row: var(--s);
+    grid-column: var(--r);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
+    aspect-ratio: 5 / 7;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background-color: var(--bg-elevated);
+    color: var(--text);
+    font-variant-numeric: lining-nums;
+    transition: background-color 150ms ease;
+  }
+  .watchers__card--red {
+    color: var(--cw-red);
+  }
+  .watchers__rank {
+    font-weight: 600;
+    font-size: 1.02em;
+    line-height: 1;
+  }
+  .watchers__suit {
+    width: 1em;
+    height: 1em;
+  }
+  .watchers__atom {
+    display: none;
+    position: relative;
+    z-index: 1;
+    grid-row: var(--s0) / var(--s1);
+    grid-column: var(--r0) / var(--r1);
+    margin: calc(-0.5 * var(--cw-gap));
+    border: 1px solid var(--cw-atom);
+    border-radius: 9px;
+    pointer-events: none;
+  }
+  /* Longhands, not the `border` shorthand: the shorthand also resets
+     border-image, which would wipe the stroke that .boxed--vN supplies. */
+  .watchers__ink {
+    display: none;
+    position: absolute;
+    inset: -4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image-slice: 38;
+    border-image-width: var(--cw-ink-width);
+    border-image-repeat: stretch;
+  }
+
+  /* ─── Readout and caption ───────────────────────────────────────────*/
+  .watchers__readout {
+    margin: 1.1rem 0 0;
+    min-height: 3em;
+    font-size: 1.06em;
+    color: var(--text);
+  }
+  .watchers__says,
+  .watchers__verdict {
+    display: none;
+  }
+  .watchers__caption {
+    margin-top: 0.8rem;
+    font-style: italic;
+    color: var(--text-muted);
+  }
+
+  /* ─── State: which watcher ──────────────────────────────────────────*/
+  .watchers:has([value='w-colour']:checked) .watchers__atom--colour,
+  .watchers:has([value='w-suit']:checked) .watchers__atom--suit,
+  .watchers:has([value='w-rank']:checked) .watchers__atom--rank,
+  .watchers:has([value='w-dealer']:checked) .watchers__atom--dealer {
+    display: block;
+  }
+  .watchers:has([value='w-colour']:checked) .watchers__says--colour,
+  .watchers:has([value='w-suit']:checked) .watchers__says--suit,
+  .watchers:has([value='w-rank']:checked) .watchers__says--rank,
+  .watchers:has([value='w-dealer']:checked) .watchers__says--dealer {
+    display: inline;
+  }
+
+  /* ─── State: which question ─────────────────────────────────────────
+     lights the yes-cards, shows the verdict, and rings each split atom */
+  .watchers:has([value='q-red']:checked) .y-red,
+  .watchers:has([value='q-heart']:checked) .y-heart,
+  .watchers:has([value='q-ace']:checked) .y-ace,
+  .watchers:has([value='q-face']:checked) .y-face,
+  .watchers:has([value='q-redace']:checked) .y-redace,
+  .watchers:has([value='q-qs']:checked) .y-qs,
+  .watchers:has([value='q-any']:checked) .y-any {
+    background-color: var(--cw-yes);
+  }
+  .watchers:has([value='q-red']:checked) .watchers__verdict--red,
+  .watchers:has([value='q-heart']:checked) .watchers__verdict--heart,
+  .watchers:has([value='q-ace']:checked) .watchers__verdict--ace,
+  .watchers:has([value='q-face']:checked) .watchers__verdict--face,
+  .watchers:has([value='q-redace']:checked) .watchers__verdict--redace,
+  .watchers:has([value='q-qs']:checked) .watchers__verdict--qs,
+  .watchers:has([value='q-any']:checked) .watchers__verdict--any {
+    display: inline;
+  }
+  .watchers:has([value='q-red']:checked) .x-red,
+  .watchers:has([value='q-heart']:checked) .x-heart,
+  .watchers:has([value='q-ace']:checked) .x-ace,
+  .watchers:has([value='q-face']:checked) .x-face,
+  .watchers:has([value='q-redace']:checked) .x-redace,
+  .watchers:has([value='q-qs']:checked) .x-qs,
+  .watchers:has([value='q-any']:checked) .x-any {
+    border-color: transparent;
+  }
+  .watchers:has([value='q-red']:checked) .x-red > .watchers__ink,
+  .watchers:has([value='q-heart']:checked) .x-heart > .watchers__ink,
+  .watchers:has([value='q-ace']:checked) .x-ace > .watchers__ink,
+  .watchers:has([value='q-face']:checked) .x-face > .watchers__ink,
+  .watchers:has([value='q-redace']:checked) .x-redace > .watchers__ink,
+  .watchers:has([value='q-qs']:checked) .x-qs > .watchers__ink,
+  .watchers:has([value='q-any']:checked) .x-any > .watchers__ink {
+    display: block;
+  }
+
+  /* ─── Narrow: the deck on its side (13 rows of 4) ───────────────────*/
+  @container watchers (max-width: 34rem) {
+    .watchers__deck {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: calc(0.8 * var(--cw-gap));
+    }
+    .watchers__card {
+      grid-row: var(--r);
+      grid-column: var(--s);
+      flex-direction: row;
+      gap: 0.35em;
+      aspect-ratio: auto;
+      padding: 0.4em 0;
+    }
+    .watchers__atom {
+      grid-row: var(--r0) / var(--r1);
+      grid-column: var(--s0) / var(--s1);
+    }
+  }
+</style>

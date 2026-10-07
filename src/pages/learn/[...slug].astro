@@ -18,6 +18,10 @@ import Boxed from '@/components/Boxed.astro';
 import Ref from '@/components/Ref.astro';
 import Figure from '@/components/Figure.astro';
 import Verses from '@/components/Verses.astro';
+import Drawer from '@/components/Drawer.astro';
+import Decode from '@/components/Decode.astro';
+import CardWatchers from '@/components/CardWatchers.astro';
+import DigitZoom from '@/components/DigitZoom.astro';
 
 export async function getStaticPaths() {
   // Drafts are excluded from the production build (same rule as essays).
@@ -41,6 +45,10 @@ const { Content, headings } = await render(note);
 // note body, with its click-to-zoom lightbox rendered once by NoteLayout).
 // <Verses> (Oct 2026) sets a hymn or poem line by line beside its meaning,
 // with a romanized / Devanāgarī toggle for the original.
+// <Drawer> (Oct 2026) is a zero-JS closed-by-default drawer for background,
+// deeper reading and hidden answers; <Decode> is the symbols / read-it-as /
+// intuition lines under a display equation. <CardWatchers> and <DigitZoom>
+// are the two zero-JS figures of the σ-algebras note.
 // Authors use all of these in note MDX without importing them.
 ---
 
@@ -53,5 +61,5 @@ const { Content, headings } = await render(note);
   cover={note.data.cover}
   headings={headings}
 >
-  <Content components={{ Boxed, Ref, Figure, Verses }} />
+  <Content components={{ Boxed, Ref, Figure, Verses, Drawer, Decode, CardWatchers, DigitZoom }} />
 </NoteLayout>

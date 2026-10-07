@@ -1,0 +1,84 @@
+---
+// src/components/Decode.astro
+//
+// The three-line reading that sits under a display equation in an HML note:
+// what each symbol means, how to read the line aloud, and the intuition. It
+// renders as a definition list, labels on the left, with each line filled
+// from a named slot so it can carry inline maths. A line whose slot is left
+// out is simply not drawn.
+//
+// Usage in MDX (injected by the /learn/ route, no import). Put the decode
+// straight after the `$$ … $$` block it explains, and keep the BLANK LINES
+// between the three slots: without them MDX folds the lines into a single
+// paragraph and the named slots are lost.
+//
+//   <Decode>
+//
+//   <Fragment slot="symbols">$k$ counts the atoms.</Fragment>
+//
+//   <Fragment slot="read">"A watcher with $k$ atoms can answer $2^{k}$ questions."</Fragment>
+//
+//   <Fragment slot="intuition">Each atom is a yes-or-no choice.</Fragment>
+//
+//   </Decode>
+
+const lines = [
+  { slot: 'symbols', label: 'Symbols' },
+  { slot: 'read', label: 'Read it as' },
+  { slot: 'intuition', label: 'Intuition' },
+] as const;
+const present = lines.filter((line) => Astro.slots.has(line.slot));
+const rendered = await Promise.all(
+  present.map(async (line) => ({
+    label: line.label,
+    html: await Astro.slots.render(line.slot),
+  })),
+);
+---
+
+<dl class="decode">
+  {
+    rendered.map((line) => (
+      <>
+        <dt class="decode__label">{line.label}</dt>
+        <dd class="decode__text" set:html={line.html} />
+      </>
+    ))
+  }
+</dl>
+
+<style>
+  /* VISUAL TUNABLES, on .decode:
+       --decode-label-width   width of the label column
+       --decode-scale         text size relative to the note body
+       --decode-tuck          how far the decode tucks up under its equation */
+  .decode {
+    --decode-label-width: 7.4em;
+    --decode-scale: 0.92;
+    --decode-tuck: 0.7em;
+    max-width: var(--note-measure, 50rem);
+    display: grid;
+    grid-template-columns: var(--decode-label-width) minmax(0, 1fr);
+    gap: 0.4em 1.1em;
+    margin: calc(-1 * var(--decode-tuck)) 0 2em;
+    font-size: calc(var(--decode-scale) * 1em);
+    line-height: 1.55;
+  }
+  .decode__label {
+    font-style: italic;
+    color: var(--text-muted);
+  }
+  .decode__text {
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .decode {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.05em;
+    }
+    .decode__label:not(:first-child) {
+      margin-top: 0.7em;
+    }
+  }
+</style>
