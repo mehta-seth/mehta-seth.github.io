@@ -22,7 +22,10 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     mdx(),
-    sitemap(),
+    // public/ files are invisible to the sitemap integration, so the
+    // standalone Gold Room app (public/learn/classic-cocktails/) is listed
+    // by hand.
+    sitemap({ customPages: ['https://mehta-seth.github.io/learn/classic-cocktails/'] }),
   ],
 
   markdown: {
