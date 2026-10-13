@@ -24,3 +24,27 @@ pnpm-debug.log*
 !.vscode/settings.json
 .idea/
 lighthouse-reports/
+
+# camera RAW formats — never committed.
+# Photos enter the repo only after passing through scripts/prep-photo.sh,
+# which produces a 3000px sRGB JPEG with EXIF stripped (incl. GPS).
+# Committing the raw originals would defeat the resize, balloon repo
+# size, and risk leaking location metadata.
+*.CR2
+*.CR3
+*.NEF
+*.ARW
+*.RAF
+*.ORF
+*.RW2
+*.DNG
+
+# iPhone HEIC — same logic. Always export to JPEG via prep-photo.sh.
+*.HEIC
+*.heic
+
+# General-purpose escape hatch: any file marked "-original" in its name
+# is treated as a non-shippable source. Use this naming convention when
+# keeping the original alongside a processed copy locally during a
+# Lightroom-equivalent workflow.
+*-original.*
