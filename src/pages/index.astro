@@ -47,7 +47,7 @@ const essays = [
 // "help me learn" (HML) notes — a curated list, like the essays above,
 // linking to individual pages under /learn/. Like Essays, this section
 // has no index page of its own, so its heading is plain text (not a
-// link). When a second note lands, drop it in here.
+// link). Add a note here when it should appear on the home page.
 const notes = [
   {
     // The σ (U+03C3) is a real Unicode character, so screen readers
@@ -75,6 +75,10 @@ const notes = [
     href: '/learn/classic-cocktails/',
   },
   {
+    // An MDX note (src/content/notes/art-history.mdx): the front door to the
+    // art canon, which is published on its own Cloudflare Worker so that none
+    // of its pictures is ever on GitHub. The note carries the link out and the
+    // takedown notice; the canon's own source is outside this repo.
     title: 'Art History',
     href: '/learn/art-history/',
   },
