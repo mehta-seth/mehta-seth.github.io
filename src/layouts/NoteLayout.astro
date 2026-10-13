@@ -354,6 +354,16 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
     margin: 0 0 1.4em 0;
   }
 
+  /* Small print in a note, such as the Art History copyright notice: the
+     site's apparatus size and colour, the same as an essay's photo-credit
+     line (EssayLayout .essay-credits) and its footnotes. Authored in MDX as
+     <p class="note-fine">. VISUAL TUNABLES: size, colour. */
+  .note__body p.note-fine {
+    font-size: 1.0625rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
   /* Headings inherit family/weight/size from the global h2/h3 rules in
      global.css; only rhythm and line-height are tuned here. */
   .note__body h2 {
