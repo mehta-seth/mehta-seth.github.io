@@ -523,6 +523,14 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
     border-radius: 2px;
     margin: 0;                 /* the block rhythm belongs to .figure */
   }
+  /* SVG figures (<Figure svg={...}>): the drawing is inline, so it shrinks
+     with the column on a phone and draws in the page's colour tokens. A tap
+     or click opens it at a readable size in the Lightbox. */
+  .note__body .figure__svg svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
   /* Caption — muted serif italic at the small size, left-anchored, capped
      at the prose measure so it reads consistently across figure sizes. */
   .note__body .figure__caption {

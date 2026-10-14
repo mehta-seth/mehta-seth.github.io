@@ -26,6 +26,15 @@
 //     on close.
 //   - Honors prefers-reduced-motion: no fade animation, just appears.
 //   - Closes on pagehide so bfcache restoration doesn't leave it open.
+//   - SVG figures (<Figure svg={...}>, the inline charts in HML notes) open
+//     too. Their drawing is cloned onto a plate in the page's own background
+//     colour, so the chart keeps its theme colours on the dark backdrop, and
+//     shown at a readable size: at least 720px wide (the width the charts
+//     are drawn for), larger on big screens, never taller than the screen
+//     allows. On a phone the enlarged chart is wider than the screen, so the
+//     viewer scrolls in both directions and pinch-zoom works as on any page;
+//     the caption stays in view while panning. Their caption keeps its
+//     formatting (maths included) rather than being flattened to text.
 //
 // What this lightbox is NOT (deferred):
 //   - Pinch-to-zoom on mobile. iOS double-tap on the lightbox image
@@ -70,6 +79,7 @@
   </button>
 
   <div class="lightbox__inner">
+    <div class="lightbox__plate" id="lightbox-plate" hidden></div>
     <img class="lightbox__img" id="lightbox-img" alt="" />
     <p class="lightbox__caption" id="lightbox-caption" hidden></p>
   </div>
@@ -194,8 +204,55 @@
      the essay body and the note body (.note__body), since NoteLayout also
      renders one <Lightbox />. */
   .essay__body .figure--clickable .figure__img,
-  .note__body .figure--clickable .figure__img {
+  .note__body .figure--clickable .figure__img,
+  .essay__body .figure--clickable .figure__svg,
+  .note__body .figure--clickable .figure__svg {
     cursor: zoom-in;
+  }
+
+  /* SVG figures. The viewer scrolls when the enlarged chart is bigger than
+     the screen (phones); margin:auto on the inner column centres it when it
+     fits and lets it start at the edge when it doesn't, so nothing is cut
+     off. VISUAL TUNABLES: the 720px floor (the charts' drawn width), the
+     1100px ceiling, the plate padding. */
+  .lightbox.lightbox--svg {
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .lightbox--svg .lightbox__inner {
+    margin: auto;
+    max-width: none;
+    max-height: none;
+  }
+  .lightbox--svg .lightbox__close {
+    position: fixed;    /* stays put while the chart is panned */
+  }
+  .lightbox__img[hidden] {
+    display: none;      /* .lightbox__img sets display:block, which would beat [hidden] */
+  }
+  .lightbox__plate {
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 1rem 1.1rem;
+  }
+  .lightbox__plate svg {
+    display: block;
+    height: auto;
+    width: clamp(720px, calc((100vh - 10rem) * var(--fig-aspect, 1.4)), min(92vw, 1100px));
+  }
+  @supports (height: 100dvh) {
+    .lightbox__plate svg {
+      width: clamp(720px, calc((100dvh - 10rem) * var(--fig-aspect, 1.4)), min(92vw, 1100px));
+    }
+  }
+  .lightbox--svg .lightbox__caption {
+    align-self: flex-start;
+    position: sticky;
+    left: 0;
+    max-width: min(42.5rem, calc(100vw - 4rem));
+    font-style: normal;
+    text-align: left;
+    font-size: 0.9375rem;
   }
 </style>
 
@@ -213,11 +270,38 @@
    */
 
   type FigureData = {
+    kind: 'image' | 'svg';
     src: string;
     alt: string;
     caption: string | null;
+    /** SVG figures only: the inline drawing, its aspect ratio and the caption's HTML. */
+    svg?: SVGSVGElement;
+    aspect?: string;
+    captionHTML?: string | null;
     triggerEl: HTMLElement;
   };
+
+  /**
+   * Give every id inside a cloned drawing a prefix, and point its internal
+   * references (url(#...), href="#...") at the new ids, so the copy in the
+   * viewer never shares ids with the figure on the page.
+   */
+  function reid(root: Element, prefix: string) {
+    const map = new Map<string, string>();
+    root.querySelectorAll('[id]').forEach((el) => {
+      map.set(el.id, prefix + el.id);
+      el.id = prefix + el.id;
+    });
+    root.querySelectorAll('*').forEach((el) => {
+      for (const attr of Array.from(el.attributes)) {
+        if (!attr.value.includes('#')) continue;
+        const next = attr.value
+          .replace(/url\(#([^)]+)\)/g, (m, id) => (map.has(id) ? `url(#${map.get(id)})` : m))
+          .replace(/^#(.+)$/, (m, id) => (map.has(id) ? `#${map.get(id)}` : m));
+        if (next !== attr.value) el.setAttribute(attr.name, next);
+      }
+    });
+  }
 
   /**
    * Parse a srcset string like
@@ -270,6 +354,22 @@
    * or null if the figure can't be processed.
    */
   function readFigure(figure: HTMLElement): FigureData | null {
+    const svgEl = figure.querySelector<SVGSVGElement>('.figure__svg svg');
+    if (svgEl) {
+      const wrap = figure.querySelector<HTMLElement>('.figure__svg');
+      const figcaption = figure.querySelector<HTMLElement>('.figure__caption');
+      return {
+        kind: 'svg',
+        src: '',
+        alt: svgEl.querySelector('title')?.textContent ?? '',
+        caption: null,
+        svg: svgEl,
+        aspect: wrap?.style.getPropertyValue('--fig-aspect') ?? '',
+        captionHTML: figcaption?.innerHTML.trim() || null,
+        triggerEl: figure,
+      };
+    }
+
     const picture = figure.querySelector('picture');
     if (!picture) return null;
 
@@ -286,6 +386,7 @@
     const caption = figcaption?.textContent?.trim() ?? null;
 
     return {
+      kind: 'image',
       src,
       alt,
       caption: caption && caption.length > 0 ? caption : null,
@@ -299,10 +400,11 @@
   const dialogImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
   const dialogCaption = document.getElementById('lightbox-caption') as HTMLElement | null;
   const dialogClose = document.getElementById('lightbox-close') as HTMLButtonElement | null;
+  const dialogPlate = document.getElementById('lightbox-plate') as HTMLElement | null;
 
   // If any of the dialog parts are missing, bail silently. The figures
   // remain unclickable; the page still works.
-  if (dialog && dialogImg && dialogCaption && dialogClose) {
+  if (dialog && dialogImg && dialogCaption && dialogClose && dialogPlate) {
     let lastTrigger: HTMLElement | null = null;
 
     /**
@@ -320,15 +422,35 @@
       }
       document.body.classList.add('lightbox-open');
 
-      dialogImg!.src = data.src;
-      dialogImg!.alt = data.alt;
-
-      if (data.caption) {
-        dialogCaption!.textContent = data.caption;
-        dialogCaption!.hidden = false;
+      if (data.kind === 'svg' && data.svg) {
+        // Chart: clone the drawing onto the themed plate; keep the caption's
+        // formatting (maths included).
+        const copy = data.svg.cloneNode(true) as SVGSVGElement;
+        reid(copy, 'lightbox-');
+        dialogPlate!.replaceChildren(copy);
+        if (data.aspect) dialogPlate!.style.setProperty('--fig-aspect', data.aspect);
+        dialogPlate!.hidden = false;
+        dialogImg!.hidden = true;
+        dialog!.classList.add('lightbox--svg');
+        dialog!.setAttribute('aria-label', 'Figure viewer');
+        if (data.captionHTML) {
+          dialogCaption!.innerHTML = data.captionHTML;
+          dialogCaption!.hidden = false;
+        } else {
+          dialogCaption!.textContent = '';
+          dialogCaption!.hidden = true;
+        }
       } else {
-        dialogCaption!.textContent = '';
-        dialogCaption!.hidden = true;
+        dialogImg!.src = data.src;
+        dialogImg!.alt = data.alt;
+
+        if (data.caption) {
+          dialogCaption!.textContent = data.caption;
+          dialogCaption!.hidden = false;
+        } else {
+          dialogCaption!.textContent = '';
+          dialogCaption!.hidden = true;
+        }
       }
 
       dialog!.classList.add('is-open');
@@ -359,6 +481,14 @@
       dialogCaption!.textContent = '';
       dialogCaption!.hidden = true;
 
+      // Reset the chart state so the next photo opens exactly as before.
+      dialogPlate!.replaceChildren();
+      dialogPlate!.hidden = true;
+      dialogImg!.hidden = false;
+      dialog!.classList.remove('lightbox--svg');
+      dialog!.setAttribute('aria-label', 'Image viewer');
+      dialog!.scrollTo(0, 0);
+
       // Return focus to the figure that opened the lightbox so a
       // keyboard reader doesn't lose their place in the essay.
       if (lastTrigger) {
@@ -366,17 +496,21 @@
         // (Figures are not focusable by default; the click handler
         // landed via the figure being a click target, not a focus
         // target.)
-        const previousTabIndex = lastTrigger.getAttribute('tabindex');
-        lastTrigger.setAttribute('tabindex', '-1');
-        lastTrigger.focus({ preventScroll: true });
+        const trigger = lastTrigger;
+        const previousTabIndex = trigger.getAttribute('tabindex');
+        trigger.setAttribute('tabindex', '-1');
+        trigger.focus({ preventScroll: true });
         // Restore tabindex after focus has landed. Using rAF rather
         // than removeAttribute immediately because some browsers
-        // de-focus when the attribute changes synchronously.
+        // de-focus when the attribute changes synchronously. The local
+        // `trigger` matters: lastTrigger is cleared below before this
+        // callback runs, and reading it here used to throw, leaving the
+        // figure at tabindex -1 (out of the tab order) after one viewing.
         requestAnimationFrame(() => {
           if (previousTabIndex === null) {
-            lastTrigger!.removeAttribute('tabindex');
+            trigger.removeAttribute('tabindex');
           } else {
-            lastTrigger!.setAttribute('tabindex', previousTabIndex);
+            trigger.setAttribute('tabindex', previousTabIndex);
           }
         });
       }
@@ -438,7 +572,10 @@
       // doesn't promise interactivity that won't fire.
       figure.setAttribute('tabindex', '0');
       figure.setAttribute('role', 'button');
-      figure.setAttribute('aria-label', 'Open image in viewer');
+      figure.setAttribute(
+        'aria-label',
+        figure.classList.contains('figure--svg') ? 'Open figure in viewer' : 'Open image in viewer',
+      );
       figure.classList.add('figure--clickable');
 
       const handler = (e: Event) => {

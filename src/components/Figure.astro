@@ -29,6 +29,14 @@
 //   First figure in an essay (LCP candidate):
 //   <Figure src={img} alt="..." priority />
 //
+//   SVG chart or diagram (HML notes): pass the drawing's markup, imported
+//   with Vite's ?raw suffix, instead of an image. It is inlined, so it scales
+//   with the column and draws in the page's colour tokens, following the
+//   theme. The drawing's own <title> is its accessible name (pass alt to
+//   replace it). The Lightbox opens it at a readable size on tap or click:
+//   import fog from '../../assets/notes/<slug>/fog.svg?raw';
+//   <Figure svg={fog}>Caption.</Figure>
+//
 // The `src` prop takes Astro's ImageMetadata (the object returned by
 // `import` of an image file). It does NOT take a string path. Authors
 // import the image at the top of the .mdx file and pass the binding
@@ -60,14 +68,22 @@ interface Props {
   /**
    * Imported ImageMetadata, e.g.
    *   import photo from '../../assets/essays/<slug>/<file>.jpg';
+   * Give exactly one of src and svg.
    */
-  src: ImageMetadata;
+  src?: ImageMetadata;
+  /**
+   * Raw SVG markup for a chart or diagram, e.g.
+   *   import chart from '../../assets/notes/<slug>/<file>.svg?raw';
+   * Inlined as-is; size, place and the caption work as for images.
+   */
+  svg?: string;
   /**
    * Alt text. Describe what's in the frame and what role the image
-   * plays in the essay's argument, in one sentence. Required — there
-   * is no default.
+   * plays in the essay's argument, in one sentence. Required for an
+   * image (src). For an svg figure it is optional: the drawing's own
+   * <title> already names it, and alt, if given, replaces that title.
    */
-  alt: string;
+  alt?: string;
   /**
    * column = default. Fits inside the 42.5rem essay column.
    * wide   = breaks out beyond the column on ≥1280px viewports.
@@ -92,7 +108,22 @@ interface Props {
   priority?: boolean;
 }
 
-const { src, alt, size = 'column', place = 'inline', priority = false } = Astro.props;
+const { src, svg, alt, size = 'column', place = 'inline', priority = false } = Astro.props;
+
+if (!src === !svg) {
+  throw new Error('<Figure> needs exactly one of src (an imported image) or svg (raw SVG markup).');
+}
+if (src && !alt) {
+  throw new Error('<Figure src={...}> needs alt text.');
+}
+
+// SVG figures: swap in the alt text as the drawing's <title> if one was given,
+// and read the drawing's aspect ratio from its viewBox so the Lightbox can
+// size the enlarged copy to fit the screen.
+const escapeXml = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const svgMarkup = svg && alt ? svg.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeXml(alt)}</title>`) : svg;
+const viewBox = svg?.match(/viewBox="\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)\s*"/);
+const aspect = viewBox ? (parseFloat(viewBox[1]) / parseFloat(viewBox[2])).toFixed(4) : undefined;
 
 // Widths array. The fifth entry (3000) matches the source max-edge so
 // the largest variant never upscales. The smaller widths cover phone
@@ -128,19 +159,23 @@ const decoding = priority ? 'sync' : 'async';
 const hasCaption = Astro.slots.has('default');
 ---
 
-<figure class:list={['figure', place === 'side' ? 'figure--side' : `figure--${size}`]}>
-  <Picture
-    src={src}
-    formats={['avif', 'webp']}
-    fallbackFormat="jpg"
-    widths={widths}
-    sizes={sizes}
-    quality={85}
-    alt={alt}
-    loading={loading}
-    decoding={decoding}
-    class="figure__img"
-  />
+<figure class:list={['figure', place === 'side' ? 'figure--side' : `figure--${size}`, svg && 'figure--svg']}>
+  {svgMarkup ? (
+    <div class="figure__svg" style={aspect ? `--fig-aspect: ${aspect}` : undefined} set:html={svgMarkup} />
+  ) : (
+    <Picture
+      src={src!}
+      formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+      widths={widths}
+      sizes={sizes}
+      quality={85}
+      alt={alt!}
+      loading={loading}
+      decoding={decoding}
+      class="figure__img"
+    />
+  )}
   {hasCaption && (
     <figcaption class="figure__caption"><slot /></figcaption>
   )}
