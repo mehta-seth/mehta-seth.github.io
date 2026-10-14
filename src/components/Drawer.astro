@@ -10,8 +10,8 @@
 // the summary line and by the colour of the rule beside the opened text:
 //   background  something the note takes for granted, explained only as far
 //               as the note needs (muted rule)
-//   deeper      optional reading: a proof, some history, an open problem
-//               (accent rule, accent label)
+//   deeper      optional reading: a proof, some history, an open problem,
+//               labelled “A closer look” (accent rule, accent label)
 //   answer      the hidden answer to a "check yourself" question
 // The main text must never depend on what a drawer holds.
 //
@@ -39,7 +39,7 @@ const { kind = 'background', title } = Astro.props;
 
 const LABELS = {
   background: 'Background',
-  deeper: 'Deeper',
+  deeper: 'A closer look',
   answer: 'Answer',
 } as const;
 const label = LABELS[kind];
