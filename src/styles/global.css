@@ -492,7 +492,15 @@ body::before {
    fires only when the user-agent decides a visible focus indicator
    is appropriate — typically Tab key navigation, never touch or
    click. Supported in Safari 15.4+, Chrome 86+, Firefox 85+, all of
-   which long predate the deployment target. */
+   which long predate the deployment target.
+
+   ─── iPhone fix (October 2026) ───
+   Recent iPhone Safari draws the page edge to edge beneath its
+   translucent status bar. Parked just above the viewport by the
+   transform, the unfocused pill sat in that strip and showed through
+   behind the clock. It is now also transparent until it has keyboard
+   focus: opacity:0 keeps it focusable and in the accessibility tree, so
+   Tab still finds it and it fades in as it slides down. */
 .skip-link {
   position: fixed;
   top: 0.5rem;
@@ -508,10 +516,12 @@ body::before {
   /* Offscreen: the transform trick. Kept in the a11y tree (unlike
      display:none) and still focusable (unlike visibility:hidden). */
   transform: translateY(-150%);
-  transition: transform 150ms ease;
+  opacity: 0;
+  transition: transform 150ms ease, opacity 150ms ease;
 }
 .skip-link:focus-visible {
   transform: translateY(0);
+  opacity: 1;
   /* Suppress the default focus outline on this specific element —
      the pill's accent background already communicates focus and an
      additional ring on a pill of this size looks doubled. */
