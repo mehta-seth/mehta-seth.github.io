@@ -20,7 +20,7 @@ import temptation from '../../assets/notes/algorithmic-collusion/temptation.svg?
 
 I came across this topic while working on a project for my [Mathematics of Market Microstructure](https://www.lse.ac.uk/resources/calendar2026-2027/courseGuides/ST/2026_ST461.htm) course, and thought I'd share it in a way that helped me learn it. Most of what follows draws on a recent working paper by Dou et al., and on the older ideas it builds on.
 
----
+<hr class="note-rule" />
 
 Picture two trading programs, A and B. Every morning they receive the same piece of research: a share is worth £1.20 more than the market currently thinks. Both want to buy before the price catches up. The catch is that buying pushes the price up. The dealer they buy from raises the price by a penny for every block of shares the two of them buy, so the more they buy between them, the less each block earns.
 
@@ -36,18 +36,20 @@ It helps to split this into three questions. Does holding back pay? Can a cheat 
 
 ## Why holding back pays
 
-<Figure svg={tradingDay}>One trading day in the toy market, with no other traders' orders. Every block the pair buys pushes the price up a penny, and every block earns whatever gap is left between the true value and the closing price. Left: both hold back at 30 blocks; the price closes halfway up, leaving 60p for every block, so each program earns £18.00. Right: both trade hard at 40 blocks; the price closes two-thirds of the way up, leaving 40p, so each earns £16.00.</Figure>
-
 Everything starts with one simple fact about trading. When the two programs buy $Q$ blocks between them, the price rises by $Q$ pence, so each block earns the 120p gap minus $Q$ pence. A program that buys $q$ blocks earns $q \times (120 - Q)$ pence. That's price impact: buying moves the price against the buyer. And here's the sting. The damage is shared, because each program's buying also moves the price against its rival.
+
+<Figure svg={tradingDay}>One day in the toy market, with no other traders. Each block the pair buys pushes the price up a penny, and each block earns whatever gap is left between the true value and the closing price. Holding back, the price closes halfway up and each program earns £18.00; trading hard, it closes two-thirds of the way up and each earns £16.00.</Figure>
 
 To see what that does, give each program two choices: hold back and buy 30 blocks, or trade hard and buy 40. There are four possible days.
 
 | | B holds back (30 blocks) | B trades hard (40 blocks) |
 |---|---|---|
-| **A holds back** | A £18.00, B £18.00 | A £15.00, B £20.00 |
-| **A trades hard** | A £20.00, B £15.00 | A £16.00, B £16.00 |
+| **A holds back** (30 blocks) | £18.00 each | A £15.00, B £20.00 |
+| **A trades hard** (40 blocks) | A £20.00, B £15.00 | £16.00 each |
 
-Read the table as if you were A. If B holds back, you earn more by trading hard: £20.00 rather than £18.00. If B trades hard, you still earn more by trading hard: £16.00 rather than £15.00. Whatever B does, trading hard pays you better, and B is in the same position. So two programs that each look out only for themselves end up in the bottom-right corner at £16.00 each, even though both would rather be in the top-left corner at £18.00 each. This is the prisoner's dilemma, and the bottom-right corner is what economists call the Nash equilibrium: the outcome where each side's choice is its best response to the other's.
+Read the table as if you were A. If B holds back, you earn more by trading hard: £20.00 rather than £18.00. If B trades hard, you still earn more by trading hard: £16.00 rather than £15.00. Whatever B does, trading hard pays you better, and B is in the same position.
+
+So two programs that each look out only for themselves end up in the bottom-right corner at £16.00 each, even though both would rather be in the top-left corner at £18.00 each. This is the prisoner's dilemma, and the bottom-right corner is what economists call the Nash equilibrium: the outcome where each side's choice is its best response to the other's.
 
 <Drawer kind="background" title="Best responses and Nash equilibrium">
 
@@ -67,7 +69,7 @@ A price carries information when it moves with the thing it's meant to reflect. 
 
 </Drawer>
 
-<Drawer kind="deeper" title="The same arithmetic with any number of traders">
+<Drawer kind="deeper" label="The theory" title="The same arithmetic with any number of traders">
 
 Write each program's order as $\chi$ times the gap, where $\chi$ is its trading intensity, and let $\lambda$ be the price impact (1p per block in the toy). With $I$ programs sharing the same signal,
 
@@ -89,7 +91,13 @@ Staying in that top-left corner needs something that stops each side from cheati
 
 Algorithms can be part of this kind of scheme too, either as tools that carry out an agreement people have made or as a shared hub. In the RealPage litigation over rental housing, the US Justice Department alleged that landlords fed confidential data into a common pricing algorithm. RealPage settled without admitting wrongdoing, and in 2026 a federal judge approved a settlement that bars the software from using that kind of data to recommend rents.
 
-**Tacit collusion: an understanding.** Competitors can also hold back without saying a word, as long as each expects cheating to be noticed and answered. Suppose A knows that if it trades hard today, B will see it and trade hard for the next few days, wiping out more profit than A gained. Then A holds back, and B does the same for the same reason. Nobody has agreed anything; each understands how the other would respond. For that understanding to hold, three things must be true: cheating has to be visible, the response has to be credible, and the future has to matter enough that tomorrow's losses outweigh today's gain. A plan of holding back until you see a cheat, then trading hard for a while, is called a trigger strategy.
+**Tacit collusion: an understanding.** Competitors can also hold back without saying a word, as long as each expects cheating to be noticed and answered. Suppose A knows that if it trades hard today, B will see it and trade hard for the next few days, wiping out more profit than A gained. Then A holds back, and B does the same for the same reason. Nobody has agreed anything; each understands how the other would respond. For that understanding to hold, three things must be true:
+
+- cheating has to be visible;
+- the response has to be credible;
+- the future has to matter enough that tomorrow's losses outweigh today's gain.
+
+A plan of holding back until you see a cheat, then trading hard for a while, is called a trigger strategy.
 
 <Drawer kind="background" title="Repeated games and why the future matters">
 
@@ -101,13 +109,13 @@ The toy market shows how a trigger strategy works when cheating is always seen. 
 
 Tacit collusion is hard to prove, because it can look like careful competition. The classic suspected case is Nasdaq in the early 1990s. Share prices were still quoted in fractions of a dollar then (Nasdaq moved to decimals in 2001), and two finance professors, William Christie and Paul Schultz, noticed something odd. Dealers in many of the most active Nasdaq stocks almost never quoted odd eighths (prices ending in 1/8, 3/8, 5/8 or 7/8 of a dollar). That kept the bid–ask spread, the gap between the prices at which a dealer will buy and sell, at a quarter of a dollar or more. They called it implicit collusion (Christie and Schultz 1994). Within days of their findings reaching the press, dealers in several leading stocks started quoting odd eighths (Christie, Harris and Schultz 1994).
 
-<Drawer kind="deeper" title="How thin the line between tacit and explicit can be">
+<Drawer kind="deeper" label="The evidence" title="How thin the line between tacit and explicit can be">
 
 A class action against the Nasdaq dealers settled in 1997 for 1.027 billion dollars without any admission of wrongdoing, and the Justice Department's investigation suggested that the dealers' conduct had in fact been coordinated. So what looked tacit may have been partly explicit. The distinction rests on evidence of communication, and the same market outcome can come from either.
 
 </Drawer>
 
-<Drawer kind="deeper" title="The folk theorem">
+<Drawer kind="deeper" label="The theory" title="The folk theorem">
 
 Fudenberg and Maskin (1986) showed that in repeated games with sufficiently patient players who can see each other's actions, almost any outcome that gives each player more than it could guarantee itself can be held in place by threats like the trigger strategy above. Collusion is one such outcome, but so are many others. The theorem explains how collusion can be stable; it doesn't predict that collusion will happen.
 
@@ -125,7 +133,9 @@ The first is anonymity. A can't see what B traded, only the market price, which 
 
 The second is noise. Plenty of people buy and sell for reasons that have nothing to do with the information A and B share: someone needs cash, say, or a pension fund rebalances. Their orders push the price around at random. Economists call them noise traders.
 
-So the only window A has on B is a price that also moves for innocent reasons. Whether that window is clear or fogged comes down to one comparison: how far a cheat moves the price, against how far noise usually moves it. In the toy market, a program that buys 40 blocks instead of 30 moves the price by 10p. If noise moves the price by 1p on a typical day, the cheat stands out ten times over and is caught straight away. If noise moves it by 20p, the cheat is half the size of an ordinary day's noise, and on any single day you can't see it. That's the whole difference between the two markets in the opening story.
+So the only window A has on B is a price that also moves for innocent reasons. Whether that window is clear or fogged comes down to one comparison: how far a cheat moves the price, against how far noise usually moves it.
+
+In the toy market, a program that buys 40 blocks instead of 30 moves the price by 10p. If noise moves the price by 1p on a typical day, the cheat stands out ten times over and is caught straight away. If noise moves it by 20p, the cheat is half the size of an ordinary day's noise, and on any single day you can't see it. That's the whole difference between the two markets in the opening story.
 
 Real financial markets add a twist that ordinary ones don't have. In the toy, the dealer raises the price by a fixed penny per block. A real dealer, called a market maker, isn't so passive. It knows that some of the orders it fills come from people who know more than it does, so it protects itself by working out how informative the order flow is and setting its price impact to match.
 
@@ -147,7 +157,7 @@ Camouflage has a consequence for collusion that's easy to miss, and it's the hea
 
 The market maker's learning has a second effect. When informed traders hold back, each unit of their order flow becomes more revealing, so the market maker raises its price impact, and that eats into the gain from holding back. In Kyle's market the prize for holding back shrinks to about 6 per cent, against 12.5 per cent in the toy market, where the impact is fixed (£18.00 against £16.00).
 
-<Drawer kind="deeper" title="Why the fog never clears, in symbols">
+<Drawer kind="deeper" label="The theory" title="Why the fog never clears">
 
 Measure the fog as the ratio of how far a typical noise order moves the price to how far the value typically moves:
 
@@ -161,19 +171,21 @@ In Kyle's market the market maker's price impact is proportional to $\sigma_v/\s
 
 </Drawer>
 
-<Drawer kind="deeper" title="Two markets, two temptations">
+<Drawer kind="deeper" label="The theory" title="Two markets, two temptations">
 
-<Figure svg={temptation}>Profit per trader relative to competition, against the agreed trading intensity as a fraction of the competitive one, $u = \chi/\chi^N$, for two informed traders. Brown, solid: both hold back at $u$. Blue, dashed: one holds back at $u$ while the other plays its best response. Top, Kyle's market: the solid curve is $3u/(2u^2+1)$, peaking at 1.061 when $u = 1/\sqrt{2}$, where the dashed curve $3(u^2+1)^2/\big(4u(2u^2+1)\big)$ reaches 1.193. Bottom, fixed price impact, as in the toy: the solid curve is $3u - 2u^2$, peaking at 1.125 when $u = 3/4$, where the dashed curve $(3-u)^2/4$ reaches 1.266.</Figure>
+<Figure svg={temptation}>Profit per trader against the agreed trading intensity, both relative to competition ($u = \chi/\chi^N$), for two informed traders. Brown, solid: both hold back. Blue, dashed: one cheats on a partner who holds back. Kyle's market: $3u/(2u^2+1)$, peaking at 1.061 at $u = 1/\sqrt{2}$, where cheating pays $3(u^2+1)^2/\big(4u(2u^2+1)\big) = 1.193$. Fixed price impact: $3u - 2u^2$, peaking at 1.125 at $u = 3/4$, where cheating pays $(3-u)^2/4 = 1.266$.</Figure>
 
 In both markets, cheating on a partner who holds back beats holding back by more than holding back beats competing. In Kyle's market the market maker prices for whatever intensity the pair settles on, but within a single day it can't see a deviation, which is what makes the cheat pay.
 
 </Drawer>
 
-So when can the window clear? Only when something pins the price impact down, so that informed traders can't hide by trading more. Dou, Goldstein and Ji's candidate is a group of investors who trade on price alone: they buy when the price looks low and sell when it looks high, without trying to read anything into it. The authors call them information-insensitive investors, and their examples are retail traders who follow technical rules and institutions that buy contracts close to expiry as hedges. I'll call them price-only investors. Because they absorb order flow at a steady rate, they fix the price impact, much as the toy market's dealer does. The price then reflects the informed traders' orders faithfully, and whether a cheat can be seen depends only on how much noise there is. With plenty of price-only investors and little noise, a cheat in the authors' main setting moves the price by more than 400 times a typical noise move, and the price becomes something like a security camera. Turn the noise up, and the same cheat moves the price by less than half a typical noise move.
+So when can the window clear? Only when something pins the price impact down, so that informed traders can't hide by trading more. Dou, Goldstein and Ji's candidate is a group of investors who trade on price alone: they buy when the price looks low and sell when it looks high, without trying to read anything into it. The authors call them information-insensitive investors, and their examples are retail traders who follow technical rules and institutions that buy contracts close to expiry as hedges. I'll call them price-only investors.
 
-<Figure svg={fog}>Same cheat, different fog. Where the price lands after a typical (one-standard-deviation) signal, measured so that 1 is the move the cartel causes. Brown: both informed traders hold back at the cartel's intensity. Blue, dashed: one holds back and the other trades at the competitive intensity. Top, Kyle's market: normal distributions with means 1 and 1.21 and standard deviation 1, the same at every level of noise, because the informed traders scale their trading with the noise. Bottom, a market with plenty of price-only investors and little noise (in Dou, Goldstein and Ji's notation, $\xi = 500$ for the strength of price-only demand and $\sigma_u = 0.1$ for the typical noise order): means 1 and 1.17 with standard deviation 0.0004, so narrow that both are drawn as lines. Two informed traders.</Figure>
+Because they absorb order flow at a steady rate, they fix the price impact, much as the toy market's dealer does. The price then reflects the informed traders' orders faithfully, and whether a cheat can be seen depends only on how much noise there is. With plenty of price-only investors and little noise, a cheat in the authors' main setting moves the price by more than 400 times a typical noise move, and the price becomes something like a security camera. Turn the noise up, and the same cheat moves the price by less than half a typical noise move.
 
-<Drawer kind="deeper" title="The market maker’s pricing rule in Dou, Goldstein and Ji’s model">
+<Figure svg={fog}>Same cheat, different fog: where the price lands after a typical signal, with 1 the move the cartel causes. Brown: both traders hold back. Blue, dashed: one cheats. In Kyle's market the two outcomes overlap almost entirely, at every level of noise. With plenty of price-only investors and little noise they are so sharp that they are drawn as lines, and the cheat is plain to see.</Figure>
+
+<Drawer kind="deeper" label="The model" title="The market maker’s pricing rule">
 
 The market maker chooses the price to minimise the expected sum of an inventory cost and a weighted pricing error,
 
@@ -191,7 +203,7 @@ With no price-only investors ($\xi = 0$) this collapses to $\lambda = \gamma$: K
 
 </Drawer>
 
-<Drawer kind="deeper" title="Policing through a fogged window">
+<Drawer kind="deeper" label="The theory" title="Policing through a fogged window">
 
 Green and Porter (1984) asked how a cartel can survive when its members see only a market price that also moves for random reasons. Their answer is a trigger: whenever the price crosses a threshold, everyone competes hard for a while, whatever the cause. Price wars then break out even when nobody has cheated, because bad luck sometimes trips the trigger, and those occasional wars are the cost of keeping everyone honest. Porter (1983) found prices in a nineteenth-century American railroad cartel switching between collusive and competitive regimes in a way consistent with this logic, although later work struggled to identify what set off each war (Ellison 1994). In the toy market's noisy version, a trigger would have to spot a 10p cheat inside 20p of noise, so it would either fire constantly by mistake or almost never catch a real cheat.
 
@@ -207,7 +219,7 @@ You can think of each program as keeping a scorebook. Every page describes a sit
 
 After each trade, the program nudges the score it just used towards what happened: the profit it made, plus a slightly discounted version of the best score on the page it has landed on. Most of the time it places the order with the highest score. Every so often, and less and less often as time goes on, it tries an order at random, which is the only way it can find out about orders that currently look poor. It's a lot like choosing where to eat. Go back to your favourite and you know what you'll get; try somewhere new and you might find something better, or you might waste an evening. James March (1991) called this tension exploitation versus exploration.
 
-<Drawer kind="background" title="The Q-learning update, in symbols">
+<Drawer kind="background" title="The Q-learning update">
 
 The programs are Q-learners (Watkins and Dayan 1992), and the scorebook is their Q-table. After each trade, the score for the page $s$ and order $x$ just used is updated as
 
@@ -221,7 +233,7 @@ The program explores with a probability that shrinks over time and otherwise pic
 
 </Drawer>
 
-<Drawer kind="deeper" title="Inside Dou, Goldstein and Ji’s laboratory">
+<Drawer kind="deeper" label="The model" title="Inside Dou, Goldstein and Ji’s laboratory">
 
 Dou, Goldstein and Ji's market is Kyle's, extended with several informed traders, trading repeated period after period, and price-only investors. Two Q-learning programs play the informed traders. The market maker learns its pricing rule by regression on the most recent 10,000 periods, and the results survive when it is a Q-learner too. Values, prices and orders sit on grids of 10, 31 and 15 points, the discount factor is 0.95 and the learning rate 0.01. For each market setting the authors run 1,000 independent sessions and wait until every program's choices have stopped changing for a million consecutive periods, which takes between about 20 million and 50 billion periods. Their main settings have plenty of price-only investors ($\xi = 500$), with either little noise ($\sigma_u = 0.1$) or a lot ($\sigma_u = 100$), against a typical news size of $\sigma_v = 1$. They measure collusion by
 
@@ -241,11 +253,13 @@ Early on, while they're experimenting a lot, trading hard looks attractive, beca
 
 The reason is one the programs never see. The score for trading hard on a calm day includes the value of tomorrow's page, and trading hard turns tomorrow's page into one with a price jump. On those pages both programs have learned to trade hard, because after a jump that's what pays. So cheating today lands the cheater in a price war tomorrow, and the war is already priced into the score for cheating.
 
-Once holding back wins on calm pages, it keeps the market calm, which keeps both programs on calm pages. When something does jolt the price, both trade hard for a day or two and then drift back. That's the punishment in the opening story, learned rather than reasoned. It has the shape of tacit collusion, a reward for restraint and a penalty for apparent cheating, but nobody is holding the threat in mind. It's just a pattern in two scorebooks. Dou, Goldstein and Ji call this route collusion through "artificial intelligence". In their main low-noise setting it lifts the programs' profits about 10 per cent above competition, three-quarters of the way to a perfect cartel.
+Once holding back wins on calm pages, it keeps the market calm, which keeps both programs on calm pages. When something does jolt the price, both trade hard for a day or two and then drift back. That's the punishment in the opening story, learned rather than reasoned.
+
+It has the shape of tacit collusion, a reward for restraint and a penalty for apparent cheating, but nobody is holding the threat in mind. It's just a pattern in two scorebooks. Dou, Goldstein and Ji call this route collusion through "artificial intelligence". In their main low-noise setting it lifts the programs' profits about 10 per cent above competition, three-quarters of the way to a perfect cartel.
 
 The reflex needs that clear window. If noise swamps the price, a cheat no longer reliably produces a jump, so the penalty stops landing where it should and the reflex can't form. And if you take yesterday's price off the programs' pages altogether, it can't form at all; in the authors' experiments, collusion then disappears.
 
-<Drawer kind="deeper" title="How close is the reflex to rational play?">
+<Drawer kind="deeper" label="The evidence" title="How close is the reflex to rational play?">
 
 For the low-noise market, Dou, Goldstein and Ji compute how much each program gives up by not playing its best response to the other's learned strategy: on average, about 0.27 per cent of the long-run profit available to it. So the punishment is real but imperfect, since a slightly more aggressive program would gain more today than it would lose to punishment later. Giving the programs a longer memory of past prices and values makes the reflex stronger, not weaker.
 
@@ -255,19 +269,23 @@ For the low-noise market, Dou, Goldstein and Ji compute how much each program gi
 
 Now move the programs to a fogged market with heavy noise. No reflex can form here. And yet Dou, Goldstein and Ji find that the programs still trade less than competition would, and still earn more. The explanation is a quirk built into learning from experience.
 
-Suppose a program places a big order on a day when noise traders happen to be buying too. The price is pushed up against it, and it does badly. Its score for big orders on that page drops, so it stops placing them, and because it no longer places them, the score never gets a chance to recover. Now suppose a big order gets lucky instead and earns a windfall. Its score jumps, the program keeps using it, and with repeated use the score soon falls back to what big orders really earn. So the pessimistic mistakes stick and the optimistic ones get corrected. Big orders suffer most, because a bigger order takes a bigger hit from the same noise.
+Suppose a program places a big order on a day when noise traders happen to be buying too. The price is pushed up against it, and it does badly. Its score for big orders on that page drops, so it stops placing them, and because it no longer places them, the score never gets a chance to recover.
+
+Now suppose a big order gets lucky instead and earns a windfall. Its score jumps, the program keeps using it, and with repeated use the score soon falls back to what big orders really earn.
+
+So the pessimistic mistakes stick and the optimistic ones get corrected. Big orders suffer most, because a bigger order takes a bigger hit from the same noise.
 
 The result is that each program learns to under-rate trading hard. Neither one is enforcing anything. Each is simply wrong about what trading hard would earn, and wrong in a direction that happens to suit them both. Because they both make the same mistake, they both trade less than competition would.
 
 Mark Twain described this trap in 1897: a cat that sits on a hot stove-lid will never sit on a hot one again, "but also she will never sit down on a cold one anymore". Jerker Denrell and James March (2001) gave it a name, the hot stove effect: learning that repeats what has worked is biased against options that look worse early on than they really are, especially risky ones. Dou, Goldstein and Ji's over-pruning bias is, in essence, the hot stove effect at work inside a market, and they call this route collusion through "artificial stupidity".
 
-<Figure svg={hotStove}>The hot stove in the trading model. One learning program faces a rival that holds back at the cartel's intensity, and chooses between holding back too and deviating to its best response; the deviation pays more on average but carries more noise. Scores are shown relative to the competitive profit. Top: one learner at a fog of 0.2. Its score for deviating dips below its score for holding back several times; each time it stops deviating and that score freezes, and after one deep enough dip it never tries again, although deviating really earns 1.27 against 1.13 for holding back. Bottom: across 2,000 learners for each setting, the share that end up holding back, against the fog in the price (how far a typical noise order moves the price, relative to how far the value typically moves) on a logarithmic scale, for two learning rates. Dotted lines mark a market with plenty of price-only investors and little noise (fog about 0.0002), the same market with heavy noise (about 0.2) and Kyle's market (about 0.5). Stylised: one learner, one signal state and illustrative learning rates, not a reproduction of Dou, Goldstein and Ji's simulations.</Figure>
+<Figure svg={hotStove}>The hot stove in the trading model. A learning program faces a rival that holds back, and chooses between holding back too and deviating, which pays more on average but swings more with the noise. Top: one learner's two scores. Each time the score for deviating dips below holding back, the learner stops deviating and that score freezes, and after one deep enough dip it is never tried again. Bottom: out of 2,000 learners at each level of fog, the share that end up holding back. A stylised illustration, not a reproduction of Dou, Goldstein and Ji's simulations.</Figure>
 
 Notice how the two routes fit together. The fog that stops the reflex from forming is the same fog that feeds the blind spot: noise makes a cheat invisible, and it's also what makes big orders look worse than they are. That's why the blind spot matters most in the very markets where the reflex can't work, including Kyle's market, where camouflage keeps the window fogged at every noise level. There, Dou, Goldstein and Ji find the blind spot lifting profits about 5 per cent above competition, whatever the amount of noise.
 
 So is this collusion? It has the outcome of collusion: both programs earn more than competition would give them, and either could gain in the short run by trading harder. That's Dou, Goldstein and Ji's definition. What it lacks is the thing economists have traditionally insisted on, a scheme of reward and punishment that holds the outcome in place. By that stricter standard, used by Emilio Calvano and his coauthors (2020) following Harrington (2018), the blind spot isn't collusion at all, and Dou, Goldstein and Ji acknowledge as much. It does the same damage to the market either way.
 
-<Drawer kind="deeper" title="The blind spot in theory">
+<Drawer kind="deeper" label="The theory" title="Why the blind spot looks like risk aversion">
 
 The bias makes a program behave as if it were risk-averse, even though it's built to maximise expected profit. Learning theory shows this can happen even under an optimal learning policy: a decision-maker can come to prefer a sure thing to a risky option with the same average payoff (Denrell 2007). That links the blind spot to the classic analysis of risk-averse informed traders, who trade less aggressively on their information than risk-neutral ones (Subrahmanyam 1991), and Dou, Goldstein and Ji model the bias in this spirit, as an imagined penalty for exposure to noise.
 
@@ -283,13 +301,13 @@ From the outside, an agreement, an understanding, a learned reflex and a learned
 
 **Is there enforcement?** Tacit collusion and the learned reflex both depend on responding to apparent cheating, so you can expose them by poking the market and watching what happens. Dou, Goldstein and Ji's test works like a doctor's reflex test, a tap on the knee to see whether the leg kicks. They take programs that have finished learning, add an unexpected burst of noise trading on one day so that the price jumps, and watch the next day. Programs with a learned reflex respond the way they learned to respond to cheating: they trade hard, and their own profits fall. Programs with a blind spot just carry on.
 
-<Figure svg={fingerprints}>The two fingerprints, drawn schematically rather than from data. Top: how hard the programs trade after an unexpected burst of noise trading on day 3. Programs with a learned reflex trade hard on day 4 and return to normal over the next day or two; programs with a learned blind spot carry on as before. Bottom: the day-4 response against the size of the burst, at the four sizes Dou, Goldstein and Ji test. The reflex ignores a tiny burst and responds about equally to all the larger ones; the blind spot never responds.</Figure>
+<Figure svg={fingerprints}>The two fingerprints, drawn schematically. Top: after a burst of noise trading on day 3, programs with a learned reflex trade hard on day 4 and then settle; programs with a blind spot carry on as before. Bottom: the reflex ignores a tiny burst and responds about equally to every larger one, at the four sizes Dou, Goldstein and Ji test.</Figure>
 
-The shape of the response tells you something too. In the low-noise market, a tiny burst, about a quarter of a per cent of a typical order, produces no reaction on average, while bursts of about 2.5 to 15 per cent all produce roughly the same spell of hard trading, with a weaker echo a day later. A response that switches on above a threshold, rather than growing with the size of the shock, is how a trigger behaves. Forcing one program to trade hard for a single day gives the same verdict. In the low-noise market both programs trade hard the next day; in the noisy market the other program ignores the deviation, even though it cost it money.
+The shape of the response tells you something too. In the low-noise market, a tiny burst, about a quarter of a per cent of a typical order, produces no reaction on average. Bursts of about 2.5 to 15 per cent all produce roughly the same spell of hard trading, with a weaker echo a day later. A response that switches on above a threshold, rather than growing with the size of the shock, is how a trigger behaves. Forcing one program to trade hard for a single day gives the same verdict. In the low-noise market both programs trade hard the next day; in the noisy market the other program ignores the deviation, even though it cost it money.
 
 A few other levers separate the two routes. Take yesterday's price away from the programs and the reflex dies; the blind spot never relied on it in the first place. Add noise and the reflex weakens while the blind spot grows stronger. Make the programs more patient and the reflex strengthens while the blind spot hardly changes.
 
-<Drawer kind="deeper" title="The same test in ordinary markets">
+<Drawer kind="deeper" label="The evidence" title="The same test in ordinary markets">
 
 Emilio Calvano and his coauthors (2020) ran the same kind of experiment with pricing algorithms competing to sell a product. The algorithms were never told about each other and never communicated, yet they learned to charge prices well above the competitive level, capturing roughly 70 to 90 per cent of the extra profit that full collusion would bring, depending on how they were tuned. When one was forced to cut its price, the other retaliated, and prices then drifted back up: the fingerprint of a learned reflex. Ordinary markets make the reflex easy, because rivals' prices are visible. The collusion was also specific to the pair. Matched with a new rival, a program's profit gain fell from 85 per cent to about 20 per cent, although the new pair relearned to collude in less than a tenth of the original time.
 
@@ -301,21 +319,21 @@ Emilio Calvano and his coauthors (2020) ran the same kind of experiment with pri
 
 Put all of this together and you can see why algorithmic collusion is so awkward for economists, regulators and courts. Four questions do most of the damage.
 
-**Causality.** High profits on their own prove nothing. A market with few informed traders and plenty of price-only investors can be very profitable for the informed even when they compete. To say that algorithms caused something, you need to know what competition would have produced, and in a financial market that benchmark is never observed; it has to come from a model. Field studies get at causality by comparing like with like. When algorithmic pricing software spread through Germany's retail petrol market from 2017, margins rose only for stations that faced competitors, and in markets with two or three stations only when every station had adopted it (Assad et al. 2024). Comparisons like that are much harder in financial markets, where there's no sign across the road to read.
+**Causality.** High profits on their own prove nothing. A market with few informed traders and plenty of price-only investors can be very profitable for the informed even when they compete. To say that algorithms caused something, you need to know what competition would have produced, and in a financial market that benchmark is never observed; it has to come from a model. Field studies get at causality by comparing like with like. When algorithmic pricing software spread through Germany's retail petrol market from 2017, margins rose only for stations that faced competitors. In markets with two or three stations, they rose only when every station had adopted it (Assad et al. 2024). Comparisons like that are much harder in financial markets, where there's no sign across the road to read.
 
 **Detectability.** The behaviour lives inside the programs' scorebooks, while a regulator sees only trades and prices. A learned reflex leaves a fingerprint, but only for someone who can observe the shocks that set it off and the reactions that follow. A blind spot leaves almost nothing, since it's made of trades that were never placed, and it thrives in noisy markets, where every statistical test is at its weakest.
 
 **Intent.** The law looks for some meeting of minds, or at least knowing coordination, and emergent collusion has no mind to meet. The people who deploy the programs may never have intended the outcome, or even foreseen it. Since tacit collusion between people is already largely lawful, the real question is whether outcomes nobody intended deserve different treatment when machines produce them. Whether deploying a program that predictably learns to collude should itself carry liability is still being debated (Harrington 2018).
 
-**Remedies.** The obvious fixes pull against each other. Limiting what trading programs can remember would starve the reflex of the price history it needs, but Dou, Goldstein and Ji warn that such limits can deepen the blind spot, by distorting learning further and pruning away the aggressive strategies that make markets efficient. Hub cases are simpler, because the remedy is to break up the hub, as in the RealPage settlement. Emergent collusion has no hub to break.
+**Remedies.** The obvious fixes pull against each other. Limiting what trading programs can remember would starve the reflex of the price history it needs. But Dou, Goldstein and Ji warn that such limits can deepen the blind spot, by distorting learning further and pruning away the aggressive strategies that make markets efficient. Hub cases are simpler, because the remedy is to break up the hub, as in the RealPage settlement. Emergent collusion has no hub to break.
 
-<Drawer kind="deeper" title="What regulators are saying">
+<Drawer kind="deeper" label="In practice" title="What regulators are saying">
 
 In 2025 the Bank of England's Financial Policy Committee warned that trading models might learn that market stress creates opportunities for profit and act to make stress more likely (Bank of England 2025). In April 2026 the Bank said it was working with international counterparts to understand how AI agents might affect trading, and in March 2026 the risk of AI-enabled collusion in over-the-counter trading, where dealers and clients trade directly rather than on an exchange, was on the agenda of the European Central Bank's Foreign Exchange Contact Group (ECB Foreign Exchange Contact Group 2026). I'm not aware of any public enforcement case in which learning algorithms were found to have colluded in a financial market.
 
 </Drawer>
 
-<Drawer kind="deeper" title="Does a blind spot count as collusion?">
+<Drawer kind="deeper" label="The debate" title="Does a blind spot count as collusion?">
 
 The question is as old as the experiments. Waltman and Kaymak (2008) found that Q-learners competing on quantities produced less than in the competitive equilibrium, and even less when they had no memory with which to punish. Calvano and his coauthors took that as a warning: high prices without reward and punishment might be a failure to learn rather than collusion. A related line of work in computer science asks whether threats are needed at all. Arunachaleswaran and coauthors (2025) show that monopoly-like prices can arise when one seller runs a standard no-regret learning algorithm, one guaranteed to do about as well over time as its best fixed price in hindsight, and the other optimises against it, with no threats anywhere. Hartline (2026) replies that this isn't collusion, because one seller is simply behaving non-competitively while the other responds, and collusion requires both to be complicit. The disagreement is partly about words, but the law has to decide which outcomes to prohibit.
 
@@ -331,7 +349,7 @@ If you keep only one page of this note, keep this one. Everything above comes do
 
 **What stops each from cheating?** There are five possible answers, and the differences between them are the ones that matter.
 
-| Kind | Communication | Does anyone understand the scheme? | What holds restraint in place | Where it can work in finance |
+| Kind | Communication | Understood by anyone? | What holds restraint in place | Where it can work in finance |
 |---|---|---|---|---|
 | Explicit collusion | Yes | Yes | An agreement, checked by the parties | Wherever the parties can talk |
 | Collusion through a hub | Indirect, through a common algorithm or pooled data | Not necessarily | The shared algorithm's choices | Wherever firms share a provider or data |
@@ -339,15 +357,22 @@ If you keep only one page of this note, keep this one. Everything above comes do
 | Learned reflex | No | No | A learned response to price jumps | Only where cheating can be seen through the price |
 | Learned blind spot | No | No | Nothing: each under-rates trading hard | Where noise hides cheating, including Kyle's market |
 
-<Figure svg={collusionMap}>The map, drawn schematically. Strength of collusion against the fog in the price, from thin to thick, in a market with plenty of price-only investors. Where the fog is thin, a learned reflex holds restraint in place, and it fades as the fog thickens. Where the fog is thick, the learned blind spot takes over. In between, collusion is weakest. Kyle's market sits on the thick side at every level of noise. The shape follows the pattern Dou, Goldstein and Ji report; the curve is not their data.</Figure>
+<Figure svg={collusionMap}>The map, drawn schematically for a market with plenty of price-only investors. Where the fog is thin, a learned reflex holds restraint in place; where it is thick, the blind spot takes over, and collusion is weakest in between. Kyle's market sits on the thick side. The shape follows the pattern Dou, Goldstein and Ji report; the curve is not their data.</Figure>
 
-Whichever route the programs take, the costs look the same. Trading becomes more expensive, prices carry less information and mispricing grows, and the extra profit is paid by whoever is trading without information. That's the whole model. The specialist literature fills in each piece of it, from how price impact is set to how a learning rule's biases can be measured, and with this picture in place each of those should feel like a detail of something you already understand.
+Whichever route the programs take, the costs look the same. Trading becomes more expensive, prices carry less information and mispricing grows, and the extra profit is paid by whoever is trading without information. That's the whole model. The specialist literature fills in each piece of it, from how price impact is set to how a learning rule's biases can be measured. With this picture in place, each of those should feel like a detail of something you already understand.
 
 ## Going further
 
-If you'd like to go further, here's where to start. For the study this note leans on most, Dou, Goldstein and Ji (2025). For the experiment that started the field in ordinary markets, Calvano et al. (2020). For the market model, Kyle (1985). For the learning bias, Denrell and March (2001). For the other side of the market, where the learning programs are the market makers, Colliard, Foucault and Lovo (2022) and Cont and Xiong (2024). And for reinforcement learning in finance more broadly, Hambly, Xu and Yang (2023).
+If you'd like to go further, here's where to start:
 
-<Drawer kind="deeper" title="What else the literature has found">
+- the study this note leans on most: Dou, Goldstein and Ji (2025);
+- the experiment that started the field, in ordinary markets: Calvano et al. (2020);
+- the market model: Kyle (1985);
+- the learning bias: Denrell and March (2001);
+- the other side of the market, where the learning programs are the market makers: Colliard, Foucault and Lovo (2022) and Cont and Xiong (2024);
+- reinforcement learning in finance more broadly: Hambly, Xu and Yang (2023).
+
+<Drawer kind="deeper" label="Further reading" title="What else the literature has found">
 
 **Other routes to high prices.** Banchio and Mantegazza identify spontaneous coupling: the estimates of independent Q-learners can become statistically linked through correlated play, sustaining high prices without any reward-and-punishment scheme. Hansen, Misra and Pai (2021) show that simple bandit algorithms, used independently by each firm, can also reach supra-competitive prices. Meylahn and den Boer (2022) design a pricing algorithm that provably learns to collude, and find collusion easier when competitors share demand information or use the same algorithm.
 
@@ -362,6 +387,8 @@ If you'd like to go further, here's where to start. For the study this note lean
 </Drawer>
 
 ## References
+
+<div class="note-refs">
 
 - Abada, I., and X. Lambin (2023). Artificial intelligence: Can seemingly collusive outcomes be avoided? *Management Science* 69(9), 5042–5065.
 - Abada, I., X. Lambin and N. Tchakarov (2024). Collusion by mistake: Does algorithmic sophistication drive supra-competitive profits? *European Journal of Operational Research* 318(3), 927–953.
@@ -408,3 +435,5 @@ If you'd like to go further, here's where to start. For the study this note lean
 - US Department of Justice (2015). Five major banks agree to parent-level guilty pleas. Press release, 20 May.
 - Waltman, L., and U. Kaymak (2008). Q-learning agents in a Cournot oligopoly model. *Journal of Economic Dynamics and Control* 32(10), 3275–3293.
 - Watkins, C. J. C. H., and P. Dayan (1992). Q-learning. *Machine Learning* 8(3), 279–292.
+
+</div>
