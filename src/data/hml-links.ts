@@ -25,6 +25,7 @@ export interface HmlLink {
 
 export const hmlLinks: Record<string, HmlLink> = {
   'sigma-algebra': { url: '/learn/sigma-algebras/', label: 'σ-algebra' },
+  'algorithmic-collusion': { url: '/learn/algorithmic-collusion/', label: 'Algorithmic Collusion' },
   'classic-cocktails': { url: '/learn/classic-cocktails/', label: 'Classic Cocktails' },
   'art-history': { url: '/learn/art-history/', label: 'Art History' },
   'clouds': { url: '/learn/clouds/' },
