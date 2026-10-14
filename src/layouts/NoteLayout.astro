@@ -393,6 +393,65 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
     margin: 3.25em 0 3em;
     background: transparent;
   }
+  /* A visible hairline, for the one place a note wants a drawn rule: under
+     a short personal prelude, before the note proper. Authored as
+     <hr class="note-rule" />. VISUAL TUNABLES: margins, colour. */
+  .note__body hr.note-rule {
+    border-top: 1px solid var(--border);
+    max-width: var(--note-measure);
+    margin: 1.9em 0 2.1em;
+  }
+
+  /* Tables (GFM pipes in MDX). Hairline rows, bold header, numbers and
+     words left-aligned; a wide table scrolls inside its own box on a phone
+     rather than pushing the page sideways. display:block is what lets a
+     table scroll; its rows still lay out as a table. VISUAL TUNABLES: the
+     size step, cell padding. */
+  .note__body table {
+    display: block;
+    max-width: 100%;
+    width: max-content;
+    overflow-x: auto;
+    border-collapse: collapse;
+    margin: 1.7em 0 1.9em;
+    font-size: 0.9em;
+    line-height: 1.45;
+  }
+  .note__body th,
+  .note__body td {
+    padding: 0.55em 1.1em 0.55em 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border);
+  }
+  .note__body thead th {
+    font-weight: 600;
+    border-bottom-color: var(--text-muted);
+  }
+  .note__body tbody th,
+  .note__body td strong {
+    font-weight: 600;
+  }
+
+  /* Reference list: the small apparatus size, muted, no bullets, with a
+     hanging indent so each entry's first word lines up. Authored as a
+     Markdown list inside <div class="note-refs">. */
+  .note__body .note-refs {
+    font-size: var(--fs-small);
+    line-height: 1.5;
+    color: var(--text-muted);
+    max-width: var(--note-measure);
+  }
+  .note__body .note-refs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .note__body .note-refs li {
+    margin: 0 0 0.55em;
+    padding-left: 1.4em;
+    text-indent: -1.4em;
+  }
 
   .note__body blockquote {
     margin: 1.8em 0;
