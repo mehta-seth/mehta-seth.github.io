@@ -1,0 +1,336 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" role="img" viewBox="0 0 540 475.2" xmlns="http://www.w3.org/2000/svg" version="1.1"><title>Schematic. After a burst of noise trading on day 3, programs with a learned reflex trade hard on day 4 and then return to normal, while programs with a blind spot do not react. The reflex ignores tiny bursts and responds equally to larger ones.</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="fingerprints-figure_1">
+  <g id="fingerprints-patch_1">
+   <path d="M 0 475.2 
+L 540 475.2 
+L 540 0 
+L 0 0 
+L 0 475.2 
+z
+" style="fill: none"/>
+  </g>
+  <g id="fingerprints-axes_1">
+   <g id="fingerprints-patch_2">
+    <path d="M 64.8 168.48 
+L 529.2 168.48 
+L 529.2 28.512 
+L 64.8 28.512 
+L 64.8 168.48 
+z
+" style="fill: none"/>
+   </g>
+   <g id="fingerprints-patch_3">
+    <path d="M 183.876923 168.48 
+L 231.507692 168.48 
+L 231.507692 28.512 
+L 183.876923 28.512 
+z
+" clip-path="url(#fingerprints-pc3f64e36c8)" style="fill: var(--fig-band, #ece7dd)"/>
+   </g>
+   <g id="fingerprints-matplotlib.axis_1">
+    <g id="fingerprints-xtick_1">
+     <g id="fingerprints-line2d_1"/>
+     <g id="fingerprints-text_1">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="88.615385" y="182.345" transform="rotate(-0 88.615385 182.345)">1</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_2">
+     <g id="fingerprints-line2d_2"/>
+     <g id="fingerprints-text_2">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="148.153846" y="182.345" transform="rotate(-0 148.153846 182.345)">2</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_3">
+     <g id="fingerprints-line2d_3"/>
+     <g id="fingerprints-text_3">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="207.692308" y="182.345" transform="rotate(-0 207.692308 182.345)">3</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_4">
+     <g id="fingerprints-line2d_4"/>
+     <g id="fingerprints-text_4">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="267.230769" y="182.345" transform="rotate(-0 267.230769 182.345)">4</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_5">
+     <g id="fingerprints-line2d_5"/>
+     <g id="fingerprints-text_5">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="326.769231" y="182.345" transform="rotate(-0 326.769231 182.345)">5</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_6">
+     <g id="fingerprints-line2d_6"/>
+     <g id="fingerprints-text_6">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="386.307692" y="182.345" transform="rotate(-0 386.307692 182.345)">6</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_7">
+     <g id="fingerprints-line2d_7"/>
+     <g id="fingerprints-text_7">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="445.846154" y="182.345" transform="rotate(-0 445.846154 182.345)">7</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_8">
+     <g id="fingerprints-line2d_8"/>
+     <g id="fingerprints-text_8">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="505.384615" y="182.345" transform="rotate(-0 505.384615 182.345)">8</text>
+     </g>
+    </g>
+    <g id="fingerprints-text_9">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="297" y="197.669844" transform="rotate(-0 297 197.669844)">day</text>
+    </g>
+   </g>
+   <g id="fingerprints-matplotlib.axis_2">
+    <g id="fingerprints-ytick_1">
+     <g id="fingerprints-line2d_9"/>
+     <g id="fingerprints-text_10">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="58.8" y="144.7645" transform="rotate(-0 58.8 144.7645)">normal</text>
+     </g>
+    </g>
+    <g id="fingerprints-ytick_2">
+     <g id="fingerprints-line2d_10"/>
+     <g id="fingerprints-text_11">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="58.8" y="58.3645" transform="rotate(-0 58.8 58.3645)">hard</text>
+     </g>
+    </g>
+   </g>
+   <g id="fingerprints-line2d_11">
+    <path d="M 88.615385 140.832 
+L 148.153846 140.832 
+L 207.692308 140.832 
+L 267.230769 140.832 
+L 326.769231 140.832 
+L 386.307692 140.832 
+L 445.846154 140.832 
+L 505.384615 140.832 
+" clip-path="url(#fingerprints-pc3f64e36c8)" style="fill: none; stroke-dasharray: 10.4,6.5; stroke-dashoffset: 0; stroke: var(--text-muted, #6a6358); stroke-opacity: 0.8; stroke-width: 2.6"/>
+   </g>
+   <g id="fingerprints-patch_4">
+    <path d="M 64.8 168.48 
+L 529.2 168.48 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="fingerprints-text_12">
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(158.676175 38.6115)">burst of noise trading:</text>
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(173.448362 50.345578)">the price jumps</text>
+   </g>
+   <g id="fingerprints-line2d_12">
+    <path d="M 88.615385 140.832 
+L 148.153846 140.832 
+L 207.692308 140.832 
+L 267.230769 54.432 
+L 326.769231 110.592 
+L 386.307692 136.512 
+L 445.846154 140.832 
+L 505.384615 140.832 
+" clip-path="url(#fingerprints-pc3f64e36c8)" style="fill: none; stroke: var(--text, #1a1814); stroke-width: 2; stroke-linecap: round"/>
+    <defs>
+     <path id="fingerprints-m149391843c" d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" style="stroke: var(--text, #1a1814)"/>
+    </defs>
+    <g clip-path="url(#fingerprints-pc3f64e36c8)">
+     <use xlink:href="#fingerprints-m149391843c" x="88.615385" y="140.832" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-m149391843c" x="148.153846" y="140.832" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-m149391843c" x="207.692308" y="140.832" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-m149391843c" x="267.230769" y="54.432" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-m149391843c" x="326.769231" y="110.592" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-m149391843c" x="386.307692" y="136.512" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-m149391843c" x="445.846154" y="140.832" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-m149391843c" x="505.384615" y="140.832" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+    </g>
+   </g>
+   <g id="fingerprints-text_13">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="276.161538" y="56.937078" transform="rotate(-0 276.161538 56.937078)">learned reflex: trades hard the next day</text>
+   </g>
+   <g id="fingerprints-text_14">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="514.315385" y="159.929" transform="rotate(-0 514.315385 159.929)">learned blind spot: no change</text>
+   </g>
+   <g id="fingerprints-text_15">
+    <text style="font-style: italic; font-size: 9.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="529.2" y="28.940813" transform="rotate(-0 529.2 28.940813)">schematic</text>
+   </g>
+   <g id="fingerprints-text_16">
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="64.8" y="18.512" transform="rotate(-0 64.8 18.512)">How hard the programs trade, day by day</text>
+   </g>
+  </g>
+  <g id="fingerprints-axes_2">
+   <g id="fingerprints-patch_5">
+    <path d="M 64.8 413.424 
+L 529.2 413.424 
+L 529.2 273.456 
+L 64.8 273.456 
+L 64.8 413.424 
+z
+" style="fill: none"/>
+   </g>
+   <g id="fingerprints-matplotlib.axis_3">
+    <g id="fingerprints-xtick_9">
+     <g id="fingerprints-line2d_13"/>
+     <g id="fingerprints-text_17">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(92.719267 427.289)">tiny</text>
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(84.124658 439.581844)">(0.25%)</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_10">
+     <g id="fingerprints-line2d_14"/>
+     <g id="fingerprints-text_18">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(189.68445 427.289)">medium</text>
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(193.999372 439.471844)">(2.5%)</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_11">
+     <g id="fingerprints-line2d_15"/>
+     <g id="fingerprints-text_19">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(304.244477 427.289)">large</text>
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(297.641899 439.581844)">(11.5%)</text>
+     </g>
+    </g>
+    <g id="fingerprints-xtick_12">
+     <g id="fingerprints-line2d_16"/>
+     <g id="fingerprints-text_20">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(399.259739 427.289)">very large</text>
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(408.781614 439.581844)">(15%)</text>
+     </g>
+    </g>
+    <g id="fingerprints-text_21">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="297" y="454.906687" transform="rotate(-0 297 454.906687)">size of the burst, as a share of a typical order</text>
+    </g>
+   </g>
+   <g id="fingerprints-matplotlib.axis_4">
+    <g id="fingerprints-ytick_3">
+     <g id="fingerprints-line2d_17"/>
+     <g id="fingerprints-text_22">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="58.8" y="401.8045" transform="rotate(-0 58.8 401.8045)">none</text>
+     </g>
+    </g>
+    <g id="fingerprints-ytick_4">
+     <g id="fingerprints-line2d_18"/>
+     <g id="fingerprints-text_23">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(37.124844 292.819578)">hard</text>
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(24.710312 305.002422)">trading</text>
+     </g>
+    </g>
+   </g>
+   <g id="fingerprints-line2d_19">
+    <path d="M 102.165517 397.872 
+L 208.924138 397.872 
+L 315.682759 397.872 
+L 422.441379 397.872 
+" clip-path="url(#fingerprints-p92f05408a9)" style="fill: none; stroke-dasharray: 10.4,6.5; stroke-dashoffset: 0; stroke: var(--text-muted, #6a6358); stroke-opacity: 0.8; stroke-width: 2.6"/>
+    <defs>
+     <path id="fingerprints-m9f98d644d0" d="M 0 3 
+C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
+C 2.683901 1.55874 3 0.795609 3 0 
+C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
+C 1.55874 -2.683901 0.795609 -3 0 -3 
+C -0.795609 -3 -1.55874 -2.683901 -2.12132 -2.12132 
+C -2.683901 -1.55874 -3 -0.795609 -3 0 
+C -3 0.795609 -2.683901 1.55874 -2.12132 2.12132 
+C -1.55874 2.683901 -0.795609 3 0 3 
+z
+" style="stroke: var(--text-muted, #6a6358); stroke-opacity: 0.8"/>
+    </defs>
+    <g clip-path="url(#fingerprints-p92f05408a9)">
+     <use xlink:href="#fingerprints-m9f98d644d0" x="102.165517" y="397.872" style="fill: var(--bg, #faf8f3); fill-opacity: 0.8; stroke: var(--text-muted, #6a6358); stroke-opacity: 0.8"/>
+     <use xlink:href="#fingerprints-m9f98d644d0" x="208.924138" y="397.872" style="fill: var(--bg, #faf8f3); fill-opacity: 0.8; stroke: var(--text-muted, #6a6358); stroke-opacity: 0.8"/>
+     <use xlink:href="#fingerprints-m9f98d644d0" x="315.682759" y="397.872" style="fill: var(--bg, #faf8f3); fill-opacity: 0.8; stroke: var(--text-muted, #6a6358); stroke-opacity: 0.8"/>
+     <use xlink:href="#fingerprints-m9f98d644d0" x="422.441379" y="397.872" style="fill: var(--bg, #faf8f3); fill-opacity: 0.8; stroke: var(--text-muted, #6a6358); stroke-opacity: 0.8"/>
+    </g>
+   </g>
+   <g id="fingerprints-patch_6">
+    <path d="M 64.8 413.424 
+L 529.2 413.424 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="fingerprints-line2d_20">
+    <path d="M 102.165517 397.872 
+L 155.544828 397.872 
+" clip-path="url(#fingerprints-p92f05408a9)" style="fill: none; stroke: var(--text, #1a1814); stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="fingerprints-line2d_21">
+    <path d="M 155.544828 397.872 
+L 155.544828 294.192 
+" clip-path="url(#fingerprints-p92f05408a9)" style="fill: none; stroke-dasharray: 1.2,3; stroke-dashoffset: 0; stroke: var(--text, #1a1814); stroke-width: 1.2"/>
+   </g>
+   <g id="fingerprints-line2d_22">
+    <path d="M 155.544828 294.192 
+L 422.441379 294.192 
+" clip-path="url(#fingerprints-p92f05408a9)" style="fill: none; stroke: var(--text, #1a1814); stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="fingerprints-text_24">
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(160.882759 342.661172)">threshold</text>
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(160.882759 354.29025)">somewhere here</text>
+   </g>
+   <g id="fingerprints-text_25">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="435.252414" y="296.752078" transform="rotate(-0 435.252414 296.752078)">learned reflex</text>
+   </g>
+   <g id="fingerprints-text_26">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text-muted, #6a6358)" x="435.252414" y="400.432078" transform="rotate(-0 435.252414 400.432078)">learned blind spot</text>
+   </g>
+   <g id="fingerprints-text_27">
+    <text style="font-style: italic; font-size: 9.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="529.2" y="273.884813" transform="rotate(-0 529.2 273.884813)">schematic</text>
+   </g>
+   <g id="fingerprints-text_28">
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="64.8" y="263.456" transform="rotate(-0 64.8 263.456)">Day-4 response, by size of the burst</text>
+   </g>
+   <g id="fingerprints-line2d_23">
+    <path d="M 102.165517 397.872 
+L 208.924138 294.192 
+L 315.682759 294.192 
+L 422.441379 294.192 
+" clip-path="url(#fingerprints-p92f05408a9)" style="fill: none"/>
+    <defs>
+     <path id="fingerprints-ma3bfad05b5" d="M 0 3 
+C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
+C 2.683901 1.55874 3 0.795609 3 0 
+C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
+C 1.55874 -2.683901 0.795609 -3 0 -3 
+C -0.795609 -3 -1.55874 -2.683901 -2.12132 -2.12132 
+C -2.683901 -1.55874 -3 -0.795609 -3 0 
+C -3 0.795609 -2.683901 1.55874 -2.12132 2.12132 
+C -1.55874 2.683901 -0.795609 3 0 3 
+z
+" style="stroke: var(--text, #1a1814)"/>
+    </defs>
+    <g clip-path="url(#fingerprints-p92f05408a9)">
+     <use xlink:href="#fingerprints-ma3bfad05b5" x="102.165517" y="397.872" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-ma3bfad05b5" x="208.924138" y="294.192" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-ma3bfad05b5" x="315.682759" y="294.192" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+     <use xlink:href="#fingerprints-ma3bfad05b5" x="422.441379" y="294.192" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="fingerprints-pc3f64e36c8">
+   <rect x="64.8" y="28.512" width="464.4" height="139.968"/>
+  </clipPath>
+  <clipPath id="fingerprints-p92f05408a9">
+   <rect x="64.8" y="273.456" width="464.4" height="139.968"/>
+  </clipPath>
+ </defs>
+</svg>

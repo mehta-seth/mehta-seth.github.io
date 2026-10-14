@@ -1,0 +1,237 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" role="img" viewBox="0 0 540 288" xmlns="http://www.w3.org/2000/svg" version="1.1"><title>Schematic U-shaped curve of collusion against fog: strong where the fog is thin, held by a learned reflex; weakest in between; strong again where the fog is thick, through the learned blind spot. Kyle's market sits on the thick side.</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="map-figure_1">
+  <g id="map-patch_1">
+   <path d="M 0 288 
+L 540 288 
+L 540 0 
+L 0 0 
+L 0 288 
+z
+" style="fill: none"/>
+  </g>
+  <g id="map-axes_1">
+   <g id="map-patch_2">
+    <path d="M 59.4 195.84 
+L 531.9 195.84 
+L 531.9 8.64 
+L 59.4 8.64 
+L 59.4 195.84 
+z
+" style="fill: none"/>
+   </g>
+   <g id="map-patch_3">
+    <path d="M 59.4 195.84 
+L 248.4 195.84 
+L 248.4 8.64 
+L 59.4 8.64 
+z
+" clip-path="url(#map-pf8ded17b0f)" style="fill: var(--fig-accent-soft, #ecdcc8); opacity: 0.7"/>
+   </g>
+   <g id="map-patch_4">
+    <path d="M 319.275 195.84 
+L 531.9 195.84 
+L 531.9 8.64 
+L 319.275 8.64 
+z
+" clip-path="url(#map-pf8ded17b0f)" style="fill: var(--fig-band, #ece7dd)"/>
+   </g>
+   <g id="map-matplotlib.axis_1"/>
+   <g id="map-matplotlib.axis_2">
+    <g id="map-ytick_1">
+     <g id="map-line2d_1"/>
+     <g id="map-text_1">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="53.4" y="179.715357" transform="rotate(-0 53.4 179.715357)">little</text>
+     </g>
+    </g>
+    <g id="map-ytick_2">
+     <g id="map-line2d_2"/>
+     <g id="map-text_2">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="53.4" y="37.588929" transform="rotate(-0 53.4 37.588929)">strong</text>
+     </g>
+    </g>
+    <g id="map-text_3">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="16.556094" y="102.24" transform="rotate(-90 16.556094 102.24)">collusion</text>
+    </g>
+   </g>
+   <g id="map-line2d_3">
+    <path d="M 59.4 34.269456 
+L 75.176294 34.684574 
+L 87.797329 35.227227 
+L 98.05192 35.880537 
+L 106.728881 36.644034 
+L 114.617028 37.562232 
+L 121.716361 38.622898 
+L 128.026878 39.797321 
+L 133.548581 41.040286 
+L 139.070284 42.519809 
+L 143.803172 44.004615 
+L 148.53606 45.716041 
+L 153.268948 47.680367 
+L 158.001836 49.924068 
+L 161.94591 52.025747 
+L 165.889983 54.352903 
+L 169.834057 56.917406 
+L 173.77813 59.728556 
+L 177.722204 62.792222 
+L 181.666277 66.109953 
+L 185.610351 69.678114 
+L 190.343239 74.27652 
+L 195.076127 79.192303 
+L 200.59783 85.269868 
+L 207.697162 93.479125 
+L 225.8399 114.737858 
+L 231.361603 120.748137 
+L 236.094491 125.558712 
+L 240.038564 129.279226 
+L 243.982638 132.706439 
+L 247.926711 135.817599 
+L 251.870785 138.59591 
+L 255.026043 140.57111 
+L 258.181302 142.322322 
+L 261.336561 143.847616 
+L 264.49182 145.146456 
+L 267.647078 146.219432 
+L 270.802337 147.068004 
+L 273.957596 147.694276 
+L 277.112855 148.100796 
+L 280.268114 148.290404 
+L 283.423372 148.266109 
+L 286.578631 148.031009 
+L 289.73389 147.588253 
+L 292.889149 146.941034 
+L 296.044407 146.092624 
+L 299.199666 145.046429 
+L 302.354925 143.806079 
+L 306.298998 141.98868 
+L 310.243072 139.882892 
+L 314.187145 137.49898 
+L 318.131219 134.84912 
+L 322.075292 131.94777 
+L 326.80818 128.158377 
+L 331.541068 124.066312 
+L 337.062771 118.964321 
+L 343.373289 112.79275 
+L 352.05025 103.935249 
+L 367.03773 88.55835 
+L 374.137062 81.639281 
+L 379.658765 76.550864 
+L 385.180467 71.772864 
+L 389.913356 67.950493 
+L 394.646244 64.394255 
+L 399.379132 61.110186 
+L 404.11202 58.098173 
+L 408.844908 55.352938 
+L 413.577796 52.865064 
+L 418.310684 50.622011 
+L 423.043573 48.609044 
+L 427.776461 46.81005 
+L 433.298164 44.959252 
+L 438.819866 43.350024 
+L 444.341569 41.956237 
+L 450.652087 40.595392 
+L 456.962604 39.449356 
+L 464.061937 38.378517 
+L 471.950083 37.414955 
+L 480.627045 36.578303 
+L 490.881636 35.825965 
+L 502.713856 35.197078 
+L 516.912521 34.682368 
+L 531.9 34.330298 
+L 531.9 34.330298 
+" clip-path="url(#map-pf8ded17b0f)" style="fill: none; stroke: var(--accent, #8a5a2b); stroke-width: 2.4; stroke-linecap: round"/>
+   </g>
+   <g id="map-line2d_4">
+    <path d="M 97.2 199.182857 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 1.5; stroke-linecap: round"/>
+    <defs>
+     <path id="map-ma969716de1" d="M 0 -4 
+L -4 4 
+L 4 4 
+z
+" style="stroke: var(--text-muted, #6a6358); stroke-linejoin: miter"/>
+    </defs>
+    <g>
+     <use xlink:href="#map-ma969716de1" x="97.2" y="199.182857" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="map-line2d_5">
+    <path d="M 409.05 199.182857 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 1.5; stroke-linecap: round"/>
+    <g>
+     <use xlink:href="#map-ma969716de1" x="409.05" y="199.182857" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="map-line2d_6">
+    <path d="M 494.1 199.182857 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 1.5; stroke-linecap: round"/>
+    <g>
+     <use xlink:href="#map-ma969716de1" x="494.1" y="199.182857" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="map-patch_5">
+    <path d="M 59.4 195.84 
+L 531.9 195.84 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="map-text_4">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text, #1a1814)" transform="translate(73.575 82.588663)">a learned reflex</text>
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text, #1a1814)" transform="translate(73.575 94.771507)">holds restraint</text>
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text, #1a1814)" transform="translate(73.575 106.95435)">in place</text>
+   </g>
+   <g id="map-text_5">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text, #1a1814)" transform="translate(465.284219 82.588663)">the learned</text>
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text, #1a1814)" transform="translate(470.775625 94.771507)">blind spot</text>
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text, #1a1814)" transform="translate(470.151719 106.95435)">takes over</text>
+   </g>
+   <g id="map-text_6">
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(263.88668 171.562272)">collusion</text>
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(266.030977 183.19135)">weakest</text>
+   </g>
+   <g id="map-text_7">
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(53.603125 218.032857)">price-only investors,</text>
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(75.120312 228.85067)">little noise</text>
+   </g>
+   <g id="map-text_8">
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(365.453125 218.032857)">price-only investors,</text>
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(384.121875 228.85067)">heavy noise</text>
+   </g>
+   <g id="map-text_9">
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(463.785938 218.032857)">Kyle's market,</text>
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(474.057031 228.85067)">any noise</text>
+   </g>
+   <g id="map-patch_6">
+    <path d="M 61.400713 253.872 
+Q 295.650646 253.872 528.782545 253.872 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-linecap: round"/>
+    <path d="M 523.782545 251.372 
+L 528.782545 253.872 
+L 523.782545 256.372 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-linecap: round"/>
+   </g>
+   <g id="map-text_10">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="295.65" y="271.097" transform="rotate(-0 295.65 271.097)">fog in the price: thinner to thicker (schematic)</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="map-pf8ded17b0f">
+   <rect x="59.4" y="8.64" width="472.5" height="187.2"/>
+  </clipPath>
+ </defs>
+</svg>

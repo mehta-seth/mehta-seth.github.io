@@ -1,0 +1,1547 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" role="img" viewBox="0 0 540 547.2" xmlns="http://www.w3.org/2000/svg" version="1.1"><title>Top: one learner's score for deviating dips below its score for holding back several times and finally freezes at a low value, although deviating really pays more. Bottom: the share of learners that end up holding back is zero when the fog is thin and rises towards nearly all of them as the fog thickens.</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="hot-stove-figure_1">
+  <g id="hot-stove-patch_1">
+   <path d="M 0 547.2 
+L 540 547.2 
+L 540 0 
+L 0 0 
+L 0 547.2 
+z
+" style="fill: none"/>
+  </g>
+  <g id="hot-stove-axes_1">
+   <g id="hot-stove-patch_2">
+    <path d="M 75.6 217.7856 
+L 453.6 217.7856 
+L 453.6 27.36 
+L 75.6 27.36 
+L 75.6 217.7856 
+z
+" style="fill: none"/>
+   </g>
+   <g id="hot-stove-matplotlib.axis_1">
+    <g id="hot-stove-xtick_1">
+     <g id="hot-stove-line2d_1"/>
+     <g id="hot-stove-text_1">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="75.6" y="231.6506" transform="rotate(-0 75.6 231.6506)">0</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_2">
+     <g id="hot-stove-line2d_2"/>
+     <g id="hot-stove-text_2">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="122.85" y="231.6506" transform="rotate(-0 122.85 231.6506)">5</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_3">
+     <g id="hot-stove-line2d_3"/>
+     <g id="hot-stove-text_3">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="170.1" y="231.6506" transform="rotate(-0 170.1 231.6506)">10</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_4">
+     <g id="hot-stove-line2d_4"/>
+     <g id="hot-stove-text_4">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="217.35" y="231.6506" transform="rotate(-0 217.35 231.6506)">15</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_5">
+     <g id="hot-stove-line2d_5"/>
+     <g id="hot-stove-text_5">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="264.6" y="231.6506" transform="rotate(-0 264.6 231.6506)">20</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_6">
+     <g id="hot-stove-line2d_6"/>
+     <g id="hot-stove-text_6">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="311.85" y="231.6506" transform="rotate(-0 311.85 231.6506)">25</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_7">
+     <g id="hot-stove-line2d_7"/>
+     <g id="hot-stove-text_7">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="359.1" y="231.6506" transform="rotate(-0 359.1 231.6506)">30</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_8">
+     <g id="hot-stove-line2d_8"/>
+     <g id="hot-stove-text_8">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="406.35" y="231.6506" transform="rotate(-0 406.35 231.6506)">35</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_9">
+     <g id="hot-stove-line2d_9"/>
+     <g id="hot-stove-text_9">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="453.6" y="231.6506" transform="rotate(-0 453.6 231.6506)">40</text>
+     </g>
+    </g>
+    <g id="hot-stove-text_10">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="264.6" y="246.975444" transform="rotate(-0 264.6 246.975444)">trades, thousands</text>
+    </g>
+   </g>
+   <g id="hot-stove-matplotlib.axis_2">
+    <g id="hot-stove-ytick_1">
+     <g id="hot-stove-line2d_10">
+      <path d="M 75.6 184.827323 
+L 453.6 184.827323 
+" clip-path="url(#hot-stove-p9601187968)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_11"/>
+     <g id="hot-stove-text_11">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="188.759823" transform="rotate(-0 69.6 188.759823)">0.8</text>
+     </g>
+    </g>
+    <g id="hot-stove-ytick_2">
+     <g id="hot-stove-line2d_12">
+      <path d="M 75.6 148.207015 
+L 453.6 148.207015 
+" clip-path="url(#hot-stove-p9601187968)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_13"/>
+     <g id="hot-stove-text_12">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="152.139515" transform="rotate(-0 69.6 152.139515)">1.0</text>
+     </g>
+    </g>
+    <g id="hot-stove-ytick_3">
+     <g id="hot-stove-line2d_14">
+      <path d="M 75.6 111.586708 
+L 453.6 111.586708 
+" clip-path="url(#hot-stove-p9601187968)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_15"/>
+     <g id="hot-stove-text_13">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="115.519208" transform="rotate(-0 69.6 115.519208)">1.2</text>
+     </g>
+    </g>
+    <g id="hot-stove-ytick_4">
+     <g id="hot-stove-line2d_16">
+      <path d="M 75.6 74.9664 
+L 453.6 74.9664 
+" clip-path="url(#hot-stove-p9601187968)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_17"/>
+     <g id="hot-stove-text_14">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="78.8989" transform="rotate(-0 69.6 78.8989)">1.4</text>
+     </g>
+    </g>
+    <g id="hot-stove-ytick_5">
+     <g id="hot-stove-line2d_18">
+      <path d="M 75.6 38.346092 
+L 453.6 38.346092 
+" clip-path="url(#hot-stove-p9601187968)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_19"/>
+     <g id="hot-stove-text_15">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="42.278592" transform="rotate(-0 69.6 42.278592)">1.6</text>
+     </g>
+    </g>
+    <g id="hot-stove-text_16">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(34.320875 135.788738) rotate(-90)">score</text>
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(47.61125 181.602488) rotate(-90)">(1 = competitive profit)</text>
+    </g>
+   </g>
+   <g id="hot-stove-line2d_20">
+    <path d="M 75.6 99.570669 
+L 453.6 99.570669 
+" clip-path="url(#hot-stove-p9601187968)" style="fill: none; stroke-dasharray: 1,2.5; stroke-dashoffset: 0; stroke: var(--fig-blue, #3e6d93)"/>
+   </g>
+   <g id="hot-stove-line2d_21">
+    <path d="M 75.6 114.119006 
+L 76.545 119.245384 
+L 77.49 118.256915 
+L 78.435 145.037713 
+L 79.38 128.227522 
+L 80.325 103.728235 
+L 81.27 121.255562 
+L 82.215 143.094056 
+L 83.16 120.011036 
+L 84.105 135.188936 
+L 85.05 128.243012 
+L 85.995 129.722631 
+L 86.94 115.024463 
+L 88.83 135.345737 
+L 89.775 120.893319 
+L 90.72 123.249962 
+L 91.665 132.888907 
+L 92.61 138.038537 
+L 93.555 140.505646 
+L 94.5 141.378097 
+L 95.445 130.920496 
+L 96.39 144.440994 
+L 97.335 124.295747 
+L 98.28 139.355717 
+L 99.225 136.472459 
+L 100.17 125.903846 
+L 101.115 145.378273 
+L 102.06 141.975092 
+L 103.005 102.429425 
+L 103.95 131.267496 
+L 104.895 122.764396 
+L 105.84 124.110905 
+L 106.785 132.811064 
+L 107.73 136.523704 
+L 108.675 132.374859 
+L 110.565 140.329124 
+L 111.51 140.329124 
+L 112.455 135.648157 
+L 114.345 144.095416 
+L 115.29 144.583368 
+L 116.235 143.728858 
+L 117.18 137.135954 
+L 118.125 146.799058 
+L 119.07 117.39826 
+L 120.015 151.422835 
+L 120.96 153.104948 
+L 121.905 153.104948 
+L 122.85 155.431275 
+L 123.795 148.380575 
+L 127.575 148.380575 
+L 129.465 138.981409 
+L 130.41 136.932295 
+L 131.355 149.63621 
+L 132.3 126.697031 
+L 133.245 115.929402 
+L 134.19 129.978762 
+L 135.135 155.972346 
+L 136.08 156.174553 
+L 137.025 161.443789 
+L 158.76 161.443789 
+L 159.705 141.553179 
+L 160.65 132.205436 
+L 161.595 126.632993 
+L 162.54 109.466906 
+L 163.485 127.363982 
+L 164.43 118.876859 
+L 165.375 146.544946 
+L 166.32 163.985797 
+L 192.78 163.985797 
+L 193.725 119.002125 
+L 194.67 117.506539 
+L 195.615 91.502228 
+L 196.56 135.733182 
+L 197.505 138.76213 
+L 198.45 95.255991 
+L 199.395 127.738454 
+L 200.34 126.578224 
+L 201.285 127.202305 
+L 202.23 137.269555 
+L 203.175 127.808231 
+L 204.12 99.83051 
+L 205.065 123.68274 
+L 206.01 109.619669 
+L 206.955 101.512485 
+L 207.9 125.946248 
+L 208.845 121.849009 
+L 209.79 137.639598 
+L 210.735 132.560657 
+L 211.68 116.87566 
+L 212.625 130.640835 
+L 213.57 151.142552 
+L 214.515 129.187506 
+L 215.46 143.770603 
+L 216.405 146.720409 
+L 217.35 98.033289 
+L 218.295 114.302019 
+L 219.24 134.5493 
+L 220.185 119.424468 
+L 221.13 110.672833 
+L 222.075 117.422602 
+L 223.02 117.736222 
+L 223.965 109.514289 
+L 224.91 117.584092 
+L 225.855 148.276815 
+L 226.8 144.841101 
+L 227.745 139.027033 
+L 228.69 126.362843 
+L 229.635 128.403102 
+L 230.58 131.36452 
+L 231.525 111.527563 
+L 232.47 128.95877 
+L 233.415 130.292462 
+L 234.36 115.283677 
+L 235.305 137.138639 
+L 236.25 119.822382 
+L 237.195 132.119309 
+L 238.14 123.779303 
+L 239.085 107.395419 
+L 240.03 110.929473 
+L 240.975 123.994511 
+L 241.92 115.83919 
+L 242.865 120.441672 
+L 243.81 115.272257 
+L 244.755 124.800744 
+L 245.7 106.195075 
+L 246.645 109.350321 
+L 247.59 129.456645 
+L 248.535 133.4575 
+L 249.48 95.714543 
+L 250.425 124.215212 
+L 251.37 118.222098 
+L 252.315 137.839478 
+L 253.26 108.815208 
+L 254.205 131.720477 
+L 255.15 121.731835 
+L 256.095 122.38911 
+L 257.04 141.714874 
+L 257.985 155.349682 
+L 258.93 121.207307 
+L 259.875 108.940622 
+L 260.82 133.44086 
+L 261.765 113.544623 
+L 262.71 129.524892 
+L 263.655 109.722377 
+L 264.6 135.350503 
+L 265.545 129.222304 
+L 266.49 112.376587 
+L 267.435 124.249299 
+L 268.38 138.801071 
+L 269.325 136.54763 
+L 270.27 114.794156 
+L 271.215 125.693706 
+L 272.16 126.703172 
+L 273.105 138.26862 
+L 274.05 118.955136 
+L 274.995 116.08995 
+L 275.94 124.375473 
+L 276.885 118.90323 
+L 277.83 135.852915 
+L 278.775 134.53495 
+L 279.72 140.269986 
+L 280.665 95.188305 
+L 281.61 117.48481 
+L 282.555 133.176526 
+L 283.5 111.584889 
+L 284.445 139.424011 
+L 285.39 158.053677 
+L 286.335 144.151103 
+L 287.28 137.263344 
+L 288.225 141.989285 
+L 289.17 125.330561 
+L 290.115 123.034208 
+L 291.06 115.076873 
+L 292.005 123.670921 
+L 292.95 122.137633 
+L 293.895 114.151905 
+L 294.84 128.253112 
+L 295.785 112.942085 
+L 296.73 130.286617 
+L 297.675 125.445833 
+L 298.62 135.003352 
+L 299.565 129.059533 
+L 300.51 111.212095 
+L 301.455 116.270809 
+L 302.4 134.755123 
+L 303.345 136.15057 
+L 304.29 114.412067 
+L 305.235 104.325719 
+L 306.18 101.851139 
+L 307.125 131.125434 
+L 308.07 126.538738 
+L 309.015 127.35307 
+L 309.96 129.292167 
+L 310.905 125.160493 
+L 312.795 144.308101 
+L 313.74 155.025355 
+L 314.685 126.919738 
+L 315.63 124.805494 
+L 316.575 123.599151 
+L 317.52 127.682358 
+L 318.465 128.660454 
+L 319.41 125.577149 
+L 320.355 129.723087 
+L 321.3 125.834156 
+L 322.245 107.874582 
+L 323.19 129.302584 
+L 324.135 139.371313 
+L 325.08 125.868383 
+L 326.025 124.120187 
+L 326.97 139.402196 
+L 327.915 139.988065 
+L 328.86 149.13413 
+L 329.805 120.515641 
+L 330.75 137.951679 
+L 331.695 123.946788 
+L 332.64 133.346494 
+L 333.585 127.656194 
+L 334.53 116.74579 
+L 336.42 101.554966 
+L 337.365 143.622167 
+L 339.255 118.227054 
+L 340.2 113.158991 
+L 341.145 120.17526 
+L 342.09 145.415729 
+L 343.035 110.172621 
+L 343.98 127.658974 
+L 344.925 105.177966 
+L 345.87 118.511889 
+L 346.815 111.79702 
+L 347.76 110.982311 
+L 348.705 115.256665 
+L 349.65 132.532792 
+L 350.595 142.34635 
+L 351.54 133.800062 
+L 352.485 121.816464 
+L 353.43 136.676538 
+L 354.375 140.002856 
+L 355.32 152.250004 
+L 356.265 108.365878 
+L 357.21 127.918876 
+L 358.155 112.115354 
+L 359.1 109.491551 
+L 360.045 126.475432 
+L 360.99 130.029969 
+L 361.935 124.552412 
+L 362.88 121.657405 
+L 363.825 164.673983 
+L 364.77 134.902104 
+L 365.715 133.615737 
+L 366.66 98.824542 
+L 367.605 100.82395 
+L 368.55 117.45513 
+L 369.495 116.023051 
+L 370.44 136.145067 
+L 371.385 115.951416 
+L 372.33 140.297796 
+L 373.275 127.381508 
+L 374.22 105.882814 
+L 375.165 131.18136 
+L 376.11 120.14648 
+L 377.055 107.582279 
+L 378 123.944188 
+L 378.945 125.981141 
+L 379.89 127.042927 
+L 380.835 137.770026 
+L 381.78 131.368557 
+L 382.725 133.877464 
+L 383.67 110.804248 
+L 384.615 128.610768 
+L 385.56 112.039499 
+L 386.505 123.297262 
+L 388.395 133.782803 
+L 389.34 127.142059 
+L 390.285 106.024553 
+L 391.23 123.916863 
+L 392.175 117.18622 
+L 393.12 129.086384 
+L 394.065 114.437403 
+L 395.01 122.806327 
+L 395.955 120.533814 
+L 396.9 113.261521 
+L 397.845 132.070458 
+L 398.79 108.605319 
+L 399.735 108.188828 
+L 400.68 143.518592 
+L 401.625 94.144091 
+L 402.57 130.513555 
+L 403.515 136.758703 
+L 404.46 134.493617 
+L 405.405 141.561505 
+L 406.35 130.272416 
+L 407.295 139.110031 
+L 408.24 117.548304 
+L 409.185 106.227497 
+L 410.13 130.087175 
+L 411.075 122.293602 
+L 412.02 103.866635 
+L 413.91 129.858947 
+L 414.855 104.577551 
+L 415.8 136.339254 
+L 416.745 125.912106 
+L 417.69 138.729152 
+L 418.635 114.207731 
+L 419.58 130.47791 
+L 420.525 105.909323 
+L 421.47 141.952883 
+L 422.415 111.748151 
+L 423.36 143.609527 
+L 424.305 140.252136 
+L 425.25 135.583552 
+L 426.195 133.415412 
+L 427.14 136.414152 
+L 428.085 109.780227 
+L 429.03 123.632138 
+L 429.975 132.936042 
+L 430.92 123.817206 
+L 431.865 120.113363 
+L 432.81 117.686039 
+L 433.755 167.546114 
+L 434.7 141.33905 
+L 435.645 144.560951 
+L 436.59 134.409058 
+L 437.535 148.121911 
+L 438.48 115.875464 
+L 439.425 145.449641 
+L 440.37 128.457068 
+L 441.315 129.100606 
+L 442.26 115.454974 
+L 443.205 142.41018 
+L 444.15 134.738329 
+L 445.095 130.247758 
+L 446.04 137.555623 
+L 447.93 117.611884 
+L 448.875 123.62992 
+L 449.82 112.33211 
+L 450.765 141.17557 
+L 451.71 131.08822 
+L 452.655 126.229833 
+L 452.655 126.229833 
+" clip-path="url(#hot-stove-p9601187968)" style="fill: none; stroke: var(--accent, #8a5a2b); stroke-opacity: 0.75; stroke-width: 0.8; stroke-linecap: round"/>
+   </g>
+   <g id="hot-stove-line2d_22">
+    <path d="M 75.6 112.444996 
+L 75.789 83.447292 
+L 75.978 118.117188 
+L 76.167 130.303516 
+L 76.545 63.260048 
+L 76.734 76.274061 
+L 76.923 112.558767 
+L 77.112 121.649089 
+L 77.301 124.557051 
+L 77.679 84.30569 
+L 77.868 78.292777 
+L 78.057 83.243442 
+L 78.246 109.853628 
+L 78.435 89.077018 
+L 78.624 100.696098 
+L 78.813 100.799756 
+L 79.002 94.915271 
+L 79.191 94.760119 
+L 79.38 93.799294 
+L 79.569 110.460741 
+L 79.758 110.869204 
+L 79.947 105.219534 
+L 80.136 108.149452 
+L 80.325 113.618344 
+L 80.514 100.615481 
+L 80.703 100.916663 
+L 80.892 101.846172 
+L 81.081 90.125197 
+L 81.27 88.368748 
+L 81.459 95.207248 
+L 81.837 78.02571 
+L 82.026 94.851998 
+L 82.215 74.839779 
+L 82.593 124.703736 
+L 82.782 108.098161 
+L 82.971 54.171932 
+L 83.349 111.44278 
+L 83.538 119.615233 
+L 83.727 115.279686 
+L 83.916 80.77448 
+L 84.105 90.572195 
+L 84.294 79.837259 
+L 84.483 76.541292 
+L 84.672 80.930554 
+L 84.861 120.300639 
+L 85.05 88.14887 
+L 85.239 81.888628 
+L 85.428 108.22373 
+L 85.617 96.388202 
+L 85.806 100.860461 
+L 85.995 85.300216 
+L 86.373 78.635285 
+L 86.562 93.287723 
+L 86.751 69.877894 
+L 86.94 87.752058 
+L 87.318 83.141211 
+L 87.507 97.514028 
+L 87.696 89.531953 
+L 87.885 91.224359 
+L 88.074 73.614592 
+L 88.263 83.200994 
+L 88.452 84.475154 
+L 88.641 93.582374 
+L 88.83 51.285122 
+L 89.019 90.840624 
+L 89.208 92.418136 
+L 89.397 85.828955 
+L 89.586 83.848055 
+L 89.775 97.756152 
+L 89.964 101.670974 
+L 90.153 89.132288 
+L 90.342 118.384696 
+L 90.531 118.384696 
+L 90.72 91.658814 
+L 90.909 96.758561 
+L 91.476 127.67947 
+L 91.665 104.416159 
+L 91.854 103.30258 
+L 92.043 101.40949 
+L 92.232 115.028936 
+L 92.61 94.778925 
+L 92.799 113.118734 
+L 92.988 73.806225 
+L 93.366 95.511732 
+L 93.555 67.884495 
+L 93.744 85.518748 
+L 93.933 121.4532 
+L 94.122 98.497232 
+L 94.311 108.720324 
+L 94.5 103.764559 
+L 94.689 92.409937 
+L 94.878 117.392926 
+L 95.067 86.211638 
+L 95.256 91.659839 
+L 95.634 109.634083 
+L 95.823 143.890783 
+L 96.012 143.890783 
+L 96.201 143.294716 
+L 96.39 124.659812 
+L 96.579 119.32077 
+L 96.768 78.412626 
+L 96.957 102.716321 
+L 97.146 93.284935 
+L 97.335 91.34584 
+L 97.524 86.352329 
+L 97.713 93.070185 
+L 98.091 136.388724 
+L 98.28 125.929912 
+L 98.469 94.979911 
+L 98.658 96.982052 
+L 98.847 90.538613 
+L 99.036 92.769687 
+L 99.225 115.810305 
+L 99.414 85.207608 
+L 99.603 104.822533 
+L 99.792 101.811968 
+L 99.981 93.398644 
+L 100.17 130.713495 
+L 100.359 138.109008 
+L 100.548 104.250847 
+L 100.737 100.910946 
+L 100.926 83.36128 
+L 101.115 95.087117 
+L 101.304 74.394806 
+L 101.682 122.835795 
+L 101.871 126.507929 
+L 102.06 142.107491 
+L 102.249 112.162531 
+L 102.438 147.470048 
+L 102.627 137.644628 
+L 102.816 142.900406 
+L 103.005 131.833242 
+L 103.194 131.833242 
+L 103.383 125.239607 
+L 103.761 60.704723 
+L 104.139 73.177587 
+L 104.517 131.348593 
+L 104.706 140.208899 
+L 105.273 140.208899 
+L 105.462 144.937496 
+L 105.651 144.937496 
+L 106.596 77.301877 
+L 106.785 101.533168 
+L 106.974 90.246487 
+L 107.163 119.202576 
+L 107.352 103.185887 
+L 107.541 101.169104 
+L 107.919 68.864142 
+L 108.108 72.003627 
+L 108.297 61.706735 
+L 108.486 63.494556 
+L 108.864 108.016967 
+L 109.053 95.02767 
+L 109.242 89.884945 
+L 109.431 102.519342 
+L 109.62 99.284886 
+L 109.809 66.553446 
+L 109.998 73.993477 
+L 110.187 104.573456 
+L 110.376 84.824962 
+L 110.565 93.498493 
+L 110.754 84.730202 
+L 110.943 82.518781 
+L 111.132 81.995218 
+L 111.321 87.09174 
+L 111.51 87.626431 
+L 111.699 110.792771 
+L 111.888 117.285116 
+L 112.266 62.66428 
+L 112.455 70.340193 
+L 112.644 93.965286 
+L 112.833 97.031357 
+L 113.022 91.898202 
+L 113.211 97.263806 
+L 113.4 73.477519 
+L 113.778 118.719801 
+L 113.967 97.921302 
+L 114.156 93.981621 
+L 114.345 83.621701 
+L 114.534 110.39836 
+L 114.723 98.568349 
+L 115.101 120.304104 
+L 115.29 75.161356 
+L 115.479 100.322325 
+L 115.668 75.548973 
+L 115.857 122.734932 
+L 116.046 99.870658 
+L 116.235 138.850828 
+L 116.424 108.789705 
+L 116.613 113.301748 
+L 116.802 83.623444 
+L 116.991 97.600568 
+L 117.18 149.562272 
+L 117.936 149.562272 
+L 118.125 157.390499 
+L 118.314 157.059655 
+L 118.692 157.059655 
+L 118.881 160.23119 
+L 119.637 160.23119 
+L 119.826 157.003565 
+L 120.393 98.088047 
+L 120.582 71.703471 
+L 120.771 125.472472 
+L 120.96 85.128474 
+L 121.338 122.381394 
+L 121.527 107.51951 
+L 121.716 144.825505 
+L 121.905 114.428236 
+L 122.094 121.007205 
+L 122.283 88.365294 
+L 122.661 116.807728 
+L 122.85 91.949775 
+L 123.039 95.332666 
+L 123.228 113.005778 
+L 123.417 115.084707 
+L 123.606 82.87351 
+L 123.795 111.231083 
+L 123.984 107.142225 
+L 124.173 128.349972 
+L 124.362 114.204647 
+L 124.551 119.024171 
+L 124.74 131.172256 
+L 124.929 83.543372 
+L 125.118 97.914965 
+L 125.307 92.568587 
+L 125.496 106.688889 
+L 125.685 78.152816 
+L 125.874 129.258308 
+L 126.063 101.549643 
+L 126.252 101.568278 
+L 126.441 108.068797 
+L 126.63 91.842902 
+L 126.819 118.937591 
+L 127.008 77.27813 
+L 127.197 73.740008 
+L 127.386 74.741564 
+L 127.575 103.83672 
+L 127.764 99.419813 
+L 127.953 117.371684 
+L 128.142 91.763364 
+L 128.331 106.099881 
+L 128.709 90.021176 
+L 128.898 69.663616 
+L 129.087 73.074636 
+L 129.465 99.765028 
+L 129.654 94.741653 
+L 129.843 108.180837 
+L 130.032 87.862477 
+L 130.221 85.929939 
+L 130.41 112.68142 
+L 130.599 108.513576 
+L 130.788 144.747273 
+L 130.977 144.747273 
+L 131.166 105.19091 
+L 131.355 138.779229 
+L 131.544 113.36522 
+L 131.733 152.248887 
+L 134.568 152.248887 
+L 134.946 103.01113 
+L 135.324 75.442598 
+L 135.513 105.837957 
+L 135.702 95.238838 
+L 135.891 126.309952 
+L 136.08 93.544786 
+L 136.269 110.800659 
+L 136.458 103.211471 
+L 136.647 104.844954 
+L 136.836 155.88469 
+L 137.025 116.747841 
+L 137.214 114.700884 
+L 137.403 108.147557 
+L 137.592 91.346364 
+L 137.781 110.476281 
+L 137.97 90.418533 
+L 138.159 101.601788 
+L 138.348 104.299788 
+L 138.537 95.152451 
+L 138.726 149.824749 
+L 139.293 39.630612 
+L 139.482 66.625101 
+L 139.671 121.965134 
+L 139.86 109.359124 
+L 140.049 105.451468 
+L 140.238 85.994942 
+L 140.427 90.357193 
+L 140.805 71.040174 
+L 141.372 126.228196 
+L 141.561 98.46416 
+L 141.75 95.96749 
+L 141.939 95.790163 
+L 142.128 134.906811 
+L 142.317 131.79507 
+L 142.506 141.396724 
+L 142.695 121.81761 
+L 142.884 59.204739 
+L 143.073 110.866795 
+L 143.262 117.535797 
+L 143.64 80.362941 
+L 143.829 93.031691 
+L 144.018 113.830509 
+L 144.207 87.855072 
+L 144.396 90.412692 
+L 144.585 99.500414 
+L 144.963 96.072866 
+L 145.152 123.56994 
+L 145.341 125.701748 
+L 145.53 92.589806 
+L 145.719 106.384938 
+L 145.908 108.124715 
+L 146.097 78.807532 
+L 146.286 73.884103 
+L 146.475 90.979585 
+L 146.664 90.056666 
+L 146.853 85.206767 
+L 147.042 100.239953 
+L 147.42 74.396618 
+L 147.609 71.052978 
+L 147.798 58.859531 
+L 148.176 116.711054 
+L 148.365 124.062602 
+L 148.554 108.073561 
+L 148.743 105.519452 
+L 149.121 129.225685 
+L 149.31 74.885751 
+L 149.499 91.111981 
+L 149.877 60.460847 
+L 150.066 96.195283 
+L 150.444 106.409878 
+L 150.633 98.592076 
+L 150.822 84.240705 
+L 151.011 93.908109 
+L 151.2 129.107324 
+L 151.389 126.981361 
+L 151.578 91.411413 
+L 151.767 91.630338 
+L 151.956 121.229832 
+L 152.145 117.445813 
+L 152.334 126.801593 
+L 152.523 90.345899 
+L 152.712 91.352948 
+L 152.901 131.656507 
+L 153.09 128.9687 
+L 153.279 85.976746 
+L 153.468 85.679992 
+L 153.657 66.533825 
+L 153.846 72.159604 
+L 154.224 106.150676 
+L 154.413 116.345727 
+L 154.602 111.548523 
+L 154.791 86.956456 
+L 154.98 90.251425 
+L 155.169 103.998026 
+L 155.358 127.727992 
+L 155.547 130.329505 
+L 155.736 98.645264 
+L 155.925 89.713577 
+L 156.114 86.32527 
+L 156.303 98.239982 
+L 156.492 92.726336 
+L 156.681 102.997754 
+L 157.248 24.800936 
+L 157.437 85.542561 
+L 157.626 108.297909 
+L 157.815 94.23145 
+L 158.004 122.33211 
+L 158.193 90.908396 
+L 158.571 134.686976 
+L 158.76 135.014141 
+L 158.949 163.159381 
+L 165.375 163.159381 
+L 165.942 80.538885 
+L 166.131 84.582012 
+L 166.32 85.941906 
+L 166.509 79.16895 
+L 166.698 48.146892 
+L 167.076 112.230029 
+L 167.265 124.148367 
+L 167.454 116.251784 
+L 167.643 115.940936 
+L 168.021 93.702783 
+L 168.21 86.185847 
+L 168.399 96.230513 
+L 168.588 115.098391 
+L 168.777 109.061757 
+L 168.966 85.973322 
+L 169.155 102.703579 
+L 169.344 102.378553 
+L 169.533 131.15816 
+L 169.722 78.961387 
+L 169.911 107.334552 
+L 170.1 100.641787 
+L 170.289 99.002245 
+L 170.478 109.724076 
+L 170.667 99.687431 
+L 170.856 127.792101 
+L 171.045 130.626208 
+L 171.234 123.863612 
+L 171.801 76.585994 
+L 171.99 87.158998 
+L 172.179 75.893867 
+L 172.368 79.664587 
+L 172.557 73.883586 
+L 172.746 53.20524 
+L 172.935 74.931178 
+L 173.124 83.175637 
+L 173.313 79.38945 
+L 173.502 91.46282 
+L 173.691 72.42582 
+L 173.88 74.649285 
+L 174.069 63.52025 
+L 174.258 87.854799 
+L 174.447 96.110065 
+L 174.636 92.745885 
+L 174.825 56.449476 
+L 175.203 122.931336 
+L 175.392 122.703086 
+L 175.581 107.100267 
+L 175.959 101.964928 
+L 176.526 94.131964 
+L 176.904 114.884366 
+L 177.282 79.437975 
+L 177.471 138.333115 
+L 177.849 79.33503 
+L 178.038 123.780071 
+L 178.227 80.354832 
+L 178.416 115.213643 
+L 178.605 89.920922 
+L 178.794 119.970727 
+L 178.983 93.833563 
+L 179.172 107.122022 
+L 179.361 92.534895 
+L 179.55 131.57998 
+L 179.739 105.647914 
+L 179.928 111.190091 
+L 180.117 110.443725 
+L 180.495 84.91197 
+L 180.684 56.207114 
+L 181.062 153.545846 
+L 181.44 99.470362 
+L 181.629 98.70542 
+L 181.818 83.747331 
+L 182.007 96.714762 
+L 182.196 69.540219 
+L 182.385 117.990687 
+L 182.574 115.299753 
+L 182.763 107.498888 
+L 182.952 111.648692 
+L 183.141 125.656762 
+L 183.33 34.597641 
+L 183.519 22.508811 
+L 183.708 90.520187 
+L 183.897 114.686354 
+L 184.275 90.413797 
+L 184.464 106.948864 
+L 184.653 101.718856 
+L 184.842 118.621366 
+L 185.031 87.627538 
+L 185.409 112.452046 
+L 185.598 94.2201 
+L 185.787 90.066737 
+L 185.976 90.693998 
+L 186.165 80.086394 
+L 186.354 79.043658 
+L 186.543 106.554671 
+L 186.921 90.095255 
+L 187.11 66.571077 
+L 187.299 79.132985 
+L 187.488 44.982277 
+L 187.866 116.813692 
+L 188.055 108.015024 
+L 188.244 80.278933 
+L 188.433 88.46841 
+L 188.622 90.437654 
+L 188.811 51.327762 
+L 189 77.665652 
+L 189.189 75.268327 
+L 189.378 80.57412 
+L 189.567 138.163888 
+L 189.756 126.098341 
+L 189.945 100.518297 
+L 190.134 93.379029 
+L 190.323 74.309055 
+L 190.701 78.310355 
+L 191.079 121.453091 
+L 191.268 130.333424 
+L 191.646 92.357582 
+L 191.835 108.89578 
+L 192.024 85.692375 
+L 192.213 94.115514 
+L 192.591 122.888054 
+L 192.969 98.471553 
+L 193.158 104.830068 
+L 193.347 100.138512 
+L 193.536 164.464887 
+L 195.804 164.464887 
+L 195.993 175.518429 
+L 453.411 175.518429 
+L 453.411 175.518429 
+" clip-path="url(#hot-stove-p9601187968)" style="fill: none; stroke: var(--fig-blue, #3e6d93); stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="hot-stove-patch_3">
+    <path d="M 75.6 217.7856 
+L 75.6 27.36 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="hot-stove-patch_4">
+    <path d="M 75.6 217.7856 
+L 453.6 217.7856 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="hot-stove-text_17">
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--fig-blue, #3e6d93)" transform="translate(458.136 96.667857)">deviating really</text>
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--fig-blue, #3e6d93)" transform="translate(458.136 107.128169)">earns 1.27</text>
+   </g>
+   <g id="hot-stove-text_18">
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--accent, #8a5a2b)" transform="translate(458.136 122.416511)">score for</text>
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--accent, #8a5a2b)" transform="translate(458.136 132.776823)">holding back</text>
+   </g>
+   <g id="hot-stove-text_19">
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--fig-blue, #3e6d93)" transform="translate(458.136 172.615617)">score for</text>
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--fig-blue, #3e6d93)" transform="translate(458.136 182.975929)">deviating</text>
+   </g>
+   <g id="hot-stove-text_20">
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(214.828125 193.808338)">Each time the score for deviating dips below holding</text>
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(211.389844 205.341151)">back, the learner stops deviating and the score freezes.</text>
+    <text style="font-size: 10px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(221.31875 216.873963)">After one deep enough dip, it is never tried again.</text>
+   </g>
+   <g id="hot-stove-text_21">
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="75.6" y="17.36" transform="rotate(-0 75.6 17.36)">One learner in a foggy market (fog 0.2)</text>
+   </g>
+  </g>
+  <g id="hot-stove-axes_2">
+   <g id="hot-stove-patch_5">
+    <path d="M 75.6 503.424 
+L 453.6 503.424 
+L 453.6 312.9984 
+L 75.6 312.9984 
+L 75.6 503.424 
+z
+" style="fill: none"/>
+   </g>
+   <g id="hot-stove-matplotlib.axis_3">
+    <g id="hot-stove-xtick_10">
+     <g id="hot-stove-line2d_23"/>
+     <g id="hot-stove-text_22">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="75.6" y="517.289" transform="rotate(-0 75.6 517.289)">0.0001</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_11">
+     <g id="hot-stove-line2d_24"/>
+     <g id="hot-stove-text_23">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="163.485925" y="517.289" transform="rotate(-0 163.485925 517.289)">0.001</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_12">
+     <g id="hot-stove-line2d_25"/>
+     <g id="hot-stove-text_24">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="251.37185" y="517.289" transform="rotate(-0 251.37185 517.289)">0.01</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_13">
+     <g id="hot-stove-line2d_26"/>
+     <g id="hot-stove-text_25">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="339.257775" y="517.289" transform="rotate(-0 339.257775 517.289)">0.1</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_14">
+     <g id="hot-stove-line2d_27"/>
+     <g id="hot-stove-text_26">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="427.1437" y="517.289" transform="rotate(-0 427.1437 517.289)">1</text>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_15">
+     <g id="hot-stove-line2d_28">
+      <defs>
+       <path id="hot-stove-m3124c39e5a" d="M 0 0 
+L 0 2 
+" style="stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </defs>
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="102.0563" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_16">
+     <g id="hot-stove-line2d_29">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="117.532243" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_17">
+     <g id="hot-stove-line2d_30">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="128.512599" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_18">
+     <g id="hot-stove-line2d_31">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="137.029625" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_19">
+     <g id="hot-stove-line2d_32">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="143.988542" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_20">
+     <g id="hot-stove-line2d_33">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="149.872223" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_21">
+     <g id="hot-stove-line2d_34">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="154.968899" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_22">
+     <g id="hot-stove-line2d_35">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="159.464486" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_23">
+     <g id="hot-stove-line2d_36">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="189.942225" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_24">
+     <g id="hot-stove-line2d_37">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="205.418168" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_25">
+     <g id="hot-stove-line2d_38">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="216.398524" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_26">
+     <g id="hot-stove-line2d_39">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="224.915551" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_27">
+     <g id="hot-stove-line2d_40">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="231.874468" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_28">
+     <g id="hot-stove-line2d_41">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="237.758148" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_29">
+     <g id="hot-stove-line2d_42">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="242.854824" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_30">
+     <g id="hot-stove-line2d_43">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="247.350411" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_31">
+     <g id="hot-stove-line2d_44">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="277.82815" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_32">
+     <g id="hot-stove-line2d_45">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="293.304093" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_33">
+     <g id="hot-stove-line2d_46">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="304.284449" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_34">
+     <g id="hot-stove-line2d_47">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="312.801476" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_35">
+     <g id="hot-stove-line2d_48">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="319.760393" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_36">
+     <g id="hot-stove-line2d_49">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="325.644073" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_37">
+     <g id="hot-stove-line2d_50">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="330.740749" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_38">
+     <g id="hot-stove-line2d_51">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="335.236336" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_39">
+     <g id="hot-stove-line2d_52">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="365.714075" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_40">
+     <g id="hot-stove-line2d_53">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="381.190018" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_41">
+     <g id="hot-stove-line2d_54">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="392.170375" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_42">
+     <g id="hot-stove-line2d_55">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="400.687401" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_43">
+     <g id="hot-stove-line2d_56">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="407.646318" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_44">
+     <g id="hot-stove-line2d_57">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="413.529998" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_45">
+     <g id="hot-stove-line2d_58">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="418.626674" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_46">
+     <g id="hot-stove-line2d_59">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="423.122261" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-xtick_47">
+     <g id="hot-stove-line2d_60">
+      <g>
+       <use xlink:href="#hot-stove-m3124c39e5a" x="453.6" y="503.424" style="fill: var(--text-muted, #6a6358); stroke: var(--text-muted, #6a6358); stroke-width: 0.6"/>
+      </g>
+     </g>
+    </g>
+    <g id="hot-stove-text_27">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="264.6" y="532.613844" transform="rotate(-0 264.6 532.613844)">fog in the price (log scale)</text>
+    </g>
+   </g>
+   <g id="hot-stove-matplotlib.axis_4">
+    <g id="hot-stove-ytick_6">
+     <g id="hot-stove-line2d_61">
+      <path d="M 75.6 503.424 
+L 453.6 503.424 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_62"/>
+     <g id="hot-stove-text_28">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="507.3565" transform="rotate(-0 69.6 507.3565)">0%</text>
+     </g>
+    </g>
+    <g id="hot-stove-ytick_7">
+     <g id="hot-stove-line2d_63">
+      <path d="M 75.6 460.918286 
+L 453.6 460.918286 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_64"/>
+     <g id="hot-stove-text_29">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="464.850786" transform="rotate(-0 69.6 464.850786)">25%</text>
+     </g>
+    </g>
+    <g id="hot-stove-ytick_8">
+     <g id="hot-stove-line2d_65">
+      <path d="M 75.6 418.412571 
+L 453.6 418.412571 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_66"/>
+     <g id="hot-stove-text_30">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="422.345071" transform="rotate(-0 69.6 422.345071)">50%</text>
+     </g>
+    </g>
+    <g id="hot-stove-ytick_9">
+     <g id="hot-stove-line2d_67">
+      <path d="M 75.6 375.906857 
+L 453.6 375.906857 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_68"/>
+     <g id="hot-stove-text_31">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="379.839357" transform="rotate(-0 69.6 379.839357)">75%</text>
+     </g>
+    </g>
+    <g id="hot-stove-ytick_10">
+     <g id="hot-stove-line2d_69">
+      <path d="M 75.6 333.401143 
+L 453.6 333.401143 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="hot-stove-line2d_70"/>
+     <g id="hot-stove-text_32">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="69.6" y="337.333643" transform="rotate(-0 69.6 337.333643)">100%</text>
+     </g>
+    </g>
+    <g id="hot-stove-text_33">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(21.913531 451.09995) rotate(-90)">learners that end</text>
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(35.203906 449.020575) rotate(-90)">up holding back</text>
+    </g>
+   </g>
+   <g id="hot-stove-line2d_71">
+    <path d="M 75.6 503.424 
+L 97.829969 503.424 
+L 120.059939 503.424 
+L 142.289908 503.424 
+L 164.519877 503.424 
+L 186.749846 503.424 
+L 208.979816 503.424 
+L 231.209785 503.424 
+L 253.439754 503.424 
+L 275.669724 503.424 
+L 297.899693 503.424 
+L 320.129662 503.424 
+L 342.359631 498.493337 
+L 364.589601 415.94724 
+L 386.81957 353.038783 
+L 409.049539 339.862011 
+L 431.279509 337.226657 
+L 453.509478 336.376543 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke: var(--accent, #8a5a2b); stroke-width: 2; stroke-linecap: round"/>
+    <defs>
+     <path id="hot-stove-m6bf43cd097" d="M 0 1.5 
+C 0.397805 1.5 0.77937 1.341951 1.06066 1.06066 
+C 1.341951 0.77937 1.5 0.397805 1.5 0 
+C 1.5 -0.397805 1.341951 -0.77937 1.06066 -1.06066 
+C 0.77937 -1.341951 0.397805 -1.5 0 -1.5 
+C -0.397805 -1.5 -0.77937 -1.341951 -1.06066 -1.06066 
+C -1.341951 -0.77937 -1.5 -0.397805 -1.5 0 
+C -1.5 0.397805 -1.341951 0.77937 -1.06066 1.06066 
+C -0.77937 1.341951 -0.397805 1.5 0 1.5 
+z
+" style="stroke: var(--accent, #8a5a2b)"/>
+    </defs>
+    <g clip-path="url(#hot-stove-p464615d69e)">
+     <use xlink:href="#hot-stove-m6bf43cd097" x="75.6" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="97.829969" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="120.059939" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="142.289908" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="164.519877" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="186.749846" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="208.979816" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="231.209785" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="253.439754" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="275.669724" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="297.899693" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="320.129662" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="342.359631" y="498.493337" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="364.589601" y="415.94724" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="386.81957" y="353.038783" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="409.049539" y="339.862011" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="431.279509" y="337.226657" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="453.509478" y="336.376543" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+    </g>
+   </g>
+   <g id="hot-stove-line2d_72">
+    <path d="M 75.6 503.424 
+L 97.829969 503.424 
+L 120.059939 503.424 
+L 142.289908 503.424 
+L 164.519877 503.424 
+L 186.749846 503.424 
+L 208.979816 503.424 
+L 231.209785 503.424 
+L 253.439754 503.424 
+L 275.669724 503.424 
+L 297.899693 503.424 
+L 320.129662 503.424 
+L 342.359631 503.424 
+L 364.589601 502.403863 
+L 386.81957 464.488766 
+L 409.049539 385.853194 
+L 431.279509 351.08352 
+L 453.509478 345.13272 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke-dasharray: 10,5; stroke-dashoffset: 0; stroke: var(--accent, #8a5a2b); stroke-width: 2"/>
+    <g clip-path="url(#hot-stove-p464615d69e)">
+     <use xlink:href="#hot-stove-m6bf43cd097" x="75.6" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="97.829969" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="120.059939" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="142.289908" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="164.519877" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="186.749846" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="208.979816" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="231.209785" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="253.439754" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="275.669724" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="297.899693" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="320.129662" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="342.359631" y="503.424" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="364.589601" y="502.403863" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="386.81957" y="464.488766" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="409.049539" y="385.853194" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="431.279509" y="351.08352" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     <use xlink:href="#hot-stove-m6bf43cd097" x="453.509478" y="345.13272" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+    </g>
+   </g>
+   <g id="hot-stove-line2d_73">
+    <path d="M 102.0563 503.424 
+L 102.0563 312.9984 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke-dasharray: 0.9,2.25; stroke-dashoffset: 0; stroke: var(--text-muted, #6a6358); stroke-width: 0.9"/>
+   </g>
+   <g id="hot-stove-line2d_74">
+    <path d="M 365.714075 503.424 
+L 365.714075 312.9984 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke-dasharray: 0.9,2.25; stroke-dashoffset: 0; stroke: var(--text-muted, #6a6358); stroke-width: 0.9"/>
+   </g>
+   <g id="hot-stove-line2d_75">
+    <path d="M 400.687401 503.424 
+L 400.687401 312.9984 
+" clip-path="url(#hot-stove-p464615d69e)" style="fill: none; stroke-dasharray: 0.9,2.25; stroke-dashoffset: 0; stroke: var(--text-muted, #6a6358); stroke-width: 0.9"/>
+   </g>
+   <g id="hot-stove-patch_6">
+    <path d="M 75.6 503.424 
+L 75.6 312.9984 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="hot-stove-patch_7">
+    <path d="M 75.6 503.424 
+L 453.6 503.424 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="hot-stove-text_34">
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text-muted, #6a6358)" x="106.381871" y="325.643482" transform="rotate(-0 106.381871 325.643482)">little noise</text>
+   </g>
+   <g id="hot-stove-text_35">
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="361.692636" y="325.590982" transform="rotate(-0 361.692636 325.590982)">heavy noise</text>
+   </g>
+   <g id="hot-stove-text_36">
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text-muted, #6a6358)" x="404.325235" y="325.590982" transform="rotate(-0 404.325235 325.590982)">Kyle's market</text>
+   </g>
+   <g id="hot-stove-text_37">
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="75.6" y="302.9984" transform="rotate(-0 75.6 302.9984)">How often the deviation gets written off</text>
+   </g>
+   <g id="hot-stove-legend_1">
+    <g id="hot-stove-line2d_76">
+     <path d="M 107.73 399.186122 
+L 121.38 399.186122 
+L 135.03 399.186122 
+" style="fill: none; stroke: var(--accent, #8a5a2b); stroke-width: 2; stroke-linecap: round"/>
+     <g>
+      <use xlink:href="#hot-stove-m6bf43cd097" x="121.38" y="399.186122" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     </g>
+    </g>
+    <g id="hot-stove-text_38">
+     <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="143.43" y="402.861122" transform="rotate(-0 143.43 402.861122)">learning rate 0.05</text>
+    </g>
+    <g id="hot-stove-line2d_77">
+     <path d="M 107.73 414.6687 
+L 121.38 414.6687 
+L 135.03 414.6687 
+" style="fill: none; stroke-dasharray: 10,5; stroke-dashoffset: 0; stroke: var(--accent, #8a5a2b); stroke-width: 2"/>
+     <g>
+      <use xlink:href="#hot-stove-m6bf43cd097" x="121.38" y="414.6687" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+     </g>
+    </g>
+    <g id="hot-stove-text_39">
+     <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="143.43" y="418.3437" transform="rotate(-0 143.43 418.3437)">learning rate 0.01</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="hot-stove-p9601187968">
+   <rect x="75.6" y="27.36" width="378" height="190.4256"/>
+  </clipPath>
+  <clipPath id="hot-stove-p464615d69e">
+   <rect x="75.6" y="312.9984" width="378" height="190.4256"/>
+  </clipPath>
+ </defs>
+</svg>

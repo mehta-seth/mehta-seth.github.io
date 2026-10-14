@@ -1,0 +1,217 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" role="img" viewBox="0 0 540 381.6" xmlns="http://www.w3.org/2000/svg" version="1.1"><title>Two stacked bars of price impact. Holding back, each program buys 30 blocks and the price closes halfway to the true value, leaving 60p per block, so each earns £18.00. Trading hard, each buys 40 blocks and the price closes two-thirds of the way up, leaving 40p per block, so each earns £16.00.</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="trading-day-figure_1">
+  <g id="trading-day-patch_1">
+   <path d="M 0 381.6 
+L 540 381.6 
+L 540 0 
+L 0 0 
+L 0 381.6 
+z
+" style="fill: none"/>
+  </g>
+  <g id="trading-day-axes_1">
+   <g id="trading-day-patch_2">
+    <path d="M 54 286.2 
+L 534.6 286.2 
+L 534.6 11.448 
+L 54 11.448 
+L 54 286.2 
+z
+" style="fill: none"/>
+   </g>
+   <g id="trading-day-matplotlib.axis_1"/>
+   <g id="trading-day-matplotlib.axis_2">
+    <g id="trading-day-ytick_1">
+     <g id="trading-day-line2d_1">
+      <path d="M 54 286.2 
+L 534.6 286.2 
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="trading-day-line2d_2"/>
+     <g id="trading-day-text_1">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="48" y="290.1325" transform="rotate(-0 48 290.1325)">0</text>
+     </g>
+    </g>
+    <g id="trading-day-ytick_2">
+     <g id="trading-day-line2d_3">
+      <path d="M 54 222.6 
+L 534.6 222.6 
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="trading-day-line2d_4"/>
+     <g id="trading-day-text_2">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="48" y="226.5325" transform="rotate(-0 48 226.5325)">30</text>
+     </g>
+    </g>
+    <g id="trading-day-ytick_3">
+     <g id="trading-day-line2d_5">
+      <path d="M 54 159 
+L 534.6 159 
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="trading-day-line2d_6"/>
+     <g id="trading-day-text_3">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="48" y="162.9325" transform="rotate(-0 48 162.9325)">60</text>
+     </g>
+    </g>
+    <g id="trading-day-ytick_4">
+     <g id="trading-day-line2d_7">
+      <path d="M 54 95.4 
+L 534.6 95.4 
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="trading-day-line2d_8"/>
+     <g id="trading-day-text_4">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="48" y="99.3325" transform="rotate(-0 48 99.3325)">90</text>
+     </g>
+    </g>
+    <g id="trading-day-ytick_5">
+     <g id="trading-day-line2d_9">
+      <path d="M 54 31.8 
+L 534.6 31.8 
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="trading-day-line2d_10"/>
+     <g id="trading-day-text_5">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="48" y="35.7325" transform="rotate(-0 48 35.7325)">120</text>
+     </g>
+    </g>
+    <g id="trading-day-text_6">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="22.189063" y="148.824" transform="rotate(-90 22.189063 148.824)">price, pence above the opening price</text>
+    </g>
+   </g>
+   <g id="trading-day-patch_3">
+    <path d="M 118.733878 286.2 
+L 185.429388 286.2 
+L 185.429388 222.6 
+L 118.733878 222.6 
+z
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: var(--accent, #8a5a2b); stroke: var(--bg, #faf8f3); stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="trading-day-patch_4">
+    <path d="M 118.733878 222.6 
+L 185.429388 222.6 
+L 185.429388 159 
+L 118.733878 159 
+z
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: var(--accent, #8a5a2b); stroke: var(--bg, #faf8f3); stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="trading-day-patch_5">
+    <path d="M 118.733878 159 
+L 185.429388 159 
+L 185.429388 31.8 
+L 118.733878 31.8 
+L 118.733878 159 
+z
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: none; stroke-dasharray: 3.6,3.6; stroke-dashoffset: 0; stroke: var(--accent, #8a5a2b); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="trading-day-patch_6">
+    <path d="M 344.321633 286.2 
+L 411.017143 286.2 
+L 411.017143 201.4 
+L 344.321633 201.4 
+z
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: var(--fig-blue, #3e6d93); stroke: var(--bg, #faf8f3); stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="trading-day-patch_7">
+    <path d="M 344.321633 201.4 
+L 411.017143 201.4 
+L 411.017143 116.6 
+L 344.321633 116.6 
+z
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: var(--fig-blue, #3e6d93); stroke: var(--bg, #faf8f3); stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="trading-day-patch_8">
+    <path d="M 344.321633 116.6 
+L 411.017143 116.6 
+L 411.017143 31.8 
+L 344.321633 31.8 
+L 344.321633 116.6 
+z
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: none; stroke-dasharray: 3.6,3.6; stroke-dashoffset: 0; stroke: var(--fig-blue, #3e6d93); stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="trading-day-line2d_11">
+    <path d="M 54 31.8 
+L 534.6 31.8 
+" clip-path="url(#trading-day-p130ee7bd89)" style="fill: none; stroke-dasharray: 1,2.5; stroke-dashoffset: 0; stroke: var(--text, #1a1814)"/>
+   </g>
+   <g id="trading-day-patch_9">
+    <path d="M 54 286.2 
+L 534.6 286.2 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="trading-day-text_7">
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--bg, #faf8f3)" x="152.081633" y="257.018945" transform="rotate(-0 152.081633 257.018945)">A buys 30</text>
+   </g>
+   <g id="trading-day-text_8">
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--bg, #faf8f3)" x="152.081633" y="193.418945" transform="rotate(-0 152.081633 193.418945)">B buys 30</text>
+   </g>
+   <g id="trading-day-text_9">
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--accent, #8a5a2b)" transform="translate(132.856867 85.282336)">60p left</text>
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--accent, #8a5a2b)" transform="translate(129.87675 98.018945)">for every</text>
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--accent, #8a5a2b)" transform="translate(138.750617 110.870555)">block</text>
+   </g>
+   <g id="trading-day-text_10">
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(195.237551 155.764359)">price closes</text>
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(195.237551 167.018063)">halfway up</text>
+   </g>
+   <g id="trading-day-text_11">
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text, #1a1814)" x="152.081633" y="325.690891" transform="rotate(-0 152.081633 325.690891)">Both hold back</text>
+   </g>
+   <g id="trading-day-text_12">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="152.081633" y="346.217" transform="rotate(-0 152.081633 346.217)">30 blocks each</text>
+   </g>
+   <g id="trading-day-text_13">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text, #1a1814)" x="152.081633" y="366.569" transform="rotate(-0 152.081633 366.569)">each earns 30 × 60p = £18.00</text>
+   </g>
+   <g id="trading-day-text_14">
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--bg, #faf8f3)" x="377.669388" y="246.418945" transform="rotate(-0 377.669388 246.418945)">A buys 40</text>
+   </g>
+   <g id="trading-day-text_15">
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--bg, #faf8f3)" x="377.669388" y="161.618945" transform="rotate(-0 377.669388 161.618945)">B buys 40</text>
+   </g>
+   <g id="trading-day-text_16">
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--fig-blue, #3e6d93)" transform="translate(358.444622 64.082336)">40p left</text>
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--fig-blue, #3e6d93)" transform="translate(355.464505 76.818945)">for every</text>
+    <text style="font-size: 11.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--fig-blue, #3e6d93)" transform="translate(364.338372 89.670555)">block</text>
+   </g>
+   <g id="trading-day-text_17">
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(420.825306 113.364359)">price closes</text>
+    <text style="font-size: 10.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(420.825306 124.618063)">two-thirds of the way up</text>
+   </g>
+   <g id="trading-day-text_18">
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text, #1a1814)" x="377.669388" y="325.690891" transform="rotate(-0 377.669388 325.690891)">Both trade hard</text>
+   </g>
+   <g id="trading-day-text_19">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="377.669388" y="346.217" transform="rotate(-0 377.669388 346.217)">40 blocks each</text>
+   </g>
+   <g id="trading-day-text_20">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text, #1a1814)" x="377.669388" y="366.569" transform="rotate(-0 377.669388 366.569)">each earns 40 × 40p = £16.00</text>
+   </g>
+   <g id="trading-day-text_21">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text, #1a1814)" x="534.6" y="25.239156" transform="rotate(-0 534.6 25.239156)">true value</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="trading-day-p130ee7bd89">
+   <rect x="54" y="11.448" width="480.6" height="274.752"/>
+  </clipPath>
+ </defs>
+</svg>

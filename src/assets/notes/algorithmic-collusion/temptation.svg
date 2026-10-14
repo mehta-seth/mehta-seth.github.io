@@ -1,0 +1,494 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" role="img" viewBox="0 0 540 475.2" xmlns="http://www.w3.org/2000/svg" version="1.1"><title>Profit relative to competition against the agreed trading intensity. In both Kyle's market and a market with fixed price impact, cheating on a partner who holds back earns more than holding back, which earns more than competition.</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="temptation-figure_1">
+  <g id="temptation-patch_1">
+   <path d="M 0 475.2 
+L 540 475.2 
+L 540 0 
+L 0 0 
+L 0 475.2 
+z
+" style="fill: none"/>
+  </g>
+  <g id="temptation-axes_1">
+   <g id="temptation-patch_2">
+    <path d="M 70.2 197.863448 
+L 523.8 197.863448 
+L 523.8 23.76 
+L 70.2 23.76 
+L 70.2 197.863448 
+z
+" style="fill: none"/>
+   </g>
+   <g id="temptation-matplotlib.axis_1">
+    <g id="temptation-xtick_1">
+     <g id="temptation-line2d_1"/>
+    </g>
+    <g id="temptation-xtick_2">
+     <g id="temptation-line2d_2"/>
+    </g>
+    <g id="temptation-xtick_3">
+     <g id="temptation-line2d_3"/>
+    </g>
+    <g id="temptation-xtick_4">
+     <g id="temptation-line2d_4"/>
+    </g>
+    <g id="temptation-xtick_5">
+     <g id="temptation-line2d_5"/>
+    </g>
+    <g id="temptation-xtick_6">
+     <g id="temptation-line2d_6"/>
+    </g>
+    <g id="temptation-xtick_7">
+     <g id="temptation-line2d_7"/>
+    </g>
+   </g>
+   <g id="temptation-matplotlib.axis_2">
+    <g id="temptation-ytick_1">
+     <g id="temptation-line2d_8">
+      <path d="M 70.2 173.682414 
+L 523.8 173.682414 
+" clip-path="url(#temptation-pbb84f758f0)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="temptation-line2d_9"/>
+     <g id="temptation-text_1">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="64.2" y="177.614914" transform="rotate(-0 64.2 177.614914)">1.0</text>
+     </g>
+    </g>
+    <g id="temptation-ytick_2">
+     <g id="temptation-line2d_10">
+      <path d="M 70.2 125.320345 
+L 523.8 125.320345 
+" clip-path="url(#temptation-pbb84f758f0)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="temptation-line2d_11"/>
+     <g id="temptation-text_2">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="64.2" y="129.252845" transform="rotate(-0 64.2 129.252845)">1.2</text>
+     </g>
+    </g>
+    <g id="temptation-ytick_3">
+     <g id="temptation-line2d_12">
+      <path d="M 70.2 76.958276 
+L 523.8 76.958276 
+" clip-path="url(#temptation-pbb84f758f0)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="temptation-line2d_13"/>
+     <g id="temptation-text_3">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="64.2" y="80.890776" transform="rotate(-0 64.2 80.890776)">1.4</text>
+     </g>
+    </g>
+    <g id="temptation-ytick_4">
+     <g id="temptation-line2d_14">
+      <path d="M 70.2 28.596207 
+L 523.8 28.596207 
+" clip-path="url(#temptation-pbb84f758f0)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="temptation-line2d_15"/>
+     <g id="temptation-text_4">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="64.2" y="32.528707" transform="rotate(-0 64.2 32.528707)">1.6</text>
+     </g>
+    </g>
+    <g id="temptation-text_5">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(28.920875 125.515474) rotate(-90)">profit</text>
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(42.21125 154.422349) rotate(-90)">(1 = competition)</text>
+    </g>
+   </g>
+   <g id="temptation-line2d_16">
+    <path d="M 70.2 173.682414 
+L 81.568421 171.378055 
+L 92.936842 169.306469 
+L 104.305263 167.457415 
+L 115.673684 165.820711 
+L 128.178947 164.253587 
+L 140.684211 162.918036 
+L 153.189474 161.801152 
+L 166.831579 160.817356 
+L 180.473684 160.063012 
+L 194.115789 159.522869 
+L 208.894737 159.162465 
+L 223.673684 159.018492 
+L 239.589474 159.086127 
+L 256.642105 159.392779 
+L 273.694737 159.919236 
+L 291.884211 160.698942 
+L 311.210526 161.747766 
+L 331.673684 163.07687 
+L 354.410526 164.783107 
+L 378.284211 166.797121 
+L 404.431579 169.221877 
+L 433.989474 172.187147 
+L 468.094737 175.838547 
+L 509.021053 180.454765 
+L 523.8 182.166987 
+L 523.8 182.166987 
+" clip-path="url(#temptation-pbb84f758f0)" style="fill: none; stroke: var(--accent, #8a5a2b); stroke-width: 2.2; stroke-linecap: round"/>
+   </g>
+   <g id="temptation-line2d_17">
+    <path d="M 70.2 37.664095 
+L 78.157895 44.392996 
+L 86.115789 50.805282 
+L 94.073684 56.919345 
+L 102.031579 62.752178 
+L 109.989474 68.319515 
+L 117.947368 73.63594 
+L 127.042105 79.421943 
+L 136.136842 84.916587 
+L 145.231579 90.137115 
+L 154.326316 95.099455 
+L 163.421053 99.818335 
+L 172.515789 104.307405 
+L 182.747368 109.098643 
+L 192.978947 113.63171 
+L 203.210526 117.921989 
+L 213.442105 121.983692 
+L 224.810526 126.244574 
+L 236.178947 130.256124 
+L 247.547368 134.033665 
+L 258.915789 137.591325 
+L 271.421053 141.266331 
+L 283.926316 144.707049 
+L 296.431579 147.928186 
+L 310.073684 151.207609 
+L 323.715789 154.257972 
+L 338.494737 157.3212 
+L 353.273684 160.150222 
+L 368.052632 162.760804 
+L 383.968421 165.344436 
+L 399.884211 167.707931 
+L 416.936842 170.013025 
+L 433.989474 172.099526 
+L 452.178947 174.101461 
+L 471.505263 175.994051 
+L 490.831579 177.66309 
+L 511.294737 179.205128 
+L 523.8 180.041023 
+L 523.8 180.041023 
+" clip-path="url(#temptation-pbb84f758f0)" style="fill: none; stroke-dasharray: 11,5.5; stroke-dashoffset: 0; stroke: var(--fig-blue, #3e6d93); stroke-width: 2.2"/>
+   </g>
+   <g id="temptation-line2d_18">
+    <path d="M 226.772727 197.863448 
+L 226.772727 23.76 
+" clip-path="url(#temptation-pbb84f758f0)" style="fill: none; stroke-dasharray: 0.9,2.25; stroke-dashoffset: 0; stroke: var(--text-muted, #6a6358); stroke-width: 0.9"/>
+   </g>
+   <g id="temptation-line2d_19">
+    <defs>
+     <path id="temptation-m07415eaa17" d="M 0 3 
+C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
+C 2.683901 1.55874 3 0.795609 3 0 
+C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
+C 1.55874 -2.683901 0.795609 -3 0 -3 
+C -0.795609 -3 -1.55874 -2.683901 -2.12132 -2.12132 
+C -2.683901 -1.55874 -3 -0.795609 -3 0 
+C -3 0.795609 -2.683901 1.55874 -2.12132 2.12132 
+C -1.55874 2.683901 -0.795609 3 0 3 
+z
+" style="stroke: var(--accent, #8a5a2b)"/>
+    </defs>
+    <g clip-path="url(#temptation-pbb84f758f0)">
+     <use xlink:href="#temptation-m07415eaa17" x="226.772727" y="158.931983" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+    </g>
+   </g>
+   <g id="temptation-line2d_20">
+    <defs>
+     <path id="temptation-m3f2f4a04d5" d="M 0 3 
+C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
+C 2.683901 1.55874 3 0.795609 3 0 
+C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
+C 1.55874 -2.683901 0.795609 -3 0 -3 
+C -0.795609 -3 -1.55874 -2.683901 -2.12132 -2.12132 
+C -2.683901 -1.55874 -3 -0.795609 -3 0 
+C -3 0.795609 -2.683901 1.55874 -2.12132 2.12132 
+C -1.55874 2.683901 -0.795609 3 0 3 
+z
+" style="stroke: var(--fig-blue, #3e6d93)"/>
+    </defs>
+    <g clip-path="url(#temptation-pbb84f758f0)">
+     <use xlink:href="#temptation-m3f2f4a04d5" x="226.772727" y="127.013017" style="fill: var(--fig-blue, #3e6d93); stroke: var(--fig-blue, #3e6d93)"/>
+    </g>
+   </g>
+   <g id="temptation-line2d_21">
+    <defs>
+     <path id="temptation-m149391843c" d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" style="stroke: var(--text, #1a1814)"/>
+    </defs>
+    <g clip-path="url(#temptation-pbb84f758f0)">
+     <use xlink:href="#temptation-m149391843c" x="448.2" y="173.682414" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+    </g>
+   </g>
+   <g id="temptation-patch_3">
+    <path d="M 70.2 197.863448 
+L 70.2 23.76 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="temptation-patch_4">
+    <path d="M 70.2 197.863448 
+L 523.8 197.863448 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="temptation-text_6">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--accent, #8a5a2b)" x="235.844727" y="174.051293" transform="rotate(-0 235.844727 174.051293)">cartel: 1.061</text>
+   </g>
+   <g id="temptation-text_7">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--fig-blue, #3e6d93)" x="235.844727" y="118.222915" transform="rotate(-0 235.844727 118.222915)">cheat on a partner who holds back: 1.193</text>
+   </g>
+   <g id="temptation-text_8">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text, #1a1814)" x="444.42" y="192.428879" transform="rotate(-0 444.42 192.428879)">competition</text>
+   </g>
+   <g id="temptation-text_9">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--accent, #8a5a2b)" x="85.32" y="190.010776" transform="rotate(-0 85.32 190.010776)">both hold back</text>
+   </g>
+   <g id="temptation-text_10">
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="70.2" y="13.76" transform="rotate(-0 70.2 13.76)">Kyle's market</text>
+   </g>
+  </g>
+  <g id="temptation-axes_2">
+   <g id="temptation-patch_5">
+    <path d="M 70.2 427.68 
+L 523.8 427.68 
+L 523.8 253.576552 
+L 70.2 253.576552 
+L 70.2 427.68 
+z
+" style="fill: none"/>
+   </g>
+   <g id="temptation-matplotlib.axis_3">
+    <g id="temptation-xtick_8">
+     <g id="temptation-line2d_22"/>
+     <g id="temptation-text_11">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="70.2" y="441.545" transform="rotate(-0 70.2 441.545)">0.5</text>
+     </g>
+    </g>
+    <g id="temptation-xtick_9">
+     <g id="temptation-line2d_23"/>
+     <g id="temptation-text_12">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="145.8" y="441.545" transform="rotate(-0 145.8 441.545)">0.6</text>
+     </g>
+    </g>
+    <g id="temptation-xtick_10">
+     <g id="temptation-line2d_24"/>
+     <g id="temptation-text_13">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="221.4" y="441.545" transform="rotate(-0 221.4 441.545)">0.7</text>
+     </g>
+    </g>
+    <g id="temptation-xtick_11">
+     <g id="temptation-line2d_25"/>
+     <g id="temptation-text_14">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="297" y="441.545" transform="rotate(-0 297 441.545)">0.8</text>
+     </g>
+    </g>
+    <g id="temptation-xtick_12">
+     <g id="temptation-line2d_26"/>
+     <g id="temptation-text_15">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="372.6" y="441.545" transform="rotate(-0 372.6 441.545)">0.9</text>
+     </g>
+    </g>
+    <g id="temptation-xtick_13">
+     <g id="temptation-line2d_27"/>
+     <g id="temptation-text_16">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="448.2" y="441.545" transform="rotate(-0 448.2 441.545)">1.0</text>
+     </g>
+    </g>
+    <g id="temptation-xtick_14">
+     <g id="temptation-line2d_28"/>
+     <g id="temptation-text_17">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="523.8" y="441.545" transform="rotate(-0 523.8 441.545)">1.1</text>
+     </g>
+    </g>
+    <g id="temptation-text_18">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: middle; fill: var(--text-muted, #6a6358)" x="297" y="456.869844" transform="rotate(-0 297 456.869844)">agreed trading intensity (1 = competitive intensity)</text>
+    </g>
+   </g>
+   <g id="temptation-matplotlib.axis_4">
+    <g id="temptation-ytick_5">
+     <g id="temptation-line2d_29">
+      <path d="M 70.2 403.498966 
+L 523.8 403.498966 
+" clip-path="url(#temptation-p3010f63036)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="temptation-line2d_30"/>
+     <g id="temptation-text_19">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="64.2" y="407.431466" transform="rotate(-0 64.2 407.431466)">1.0</text>
+     </g>
+    </g>
+    <g id="temptation-ytick_6">
+     <g id="temptation-line2d_31">
+      <path d="M 70.2 355.136897 
+L 523.8 355.136897 
+" clip-path="url(#temptation-p3010f63036)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="temptation-line2d_32"/>
+     <g id="temptation-text_20">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="64.2" y="359.069397" transform="rotate(-0 64.2 359.069397)">1.2</text>
+     </g>
+    </g>
+    <g id="temptation-ytick_7">
+     <g id="temptation-line2d_33">
+      <path d="M 70.2 306.774828 
+L 523.8 306.774828 
+" clip-path="url(#temptation-p3010f63036)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="temptation-line2d_34"/>
+     <g id="temptation-text_21">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="64.2" y="310.707328" transform="rotate(-0 64.2 310.707328)">1.4</text>
+     </g>
+    </g>
+    <g id="temptation-ytick_8">
+     <g id="temptation-line2d_35">
+      <path d="M 70.2 258.412759 
+L 523.8 258.412759 
+" clip-path="url(#temptation-p3010f63036)" style="fill: none; stroke: var(--border, #e8e2d4); stroke-width: 0.9; stroke-linecap: round"/>
+     </g>
+     <g id="temptation-line2d_36"/>
+     <g id="temptation-text_22">
+      <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="64.2" y="262.345259" transform="rotate(-0 64.2 262.345259)">1.6</text>
+     </g>
+    </g>
+    <g id="temptation-text_23">
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(28.920875 355.332026) rotate(-90)">profit</text>
+     <text style="font-size: 12px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; fill: var(--text-muted, #6a6358)" transform="translate(42.21125 384.238901) rotate(-90)">(1 = competition)</text>
+    </g>
+   </g>
+   <g id="temptation-line2d_37">
+    <path d="M 70.2 403.498966 
+L 81.568421 399.972081 
+L 92.936842 396.663917 
+L 104.305263 393.574475 
+L 115.673684 390.703755 
+L 127.042105 388.051756 
+L 138.410526 385.618479 
+L 149.778947 383.403923 
+L 161.147368 381.408089 
+L 172.515789 379.630976 
+L 183.884211 378.072585 
+L 195.252632 376.732916 
+L 206.621053 375.611968 
+L 217.989474 374.709741 
+L 229.357895 374.026237 
+L 240.726316 373.561453 
+L 252.094737 373.315391 
+L 263.463158 373.288051 
+L 274.831579 373.479433 
+L 286.2 373.889536 
+L 297.568421 374.51836 
+L 308.936842 375.365906 
+L 320.305263 376.432174 
+L 331.673684 377.717163 
+L 343.042105 379.220873 
+L 354.410526 380.943306 
+L 365.778947 382.884459 
+L 377.147368 385.044335 
+L 388.515789 387.422932 
+L 399.884211 390.02025 
+L 411.252632 392.83629 
+L 422.621053 395.871051 
+L 433.989474 399.124534 
+L 445.357895 402.596739 
+L 456.726316 406.287665 
+L 468.094737 410.197313 
+L 479.463158 414.325682 
+L 490.831579 418.672773 
+L 502.2 423.238586 
+L 513.568421 428.023119 
+L 523.8 432.516207 
+L 523.8 432.516207 
+" clip-path="url(#temptation-p3010f63036)" style="fill: none; stroke: var(--accent, #8a5a2b); stroke-width: 2.2; stroke-linecap: round"/>
+   </g>
+   <g id="temptation-line2d_38">
+    <path d="M 70.2 267.480647 
+L 104.305263 280.993537 
+L 138.410526 294.260366 
+L 172.515789 307.281134 
+L 205.484211 319.63398 
+L 238.452632 331.756896 
+L 271.421053 343.64988 
+L 304.389474 355.312933 
+L 337.357895 366.746056 
+L 370.326316 377.949247 
+L 403.294737 388.922507 
+L 436.263158 399.665836 
+L 469.231579 410.179234 
+L 502.2 420.462701 
+L 523.8 427.075474 
+L 523.8 427.075474 
+" clip-path="url(#temptation-p3010f63036)" style="fill: none; stroke-dasharray: 11,5.5; stroke-dashoffset: 0; stroke: var(--fig-blue, #3e6d93); stroke-width: 2.2"/>
+   </g>
+   <g id="temptation-line2d_39">
+    <path d="M 259.2 427.68 
+L 259.2 253.576552 
+" clip-path="url(#temptation-p3010f63036)" style="fill: none; stroke-dasharray: 0.9,2.25; stroke-dashoffset: 0; stroke: var(--text-muted, #6a6358); stroke-width: 0.9"/>
+   </g>
+   <g id="temptation-line2d_40">
+    <g clip-path="url(#temptation-p3010f63036)">
+     <use xlink:href="#temptation-m07415eaa17" x="259.2" y="373.272672" style="fill: var(--accent, #8a5a2b); stroke: var(--accent, #8a5a2b)"/>
+    </g>
+   </g>
+   <g id="temptation-line2d_41">
+    <g clip-path="url(#temptation-p3010f63036)">
+     <use xlink:href="#temptation-m3f2f4a04d5" x="259.2" y="339.177414" style="fill: var(--fig-blue, #3e6d93); stroke: var(--fig-blue, #3e6d93)"/>
+    </g>
+   </g>
+   <g id="temptation-line2d_42">
+    <g clip-path="url(#temptation-p3010f63036)">
+     <use xlink:href="#temptation-m149391843c" x="448.2" y="403.498966" style="fill: var(--text, #1a1814); stroke: var(--text, #1a1814)"/>
+    </g>
+   </g>
+   <g id="temptation-patch_6">
+    <path d="M 70.2 427.68 
+L 70.2 253.576552 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="temptation-patch_7">
+    <path d="M 70.2 427.68 
+L 523.8 427.68 
+" style="fill: none; stroke: var(--text-muted, #6a6358); stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="temptation-text_24">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--accent, #8a5a2b)" x="268.272" y="388.391983" transform="rotate(-0 268.272 388.391983)">cartel: 1.125</text>
+   </g>
+   <g id="temptation-text_25">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--fig-blue, #3e6d93)" x="268.272" y="330.387311" transform="rotate(-0 268.272 330.387311)">cheat on a partner who holds back: 1.266</text>
+   </g>
+   <g id="temptation-text_26">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text, #1a1814)" x="444.42" y="422.245431" transform="rotate(-0 444.42 422.245431)">competition</text>
+   </g>
+   <g id="temptation-text_27">
+    <text style="font-size: 11px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--accent, #8a5a2b)" x="85.32" y="419.827328" transform="rotate(-0 85.32 419.827328)">both hold back</text>
+   </g>
+   <g id="temptation-text_28">
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="70.2" y="243.576552" transform="rotate(-0 70.2 243.576552)">Fixed price impact, as in the toy market</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="temptation-pbb84f758f0">
+   <rect x="70.2" y="23.76" width="453.6" height="174.103448"/>
+  </clipPath>
+  <clipPath id="temptation-p3010f63036">
+   <rect x="70.2" y="253.576552" width="453.6" height="174.103448"/>
+  </clipPath>
+ </defs>
+</svg>
