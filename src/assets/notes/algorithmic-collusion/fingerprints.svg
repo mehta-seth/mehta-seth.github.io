@@ -1,4 +1,4 @@
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" role="img" viewBox="0 0 540 475.2" xmlns="http://www.w3.org/2000/svg" version="1.1"><title>Schematic. After a burst of noise trading on day 3, programs with a learned reflex trade hard on day 4 and then return to normal, while programs with a blind spot do not react. The reflex ignores tiny bursts and responds equally to larger ones.</title>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" role="img" viewBox="0 0 540 475.2" xmlns="http://www.w3.org/2000/svg" version="1.1"><title>Schematic. After a burst of noise trading on day 3, algorithms with a learned reflex trade hard on day 4 and then return to normal, while algorithms with a blind spot do not react. The reflex ignores tiny bursts and responds equally to larger ones.</title>
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -174,7 +174,7 @@ z
     <text style="font-style: italic; font-size: 9.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: end; fill: var(--text-muted, #6a6358)" x="529.2" y="28.940813" transform="rotate(-0 529.2 28.940813)">schematic</text>
    </g>
    <g id="fingerprints-text_16">
-    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="64.8" y="18.512" transform="rotate(-0 64.8 18.512)">How hard the programs trade, day by day</text>
+    <text style="font-weight: 600; font-size: 12.5px; font-family: 'HML Math', 'Newsreader', Charter, Georgia, serif; text-anchor: start; fill: var(--text, #1a1814)" x="64.8" y="18.512" transform="rotate(-0 64.8 18.512)">How hard the algorithms trade, day by day</text>
    </g>
   </g>
   <g id="fingerprints-axes_2">

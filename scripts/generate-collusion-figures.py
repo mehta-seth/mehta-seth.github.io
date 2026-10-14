@@ -199,7 +199,7 @@ def fig4(P):
     ax.text(1.0, 0.98, 'schematic', transform=ax.transAxes, ha='right', va='bottom', color=P['muted'], fontsize=FS - 3, style='italic')
     ax.set_xlim(0.6, 8.4); ax.set_ylim(-0.32, 1.3); ax.set_xticks(days); ax.set_xlabel('day')
     ax.set_yticks([0, 1]); ax.set_yticklabels(['normal', 'hard'])
-    ax.spines['left'].set_visible(False); ax.set_title('How hard the programs trade, day by day')
+    ax.spines['left'].set_visible(False); ax.set_title('How hard the algorithms trade, day by day')
     ax = axes[1]
     cats = ['tiny\n(0.25%)', 'medium\n(2.5%)', 'large\n(11.5%)', 'very large\n(15%)']; xs = np.arange(4)
     ax.plot(xs, [0, 0, 0, 0], color=P['muted'], linewidth=2.6, linestyle=(0, (4, 2.5)), alpha=0.8, marker='o', markersize=6,
@@ -279,10 +279,10 @@ def to_theme_svg(svg, P, alt, name):
     return svg
 
 ALT = {
- 'fig1': 'Two stacked bars of price impact. Holding back, each program buys 30 blocks and the price closes halfway to the true value, leaving 60p per block, so each earns £18.00. Trading hard, each buys 40 blocks and the price closes two-thirds of the way up, leaving 40p per block, so each earns £16.00.',
+ 'fig1': 'Two stacked bars of price impact. Holding back, each algorithm buys 30 blocks and the price closes halfway to the true value, leaving 60p per block, so each earns £18.00. Trading hard, each buys 40 blocks and the price closes two-thirds of the way up, leaving 40p per block, so each earns £16.00.',
  'fig2': "Two panels. In Kyle's market the price distributions with and without a cheat overlap almost completely. In a market with plenty of price-only investors and little noise, the two outcomes are thin lines 0.17 apart and easy to tell apart.",
  'fig3': "Top: one learner's score for deviating dips below its score for holding back several times and finally freezes at a low value, although deviating really pays more. Bottom: the share of learners that end up holding back is zero when the fog is thin and rises towards nearly all of them as the fog thickens.",
- 'fig4': 'Schematic. After a burst of noise trading on day 3, programs with a learned reflex trade hard on day 4 and then return to normal, while programs with a blind spot do not react. The reflex ignores tiny bursts and responds equally to larger ones.',
+ 'fig4': 'Schematic. After a burst of noise trading on day 3, algorithms with a learned reflex trade hard on day 4 and then return to normal, while algorithms with a blind spot do not react. The reflex ignores tiny bursts and responds equally to larger ones.',
  'fig5': "Schematic U-shaped curve of collusion against fog: strong where the fog is thin, held by a learned reflex; weakest in between; strong again where the fog is thick, through the learned blind spot. Kyle's market sits on the thick side.",
  'figS': "Profit relative to competition against the agreed trading intensity. In both Kyle's market and a market with fixed price impact, cheating on a partner who holds back earns more than holding back, which earns more than competition.",
 }
