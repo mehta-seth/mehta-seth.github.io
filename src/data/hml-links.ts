@@ -28,6 +28,6 @@ export const hmlLinks: Record<string, HmlLink> = {
   'algorithmic-collusion': { url: '/learn/algorithmic-collusion/', label: 'Algorithmic Collusion' },
   'classic-cocktails': { url: '/learn/classic-cocktails/', label: 'Classic Cocktails' },
   'art-history': { url: '/learn/art-history/', label: 'Art History' },
-  'clouds': { url: '/learn/clouds/' },
+  'clouds': { url: '/learn/clouds/', label: 'Types of Clouds' },
   // Add a term here the moment its note is published. One line per term.
 };

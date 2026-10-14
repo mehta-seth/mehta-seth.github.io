@@ -25,7 +25,7 @@ export default defineConfig({
     // public/ files are invisible to the sitemap integration, so the
     // standalone Gold Room app (public/learn/classic-cocktails/) is listed
     // by hand.
-    sitemap({ customPages: ['https://mehta-seth.github.io/learn/classic-cocktails/'] }),
+    sitemap({ customPages: ['https://mehta-seth.github.io/learn/classic-cocktails/', 'https://mehta-seth.github.io/learn/clouds/'] }),
   ],
 
   markdown: {
