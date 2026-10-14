@@ -9,11 +9,23 @@
 // Three kinds share one look and are told apart by the small italic label on
 // the summary line and by the colour of the rule beside the opened text:
 //   background  something the note takes for granted, explained only as far
-//               as the note needs (muted rule)
-//   deeper      optional reading: a proof, some history, an open problem,
-//               labelled “A closer look” (accent rule, accent label)
+//               as the note needs; labelled “Primer” (muted rule)
+//   deeper      optional reading beyond what the note needs (accent rule,
+//               accent label)
 //   answer      the hidden answer to a "check yourself" question
 // The main text must never depend on what a drawer holds.
+//
+// The label tells a reader what is inside before they open it, so a deeper
+// drawer names its kind of content with `label`, from this short list:
+//   The theory       a theorem, proof, derivation or formal result
+//   The model        a modelling assumption or the set-up of a model
+//   The evidence     an empirical result, experiment or real case
+//   The debate       a contested definition or open dispute
+//   In practice      regulation, industry, what is happening now
+//   The fine print   a caveat or the limits of an idea
+//   Further reading  where to go next
+// Without one, a deeper drawer reads “Further”. Background drawers keep
+// “Primer” and answers “Answer”; `label` can override any of them.
 //
 // Usage in MDX (injected by the /learn/ route, no import). Leave blank lines
 // inside the tags so MDX parses the body as Markdown, maths included:
@@ -24,25 +36,29 @@
 //
 //   </Drawer>
 //
-// `title` is a plain-text prop: props are not Markdown, so keep maths out of
-// it, and type curly quotes directly (“countable”), since smartypants never
-// reaches props. An answer drawer usually needs no title.
+//   <Drawer kind="deeper" label="The theory" title="The folk theorem">
+//
+// `title` and `label` are plain-text props: props are not Markdown, so keep
+// maths out of them, and type curly quotes directly (“countable”), since
+// smartypants never reaches props. An answer drawer usually needs no title.
 
 interface Props {
   /** Which drawer this is; sets the label and the rule colour. */
   kind?: 'background' | 'deeper' | 'answer';
   /** Plain-text title on the summary line, after the label. */
   title?: string;
+  /** Plain-text label naming what the drawer holds (see the list above). */
+  label?: string;
 }
 
-const { kind = 'background', title } = Astro.props;
+const { kind = 'background', title, label: labelProp } = Astro.props;
 
 const LABELS = {
-  background: 'Background',
-  deeper: 'A closer look',
+  background: 'Primer',
+  deeper: 'Further',
   answer: 'Answer',
 } as const;
-const label = LABELS[kind];
+const label = labelProp ?? LABELS[kind];
 ---
 
 <details class:list={['drawer', `drawer--${kind}`]}>

@@ -40,7 +40,8 @@ import placeholderFigure from '../../assets/notes/placeholder-diagram.png';
     (registered → real link; pending → plain text), two <Figure>s
     (one in-column, one place="side") with the click-to-zoom lightbox, a
     <Decode> under a display equation, and a <Drawer> of each kind
-    (background, deeper, answer). */}
+    (background, deeper, answer; a deeper drawer names its content with
+    `label`, from the list in Drawer.astro). */}
 
 _This is the help-me-learn reference note: the layout and every component in one place, so a new note can be built by copying from here. The words and equations are placeholders and mean nothing yet._
 
@@ -118,7 +119,7 @@ Placeholder: something the note takes for granted, explained only as far as the 
 
 </Drawer>
 
-<Drawer kind="deeper" title="A deeper drawer">
+<Drawer kind="deeper" label="The theory" title="A deeper drawer">
 
 Placeholder: an optional proof, a piece of history, or an open problem.
 

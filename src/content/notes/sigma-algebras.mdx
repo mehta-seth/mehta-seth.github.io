@@ -93,7 +93,7 @@ $$
 
 These rules come straight from what “can answer” means, with nothing added. A collection of questions that obeys them is called an <dfn>algebra of sets</dfn>. On a deck of 52 cards this is the whole story. Probability theory needs one more letter, the σ, and to see why we need a hidden thing with infinitely many possibilities.
 
-<Drawer kind="deeper" title="Why finite knowledge always comes in atoms">
+<Drawer kind="deeper" label="The theory" title="Why finite knowledge always comes in atoms">
 
 Counting questions by counting atoms always works, and the reason is a small theorem. Take any list of questions about a finite $\Omega$ that obeys the three rules, and call two cards indistinguishable if every question on the list contains both or neither. The groups of mutually indistinguishable cards are the atoms.
 
@@ -165,7 +165,7 @@ $$
 
 Will a gambler ever go broke? Will a share price ever touch 100? Questions of this kind are everywhere. Some are subtler. “Do the digits of $U$ eventually repeat in a cycle?” is secretly “Is $U$ a fraction?”, and it too is built from digit questions, using infinitely many “or”s and “and”s.
 
-<Drawer kind="deeper" title="Fractions as a digit question">
+<Drawer kind="deeper" label="The theory" title="Fractions as a digit question">
 
 A number is a fraction exactly when its digits are eventually periodic: from some position $N$ on, every digit equals the digit $p$ places later, for some period $p$. For example $\tfrac{1}{7} = 0.142857\,142857\ldots$ has period 6 from the start, and $\tfrac{1}{4} = 0.25000\ldots$ has period 1 from the third digit on. In symbols:
 
@@ -187,7 +187,7 @@ Its probability is 0. Each fixed pair $(N, p)$ needs infinitely many coincidence
 
 </Drawer>
 
-<Drawer kind="deeper" title="Borel’s normal numbers, and an open problem">
+<Drawer kind="deeper" label="The theory" title="Borel’s normal numbers, and an open problem">
 
 In 1909 Émile Borel asked whether, in the long run, each digit makes up a tenth of the digits of $U$. For the digit 7 the question is
 
@@ -287,7 +287,7 @@ So we must choose which questions to allow, and the choice must obey the three r
 
 The same picture explains why the rules stop at countably many “or”s. Every set is a union of single points, and “Is $U$ exactly $\tfrac{1}{3}$?” turned out to be a legitimate question, an endless “and” of digit questions; the same goes for every other number. Rules allowing any number of “or”s would therefore let every subset in, Vitali's set included.
 
-<Drawer kind="deeper" title="How Vitali builds his set, and whether it is real">
+<Drawer kind="deeper" label="The theory" title="How Vitali builds his set, and whether it is real">
 
 Call two numbers in $[0,1)$ cousins if they differ by a fraction. Cousinhood splits $[0,1)$ into families. Each family is countable, so there must be uncountably many families. From each family choose one member, and let $V$ be the set of chosen members.
 
@@ -313,7 +313,7 @@ For $U$, this σ-algebra has a famous name: the <dfn>Borel σ-algebra</dfn> on $
 
 Here the pixel picture bends. To someone who has read every digit, each single number is its own atom, because she can tell any two numbers apart. On the deck, a watcher who could tell every pair of cards apart could answer every question. Here she cannot. She knows $U$ exactly, and yet “Is $U$ in $V$?” still has no probability. On the continuum, “answerable” has to mean two things at once: settled by what you see, and able to carry a probability. A σ-algebra keeps track of both.
 
-<Drawer kind="deeper" title="Two theorems behind “generated”">
+<Drawer kind="deeper" label="The theory" title="Two theorems behind “generated”">
 
 Why a smallest one exists. $\sigma(\mathcal{C})$ is defined from above, as the intersection of every σ-algebra that contains $\mathcal{C}$:
 
@@ -405,7 +405,7 @@ For σ-algebras whose atoms have probability zero, such as the Borel σ-algebra 
 
 As $n$ grows, the guess closes in on the truth, and it is never more than $\tfrac{1}{2} \cdot 10^{-n}$ away. The chain $\mathcal{F}_1 \subseteq \mathcal{F}_2 \subseteq \cdots$ climbs towards the Borel σ-algebra, and the best guesses climb towards $U$ itself.
 
-<Drawer kind="deeper" title="Martingales: you cannot predict your own revisions">
+<Drawer kind="deeper" label="The theory" title="Martingales: you cannot predict your own revisions">
 
 Write $M_n = \mathbb{E}[U \mid \mathcal{F}_n]$ for your guess after $n$ digits. Before reading the next digit, what do you expect your next guess to be? The ten possible next intervals are equally likely, and their midpoints average to your current midpoint, so
 
@@ -429,7 +429,7 @@ Paul Lévy's upward theorem says that for any random variable $X$ with a finite 
 
 Swap digits for daily closing prices and nothing changes. $\mathcal{F}_t$ is everything the market has revealed by day $t$. A trading rule is legitimate only if each day's position is $\mathcal{F}_t$-measurable, which is the exact meaning of “no peeking at tomorrow”, and a backtest that breaks this has look-ahead bias. The price of an option on day $t$ is a conditional expectation given $\mathcal{F}_t$: a best guess of its discounted payoff, made with a particular pricing probability.
 
-<Drawer kind="deeper" title="Where “information” stops being a perfect metaphor">
+<Drawer kind="deeper" label="The fine print" title="Where “information” stops being a perfect metaphor">
 
 Reading a σ-algebra as information is exact when there are finitely many atoms. In general it holds only up to events of probability zero, and Billingsley's _Probability and Measure_ uses an example that makes the point. On $[0,1)$, take the σ-algebra $\mathcal{G}$ of sets that are countable or whose complement is countable. It contains every single point, so in one sense it tells you $U$ exactly. Yet each of its sets has probability 0 or 1, so the best guess it supports is the same as knowing nothing: $\mathbb{E}[U \mid \mathcal{G}] = \tfrac{1}{2}$. Information that only settles questions whose probability is already 0 or 1 is, to probability theory, no information at all.
 
