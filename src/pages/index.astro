@@ -48,6 +48,12 @@ const essays = [
 // linking to individual pages under /learn/. Like Essays, this section
 // has no index page of its own, so its heading is plain text (not a
 // link). Add a note here when it should appear on the home page.
+//
+// On screens wider than 640px the list is set in two columns. Entries
+// marked `column: 2` make up the second column and the rest the first,
+// each column in the order written here, and the two sit side by side
+// row by row (σ-Algebras beside Classic Cocktails). On phones it is one
+// list, in the order written here.
 const notes = [
   {
     // The σ (U+03C3) is a real Unicode character, so screen readers
@@ -70,6 +76,15 @@ const notes = [
     href: '/learn/nirvana-shatakam/',
   },
   {
+    // An MDX note (src/content/notes/numbers-and-logic.mdx): the front door to
+    // Whetstone, the reasoning practice site. Whetstone is built and deployed
+    // from its own repository, and GitHub Pages serves it at /whetstone/ on
+    // this same origin; the note carries the link there. Never add a page at
+    // /whetstone/ to this site, or the two would claim the same path.
+    title: 'Numbers and Logic',
+    href: '/learn/numbers-and-logic/',
+  },
+  {
     // Not an MDX note: The Gold Room is a standalone WebGL app shipped as a
     // static file at public/learn/classic-cocktails/index.html. Astro copies
     // public/ verbatim, so this link opens the app itself, with no
@@ -77,6 +92,7 @@ const notes = [
     // classic-cocktails entry, or the two would claim the same URL.
     title: 'Classic Cocktails',
     href: '/learn/classic-cocktails/',
+    column: 2,
   },
   {
     // An MDX note (src/content/notes/art-history.mdx): the front door to the
@@ -85,21 +101,14 @@ const notes = [
     // takedown notice; the canon's own source is outside this repo.
     title: 'Art History',
     href: '/learn/art-history/',
+    column: 2,
   },
   {
     // Types of Clouds: a standalone three.js page in public/learn/clouds/, not a note:
     // the ten cloud genera, each formed in turn in a live sky (§13.17).
     title: 'Types of Clouds',
     href: '/learn/clouds/',
-  },
-  {
-    // An MDX note (src/content/notes/numbers-and-logic.mdx): the front door to
-    // Whetstone, the reasoning practice site. Whetstone is built and deployed
-    // from its own repository, and GitHub Pages serves it at /whetstone/ on
-    // this same origin; the note carries the link there. Never add a page at
-    // /whetstone/ to this site, or the two would claim the same path.
-    title: 'Numbers and Logic',
-    href: '/learn/numbers-and-logic/',
+    column: 2,
   },
 ];
 
@@ -170,12 +179,13 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
           Essays, this section has no index page of its own, so the
           heading is plain text (not a link). Lowercase "help me learn"
           matches the section's identity across the site. Sits between
-          Essays and Cities. */}
+          Essays and Cities. Two columns on wider screens, one list on
+          phones (see the notes array and .linklist--columns). */}
       <section class="home-section" aria-labelledby="h-hml">
         <h2 id="h-hml" class="home-section__heading">help me learn</h2>
-        <ul class="linklist">
+        <ul class="linklist linklist--columns">
           {notes.map((note) => (
-            <li class="linklist__item">
+            <li class:list={['linklist__item', { 'linklist__item--column-2': note.column === 2 }]}>
               <a href={note.href}>{note.title}</a>
             </li>
           ))}
@@ -253,11 +263,17 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
     margin-bottom: 2rem;
   }
 
+  /* The bio's measure. The help me learn columns stop at it too, so they
+     end within the bio's right margin (see .linklist--columns). */
+  .home-card {
+    --bio-measure: 36rem;
+  }
+
   .bio {
     /* Slightly muted body color echoes Dario's bio paragraph: the
        wordmark is the primary voice, the bio is context. */
     color: var(--text);
-    max-width: 36rem;
+    max-width: var(--bio-measure);
   }
 
   /* Section headings ("Essays", "Cities") — per §3.2 these sit inline
@@ -330,6 +346,31 @@ const emailObfuscated = 'ad1t.mehta00<at>gmail<dot>com';
   .linklist__item a:focus-visible {
     color: var(--accent);
     border-bottom-color: var(--accent);
+  }
+
+  /* help me learn in two columns, above the 640px phone breakpoint that
+     .home-stage uses. Every item names its column, the first unless the
+     notes array marks it `column: 2` (left to auto-placement, an item can
+     land in a third column). With column flow each column then fills from
+     the top in list order, and the two share rows, so the nth entries
+     sit side by side. The list stops at the bio's measure, so the second
+     column ends within the bio's right margin. Below 641px none of this
+     applies and the list is one column, as before.
+     VISUAL TUNABLE: column-gap. */
+  @media (min-width: 641px) {
+    .linklist--columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-flow: column;
+      column-gap: 2rem;
+      max-width: var(--bio-measure);
+    }
+    .linklist--columns > .linklist__item {
+      grid-column: 1;
+    }
+    .linklist--columns > .linklist__item--column-2 {
+      grid-column: 2;
+    }
   }
 
   /* Email line — the business-card signature. §3.2 wants this to read
