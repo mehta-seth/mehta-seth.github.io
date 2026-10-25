@@ -12,7 +12,7 @@ import rehypeKatex from 'rehype-katex';
 // https://astro.build/config
 export default defineConfig({
   // Final site URL — swap when a custom domain is configured (§7, decision 1).
-  site: 'https://mehta-seth.github.io',
+  site: 'https://mehta-seth.com',
 
   integrations: [
     tailwind({
@@ -25,7 +25,7 @@ export default defineConfig({
     // public/ files are invisible to the sitemap integration, so the
     // standalone Gold Room app (public/learn/classic-cocktails/) is listed
     // by hand.
-    sitemap({ customPages: ['https://mehta-seth.github.io/learn/classic-cocktails/', 'https://mehta-seth.github.io/learn/clouds/'] }),
+    sitemap({ customPages: ['https://mehta-seth.com/learn/classic-cocktails/', 'https://mehta-seth.com/learn/clouds/'] }),
   ],
 
   markdown: {
