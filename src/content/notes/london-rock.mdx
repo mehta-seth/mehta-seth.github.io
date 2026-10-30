@@ -1,0 +1,69 @@
+---
+title: "London’s rock ’n’ roll map: Electric London"
+titleDisplay: "London’s rock ’n’ roll"
+summary: "Electric London maps over 100 places where London’s rock ’n’ roll happened, from the Saville Theatre to Abbey Road, and how a 1967 poster started it."
+date: 2026-10-30
+cover: "/og/london-rock.jpg"
+draft: false
+---
+import poster from '../../assets/notes/london-rock/sundays-at-the-saville.jpg';
+import JsonLd from '../../components/JsonLd.astro';
+
+Something stuck in me while listening to Sultans Of Swing (A Night In London 1996). The keys-to-guitar transition at <a class="note-quiet" href="https://www.youtube.com/watch?v=yTcsgxU9jsA&list=RDyTcsgxU9jsA&start_radio=1&t=405s" target="_blank" rel="noopener">06:45</a> sounded sublime, like how I imagined London would feel. I was clearly pretty late to the party, but I strongly believe that great music comes to you, especially when you need it.
+
+<div class="note-lyric">
+{/* The two lines of the lyric, one per <p>, replacing the bracketed placeholders. */}
+<p>Way on down south</p>
+<p>Way on down south, London town</p>
+</div>
+
+Those lyrics got me curious about the story behind the song. Mark Knopfler was living with his brother in a first-floor council flat in Deptford. He heard a little dixie jazz band playing in a nearly empty pub, which inspired him to write the song. I was stoked to find that the first place I was going to call home in London, my student accommodation just off Old Kent Rd, wouldn't be far from there.
+
+Months later, on a cold December evening, while walking along Shaftesbury Avenue, I saw a poster from 1967.
+
+<div class="note-poster">
+<Figure src={poster} alt="A 1967 newspaper advertisement headed Sundays at the Saville, a NEMS presentation, listing Pink Floyd with Tomorrow on 1 October, the Jimi Hendrix Experience on 8 October, Jr. Walker All Stars on 15 October, the Who on 22 October and the Cream on 29 October.">
+<span class="fig-split"><span>Image: Pink Floyd</span><span>(very likely a copy)</span></span>
+</Figure>
+</div>
+
+This was my entire playlist!
+
+I had unknowingly passed by the iconic Saville Theatre many times, without really knowing its significance. It's a strange, somewhat powerful feeling realising that people you've admired from afar were once right there, separated from you only by time.
+
+The road, once so important to London’s Rock ’n’ roll scene, was just a way for us to reach Tottenham Court Rd, and a particularly dark one.
+
+I made this map to trace the history of this beautiful city of London, and so that I don't fail to recognise a landmark when I pass by another dimly lit alley again.
+
+**[Have a look →](https://rock.mehta-seth.com/)**
+
+<p class="note-fine">If something on the map looks wrong, write to ad1t.mehta00&lt;at&gt;gmail&lt;dot&gt;com and I’ll fix it.</p>
+
+<JsonLd data={[
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: 'London’s rock ’n’ roll',
+    description: 'Why Adit Mehta made Electric London, a map of the places where London’s rock ’n’ roll happened: a song, a first home off the Old Kent Road and a 1967 poster for the Saville Theatre on Shaftesbury Avenue.',
+    datePublished: '2026-10-30',
+    inLanguage: 'en-GB',
+    url: 'https://mehta-seth.com/learn/london-rock/',
+    mainEntityOfPage: 'https://mehta-seth.com/learn/london-rock/',
+    image: 'https://mehta-seth.com/og/london-rock.jpg',
+    author: { '@type': 'Person', name: 'Adit Mehta', url: 'https://mehta-seth.com/' },
+    about: ['Rock music in London', 'Saville Theatre', 'Dire Straits'],
+    mentions: { '@type': 'WebApplication', name: 'Electric London', url: 'https://rock.mehta-seth.com/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Electric London',
+    url: 'https://rock.mehta-seth.com/',
+    description: 'An interactive map of over 100 London places where rock ’n’ roll happened, from the 2i’s Coffee Bar to Abbey Road, each with its story and sources.',
+    applicationCategory: 'TravelApplication',
+    operatingSystem: 'Any',
+    isAccessibleForFree: true,
+    inLanguage: 'en-GB',
+    author: { '@type': 'Person', name: 'Adit Mehta', url: 'https://mehta-seth.com/' },
+  },
+]} />

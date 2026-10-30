@@ -364,6 +364,57 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
     line-height: 1.55;
   }
 
+  /* A link that reads as plain text, such as a timestamp pointing to a
+     video: the paragraph's own colour, no underline, at rest or on hover.
+     Keyboard focus still shows the site's focus ring. Authored in MDX as
+     <a class="note-quiet" href="...">. */
+  .note__body a.note-quiet,
+  .note__body a.note-quiet:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* A few lines of a song, set apart and centred in the prose column.
+     Authored in MDX as <div class="note-lyric"><p>…</p><p>…</p></div>.
+     VISUAL TUNABLES: size, spacing. */
+  .note__body .note-lyric {
+    max-width: var(--note-measure);
+    margin: 2.2em 0 2.4em;
+    text-align: center;
+    font-style: italic;
+    font-size: 1.1em;
+    line-height: 1.6;
+  }
+  .note__body .note-lyric p {
+    margin: 0;
+  }
+
+  /* A picture set in the text, centred in the measure at about the width
+     it was made for, so a small scan isn't stretched across the column.
+     It keeps its full height (no 80vh cap), so the picture always fills
+     its box and the caption lines up with its edges. Authored in MDX by
+     wrapping the <Figure> in <div class="note-poster">.
+     VISUAL TUNABLE: the width. */
+  .note__body .note-poster {
+    max-width: var(--note-measure);
+  }
+  .note__body .note-poster .figure {
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .note__body .note-poster .figure__img {
+    max-height: none;
+  }
+
+  /* A figure caption in two parts, credit on the left and a note on the
+     right: <span class="fig-split"><span>…</span><span>…</span></span>. */
+  .note__body .figure__caption .fig-split {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
   /* Headings inherit family/weight/size from the global h2/h3 rules in
      global.css; only rhythm and line-height are tuned here. */
   .note__body h2 {

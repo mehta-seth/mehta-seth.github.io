@@ -30,5 +30,6 @@ export const hmlLinks: Record<string, HmlLink> = {
   'art-history': { url: '/learn/art-history/', label: 'Art History' },
   'clouds': { url: '/learn/clouds/', label: 'Types of Clouds' },
   'numbers-and-logic': { url: '/learn/numbers-and-logic/', label: 'Numbers and Logic' },
+  'london-rock': { url: '/learn/london-rock/', label: 'London’s rock ’n’ roll' },
   // Add a term here the moment its note is published. One line per term.
 };

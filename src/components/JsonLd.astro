@@ -1,0 +1,18 @@
+---
+// src/components/JsonLd.astro
+//
+// Structured data (schema.org JSON-LD) for search engines and AI answer
+// engines. Renders one <script type="application/ld+json"> where it is
+// placed and nothing visible. MDX usage:
+//
+//   import JsonLd from '../../components/JsonLd.astro';
+//   <JsonLd data={{ '@context': 'https://schema.org', '@type': 'Article', ... }} />
+//
+// "<" is escaped so no string inside the data can close the script tag.
+interface Props {
+  data: Record<string, unknown> | Record<string, unknown>[];
+}
+const { data } = Astro.props;
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+<script type="application/ld+json" is:inline set:html={json} />
