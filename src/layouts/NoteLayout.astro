@@ -364,6 +364,32 @@ const titleHtml = titleDisplay ? renderTitleDisplay(titleDisplay) : null;
     line-height: 1.55;
   }
 
+  /* Ragged right, kept tidy. Where supported, the browser weighs the
+     whole paragraph when breaking lines, which evens out the right edge
+     and avoids a word on its own at the end. On phones, where the column
+     holds about 38 characters, long words may also hyphenate: only words
+     of 8 letters or more, never fewer than 4 either side of the break,
+     and never on two lines running. */
+  .note__body p,
+  .note__body li {
+    text-wrap: pretty;
+  }
+  @media (max-width: 600px) {
+    .note__body p,
+    .note__body li {
+      -webkit-hyphens: auto;
+      hyphens: auto;
+      hyphenate-limit-chars: 8 4 4;
+      -webkit-hyphenate-limit-before: 4;
+      -webkit-hyphenate-limit-after: 4;
+      -webkit-hyphenate-limit-lines: 1;
+    }
+    .note__body .note-lyric p {
+      -webkit-hyphens: manual;
+      hyphens: manual;
+    }
+  }
+
   /* A link that reads as plain text, such as a timestamp pointing to a
      video: the paragraph's own colour, no underline, at rest or on hover.
      Keyboard focus still shows the site's focus ring. Authored in MDX as

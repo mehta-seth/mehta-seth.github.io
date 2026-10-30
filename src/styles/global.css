@@ -642,6 +642,13 @@ body::before {
   z-index: 200;
   transition: color 150ms ease, transform 150ms ease;
 }
+/* On phones the toggle scrolls away with the header instead of staying
+   on screen, where it would sit on top of the text. */
+@media (max-width: 600px) {
+  .theme-toggle {
+    position: absolute;
+  }
+}
 .theme-toggle:hover {
   color: var(--accent);
 }
